@@ -7,12 +7,40 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="obj\Debug\net8.0\.NETCoreApp,Version=v8.0.AssemblyAttributes.cs" />
+    <Compile Include="obj\Debug\net8.0\Desafio.API.AssemblyInfo.cs" />
+    <Compile Include="obj\Debug\net8.0\Desafio.API.GlobalUsings.g.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="obj\Desafio.API.csproj.nuget.dgspec.json" />
+    <Content Include="obj\project.assets.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="obj\Debug\net8.0\Desafio.API.AssemblyInfoInputs.cache" />
+    <None Include="obj\Debug\net8.0\Desafio.API.assets.cache" />
+    <None Include="obj\Debug\net8.0\Desafio.API.csproj.AssemblyReference.cache" />
+    <None Include="obj\Debug\net8.0\Desafio.API.GeneratedMSBuildEditorConfig.editorconfig" />
+    <None Include="obj\Desafio.API.csproj.nuget.g.props" />
+    <None Include="obj\Desafio.API.csproj.nuget.g.targets" />
+    <None Include="obj\project.nuget.cache" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Desafio.Infrastructure\Desafio.Infrastructure.csproj" />
     <ProjectReference Include="..\Desafio.Services\Desafio.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="bin\Debug\net8.0\" />
+    <Folder Include="obj\Debug\net8.0\refint\" />
+    <Folder Include="obj\Debug\net8.0\ref\" />
+    <Folder Include="obj\Debug\net8.0\staticwebassets\" />
   </ItemGroup>
 
 </Project>

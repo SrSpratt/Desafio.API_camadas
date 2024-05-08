@@ -70,10 +70,10 @@ namespace Desafio.Infrastructure.Contexts
                 _products.Add(
                     new Product(i,
                         (i*2).ToString(),
-                        180+(i+(0.5/i)),
+                        180+(i+(0.5)),
                         (i*7).ToString(),
                         (i*3).ToString(),
-                        200.0+(i + (0.5 / i)),
+                        200.0+(i + (0.5)),
                         (i*10).ToString(),
                         new DateOnly(2020+i, 10-i, 10+i)
                         )

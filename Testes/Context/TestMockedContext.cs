@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Testes.Context
 {
@@ -15,6 +16,19 @@ namespace Testes.Context
         public TestMockedContext()
         {
             _context = new MockedContext();
+        }
+
+        public void Execute()
+        {
+            //test.ListingTest();
+            Console.WriteLine();
+            //test.GetTest();
+            Console.WriteLine();
+            UpdateTest();
+            Console.WriteLine();
+            AddTest();
+            Console.WriteLine();
+            Deletetest();
         }
 
         public void ListingTest()

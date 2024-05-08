@@ -62,7 +62,7 @@ namespace Testes.Services
                 200.0,
                 "limpeza",
                 new DateOnly(2025, 1, 1)
-                );
+                ); // ProductHelper é uma opção
             _service.Create(product);
 
             Console.WriteLine(_service.Read(id));

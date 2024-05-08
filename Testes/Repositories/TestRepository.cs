@@ -61,7 +61,7 @@ namespace Testes.Repositories
                 200.0,
                 "limpeza",
                 new DateOnly(2025, 1, 1)
-                );
+                ); //ProductHelper é uma possibilidade
             _repository.Create(product);
 
             Console.WriteLine(_repository.Read(id));

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using Testes.Helpers;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Testes.Domain
 {
@@ -15,18 +17,25 @@ namespace Testes.Domain
         public Product Product { get; set; }
         public ProductDto ProductDto { get; set; }
 
+        public TestsDomain()
+        {
+
+        }
+
+        public void Execute()
+        {
+            EntityTest();
+            Console.WriteLine();
+            DtoTest();
+            Console.WriteLine("\nNow, conversions:");
+            ConversionEntityTest();
+            ConversionDtoTest();
+
+            Console.WriteLine();
+        }
         public void EntityTest()
         {
-            Product product = new Product(1,
-                "description",
-                180.5,
-                "água sanitária",
-                "loja da esquina",
-                200.0,
-                "limpeza",
-                new DateOnly(2025, 1, 1)
-                );
-            Product = product;
+            Product product = ProductHelper.GetProduct();
 
             string message = $"Produto!\nCódigo: {product.Code}\nNome:{product.Name}\nDescrição:{product.Description}\nPreço:{product.SaleValue}\nFornecedor:{product.Supplier}\nCategoria:{product.Category}\nData de validade:{product.ExpirationDate}\nValor de compra:{product.Value}";
             Console.WriteLine(message);
@@ -34,17 +43,7 @@ namespace Testes.Domain
 
         public void DtoTest()
         {
-            ProductDto product = new ProductDto(1,
-                "description",
-                180.5,
-                "água sanitária",
-                "loja da esquina",
-                200.0,
-                "limpeza",
-                new DateOnly(2025, 1, 1)
-                );
-
-            ProductDto = product;
+            ProductDto product = ProductDtoHelper.GetProductDto();
 
             string message = $"ProdutoDto!\nCódigo: {product.Code}\nNome:{product.Name}\nDescrição:{product.Description}\nPreço:{product.SaleValue}\nFornecedor:{product.Supplier}\nCategoria:{product.Category}\nData de validade:{product.ExpirationDate}\nValor de compra:{product.Value}";
             Console.WriteLine(message);
@@ -54,13 +53,13 @@ namespace Testes.Domain
         public void ConversionDtoTest()
         {
             Console.WriteLine("To DTO!!!");
-            Console.WriteLine(Product.ToDto().GetType());
+            Console.WriteLine(ProductHelper.GetProduct().ToDto().GetType());
         }
 
         public void ConversionEntityTest()
         {
             Console.WriteLine("TO ENTITY!!!");
-            Console.WriteLine(ProductDto.ToEntity().GetType());
+            Console.WriteLine(ProductDtoHelper.GetProductDto().ToEntity().GetType());
         }
 
     }

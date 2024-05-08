@@ -21,36 +21,21 @@ namespace Testes.Main
 
         public void Execute()
         {
+            ValidateDomainLayer();
+            ValidateInfrastructureLayer();
             ValidateServiceLayer();
         }
 
         private void ValidateInfrastructureLayer()
         {
             TestMockedContext test = new TestMockedContext();
-            //test.ListingTest();
-            Console.WriteLine();
-            //test.GetTest();
-            Console.WriteLine();
-            test.UpdateTest();
-            Console.WriteLine();
-            test.AddTest();
-            Console.WriteLine();
-            test.Deletetest();
+            test.Execute();
         }
 
         private void ValidateDomainLayer()
         {
             TestsDomain test = new TestsDomain();
-            test.EntityTest();
-            Console.WriteLine();
-            test.DtoTest();
-            Console.WriteLine("\nNow, conversions:");
-            test.ConversionEntityTest();
-            test.ConversionDtoTest();
-
-            Console.WriteLine();
-
-
+            test.Execute();
         }
 
         private void ValidateRepositoryLayer()

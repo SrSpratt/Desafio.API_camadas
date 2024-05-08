@@ -61,7 +61,7 @@ namespace Testes.Services
                 "loja da esquina",
                 200.0,
                 "limpeza",
-                new DateOnly(2025, 1, 1)
+                $"{2020+id}-{id}-{id}"
                 ); // ProductHelper é uma opção
             _service.Create(product);
 

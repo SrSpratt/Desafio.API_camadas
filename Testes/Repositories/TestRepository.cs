@@ -60,7 +60,7 @@ namespace Testes.Repositories
                 "loja da esquina",
                 200.0,
                 "limpeza",
-                new DateOnly(2025, 1, 1)
+                "2025-1-1"
                 ); //ProductHelper é uma possibilidade
             _repository.Create(product);
 

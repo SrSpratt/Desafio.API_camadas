@@ -21,9 +21,9 @@ namespace Desafio.Domain.Entities
 
         public string Category { get; set; }
 
-        public DateOnly ExpirationDate { get; set; }
+        public string ExpirationDate { get; set; }
 
-        public Product(int code, string description, double SaleValue, string name, string supplier, double value, string category, DateOnly expirationDate)
+        public Product(int code, string description, double SaleValue, string name, string supplier, double value, string category, string expirationDate)
         {
             Code = code;
             Description = description;

@@ -17,6 +17,8 @@ namespace Desafio.Infrastructure.Repository
         }
         public void Create(Product product)
         {
+            int newid = _context.NextId();
+            product.Code = newid;
             _context.Add(product);
         }
 

@@ -11,7 +11,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 //adicionar repositório
-builder.Services.AddScoped<IRepository, ProductRepository>();
+builder.Services.AddSingleton<IRepository, ProductRepository>();
 //adicionar serviços
 builder.Services.AddScoped<IService, ProductService>();
 

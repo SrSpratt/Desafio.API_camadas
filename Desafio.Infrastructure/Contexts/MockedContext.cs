@@ -45,7 +45,7 @@ namespace Desafio.Infrastructure.Contexts
             {
                 _products.Remove(selected);
                 selected = new Product(
-                    product.Code,
+                    selected.Code,
                     product.Description,
                     product.SaleValue,
                     product.Name,
@@ -75,10 +75,16 @@ namespace Desafio.Infrastructure.Contexts
                         (i*3).ToString(),
                         200.0+(i + (0.5)),
                         (i*10).ToString(),
-                        new DateOnly(2020+i, 10-i, 10+i)
+                        (2020+i).ToString() + $"-{i}" + $"-{i*2}"
                         )
                     );
             }
+        }
+
+        public int NextId()
+        {
+            int id = _products.Max(index => index.Code) + 1;
+            return id;
         }
     }
 }

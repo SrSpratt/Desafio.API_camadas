@@ -54,7 +54,7 @@ namespace Testes.Context
                 "loja da esquina",
                 200.0,
                 "limpeza",
-                new DateOnly(2025, 1, 1)
+                "1992-2-8"
                 ));
             foreach (Product product in _context.GetAll())
             {
@@ -72,7 +72,7 @@ namespace Testes.Context
                 "loja da esquina",
                 200.0,
                 "limpeza",
-                new DateOnly(2025, 1, 1)
+                "1992-2-8"
                 ));
             foreach (Product product in _context.GetAll())
             {

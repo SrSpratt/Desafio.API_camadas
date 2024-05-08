@@ -21,9 +21,9 @@ namespace Desafio.Domain.Dtos
 
         public string Category { get; set; }
 
-        public DateOnly ExpirationDate { get; set; }
+        public string ExpirationDate { get; set; }
 
-        public ProductDto(int code, string description, double salevalue, string name, string supplier, double value, string category, DateOnly expirationDate)
+        public ProductDto(int code, string description, double salevalue, string name, string supplier, double value, string category, string expirationDate)
         {
             Code = code;
             Description = description;

@@ -19,5 +19,6 @@ namespace Desafio.Infrastructure.Contexts
 
         public void Delete(int id);
 
+        public int NextId();
     }
 }

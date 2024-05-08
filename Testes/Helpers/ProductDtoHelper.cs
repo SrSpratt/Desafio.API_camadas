@@ -18,7 +18,7 @@ namespace Testes.Helpers
                "loja da esquina",
                200.0,
                "limpeza",
-               new DateOnly(2025, 1, 1)
+               "2025-2-1"
                );
             return product;
         }

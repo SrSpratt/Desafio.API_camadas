@@ -18,7 +18,7 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet]
-        public List<ProductDto> Get()
+        public ActionResult<List<ProductDto>> GetAll()
         {
             try
             {
@@ -31,5 +31,74 @@ namespace Desafio.API.Controllers
             }
             return null;
         }
+
+        [HttpGet("{id}")]
+        public ActionResult<ProductDto> Get(int id)
+        {
+            try
+            {
+                Product product = _service.Read(id);
+                return product == null ? NoContent() : product.ToDto(); //pode ser nulo
+            } catch (Exception ex)
+            {
+                Console.WriteLine($"Error {ex.Message}");
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        public ActionResult<ProductDto> Post([Bind("Description, Name, Supplier, Value, Category, ExpirationDate")]ProductDto productdto)
+        {
+            try
+            {
+                Product product = productdto.ToEntity();
+                _service.Create(product);
+                return _service.Read(product.Code).ToDto();
+            } catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return BadRequest();
+            
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<ProductDto> Put(int id, [FromBody]ProductDto productdto)
+        {
+            try
+            {
+                Product product = productdto.ToEntity();
+                _service.Update(id, product);
+                return _service.Read(id).ToDto();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return BadRequest();
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            try
+            {
+                _service.Delete(id);
+                return _service.Read(id) == null ? Ok() : NotFound();
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+
+            return BadRequest();
+        }
+
+
+
     }
 }

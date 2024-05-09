@@ -95,7 +95,8 @@ namespace Desafio.Consumer.Controllers
             return View(product);
         }
 
-        public async Task<IActionResult> EditHandler([Bind("Code, Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate")] Product product)
+        [HttpPost]
+        public async Task<IActionResult> EditHandler([FromForm] Product product)
         {
             try
             {

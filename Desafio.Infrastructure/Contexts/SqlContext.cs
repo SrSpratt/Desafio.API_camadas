@@ -109,7 +109,7 @@ namespace Desafio.Infrastructure.Contexts
                     result = new Product(
                         code: Int32.Parse(row["Code"].ToString()),
                         description: row["Description"].ToString(),
-                        SaleValue: Double.Parse(row["SaleValue"].ToString()),
+                        saleValue: Double.Parse(row["SaleValue"].ToString()),
                         name: row["Name"].ToString(),
                         supplier: row["Supplier"].ToString(),
                         value: Double.Parse(row["Value"].ToString()),
@@ -155,7 +155,7 @@ namespace Desafio.Infrastructure.Contexts
                     Product product = new Product(
                         code: Int32.Parse(row["Code"].ToString()),
                         description: row["Description"].ToString(),
-                        SaleValue: Double.Parse(row["SaleValue"].ToString()),
+                        saleValue: Double.Parse(row["SaleValue"].ToString()),
                         name: row["Name"].ToString(),
                         supplier: row["Supplier"].ToString(),
                         value: Double.Parse(row["Value"].ToString()),

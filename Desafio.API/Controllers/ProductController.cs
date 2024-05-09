@@ -48,7 +48,7 @@ namespace Desafio.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ProductDto> Post([Bind("Description, Name, Supplier, Value, Category, ExpirationDate")]ProductDto productdto)
+        public ActionResult<ProductDto> Post([Bind("Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate")]ProductDto productdto)
         {
             try
             {

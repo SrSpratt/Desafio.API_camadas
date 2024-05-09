@@ -84,6 +84,35 @@ namespace Desafio.Consumer.Controllers
             }
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            Product product = await Search(id);
+
+            return View(product);
+        }
+
+        public async Task<IActionResult> EditHandler([Bind("Code, Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate")] Product product)
+        {
+            try
+            {
+                string json = JsonConvert.SerializeObject(product);
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                ByteArrayContent byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ("application/json");
+                string url = $"{ENDPOINT}{product.Code}";
+                HttpResponseMessage response =  await httpClient.PutAsync(url, byteContent);
+
+                if (!response.IsSuccessStatusCode)
+                    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         private async Task<Product> Search(int id)
         {
             try

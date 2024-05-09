@@ -1,5 +1,7 @@
+using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Repository;
 using Desafio.Services.Services;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IRepository, ProductRepository>();
 //adicionar serviços
 builder.Services.AddScoped<IService, ProductService>();
+
+builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection(nameof(ApiConfig)));
+
+builder.Services.AddSingleton<IApiConfig>(x => x.GetRequiredService<IOptions<ApiConfig>>().Value);
 
 var app = builder.Build();
 

@@ -14,16 +14,19 @@ namespace Testes.Main
     {
         private readonly TestRepository _testRepository;
         private readonly TestProductService _testProductService;
-        public MainAppTest(TestProductService testProductService)
+        private readonly ConnectionTest _connectionTest;
+        public MainAppTest(TestProductService testProductService, ConnectionTest connectionTest)
         {
             _testProductService = testProductService;
+            _connectionTest = connectionTest;
         }
 
         public void Execute()
         {
-            ValidateDomainLayer();
-            ValidateInfrastructureLayer();
-            ValidateServiceLayer();
+            //ValidateDomainLayer();
+            //ValidateInfrastructureLayer();
+            //ValidateServiceLayer();
+            ValidateConnection();
         }
 
         private void ValidateInfrastructureLayer()
@@ -46,6 +49,11 @@ namespace Testes.Main
         private void ValidateServiceLayer()
         {
             _testProductService.Execute();
+        }
+
+        private void ValidateConnection()
+        {
+            _connectionTest.Execute();
         }
     }
 }

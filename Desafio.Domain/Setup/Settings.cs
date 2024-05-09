@@ -9,6 +9,6 @@ namespace Desafio.Domain.Setup
 {
     public static class Settings
     {
-        public static DatabaseType SELECTED_DATABASE = DatabaseType.Fake;
+        public static DatabaseType SELECTED_DATABASE = DatabaseType.Sql;
     }
 }

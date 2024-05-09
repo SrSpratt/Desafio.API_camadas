@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Desafio.Domain.Enums
 {
-    public enum DatabaseType
+    public enum SqlQueryType
     {
-        Volatile,
-        Sql,
-        Nosql
+        CREATE,
+        READ,
+        READALL,
+        UPDATE,
+        DELETE
 
     }
 }

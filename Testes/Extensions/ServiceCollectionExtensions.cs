@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Testes.Context;
 using Testes.Main;
 using Testes.Repositories;
 using Testes.Services;
@@ -32,6 +33,7 @@ namespace Testes.Extensions
 
             services.AddScoped<IService, ProductService>();
             services.AddScoped<TestProductService>();
+            services.AddScoped<ConnectionTest>();
         }
 
         private static IConfiguration GetConfiguration()

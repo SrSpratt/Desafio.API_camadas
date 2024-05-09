@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Dtos;
+﻿using Desafio.Domain.Setup;
+using Desafio.Domain.Dtos;
 using Desafio.Domain.Entities;
 using Desafio.Services.Services;
 using Microsoft.AspNetCore.Http;
@@ -11,10 +12,12 @@ namespace Desafio.API.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IService _service;
+        private readonly IApiConfig _config;
 
-        public ProductController(IService service)
+        public ProductController(IService service, IApiConfig config)
         {
             _service = service;
+            _config = config;
         }
 
         [HttpGet]
@@ -54,7 +57,7 @@ namespace Desafio.API.Controllers
             {
                 Product product = productdto.ToEntity();
                 _service.Create(product);
-                return _service.Read(product.Code).ToDto();
+                return Ok();
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -71,7 +74,7 @@ namespace Desafio.API.Controllers
             {
                 Product product = productdto.ToEntity();
                 _service.Update(id, product);
-                return _service.Read(id).ToDto();
+                return Ok();
             }
             catch (Exception ex)
             {

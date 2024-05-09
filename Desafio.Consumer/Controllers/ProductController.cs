@@ -7,11 +7,15 @@ namespace Desafio.Consumer.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly string ENDPOINT = "https://localhost:44328/api/Product/";
+        private readonly string ENDPOINT = "";
         private readonly HttpClient httpClient = null;
 
-        public ProductController()
+        private readonly IConfiguration _configuration;
+
+        public ProductController(IConfiguration configuration)
         {
+            _configuration = configuration;
+            ENDPOINT = _configuration["App_url"];
             this.httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(ENDPOINT);
         }

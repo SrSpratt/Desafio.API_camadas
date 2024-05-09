@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-//adicionar repositório
+//adicionar repositório {deixarei o singleton enquanto for mockado}
 builder.Services.AddSingleton<IRepository, ProductRepository>();
 //adicionar serviços
 builder.Services.AddScoped<IService, ProductService>();

@@ -29,7 +29,7 @@ namespace Desafio.Consumer.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError(null, "Erro ao processar");
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
                 }
                 return View(products);
 
@@ -74,7 +74,7 @@ namespace Desafio.Consumer.Controllers
                 HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
 
                 if (!response.IsSuccessStatusCode)
-                    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
@@ -103,12 +103,40 @@ namespace Desafio.Consumer.Controllers
                 HttpResponseMessage response =  await httpClient.PutAsync(url, byteContent);
 
                 if (!response.IsSuccessStatusCode)
-                    ModelState.AddModelError(null, "Erro ao processar a solicitação");
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
 
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            Product product = await Search(id);
+            if (product == null)
+                return NotFound();
+            return View(product);
+        }
+
+        public async Task<IActionResult> DeleteHandler(string Code) //TEM que nomeado EXATAMENTE como na tag do formulário que redireciona para cá
+        {
+            try
+            {
+                int id = Int32.Parse(Code);
+                string url = $"{ENDPOINT}{id}";
+
+                HttpResponseMessage response = await httpClient.DeleteAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
         }

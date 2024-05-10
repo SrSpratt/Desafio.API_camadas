@@ -1,0 +1,31 @@
+﻿body {
+    font-family: cursive;
+    background: linear-gradient(30deg, #d6d6d6, #efefef)
+}
+
+bg-whole {
+    background: linear-gradient(45deg, #e40afffb, #4faffffb)
+}
+
+.bg-custom {
+    background: linear-gradient(200deg, #e40affdf, #4fafffdf)
+}
+.bg-circled-transparency {
+    background-color: #d3d3d3fd;
+    border-radius: 30px;
+    border: 1px solid #7515ef; 
+}
+
+.header, .footer, .custom-brand{
+    color: aliceblue !important;
+    font-weight: 400 !important;
+    text-decoration: none !important;
+}
+
+.big-button{
+    background-image: linear-gradient(#8b69fff3, #d5d5d5f3, #dfa6df), linear-gradient(45deg, #d7d7d7, #aaaaaa);
+    padding: 30px 45px;
+    box-shadow: 0px 9px 9px 9px #d4d4d4;
+    border-radius: 60px;
+    background-position: bottom;
+}

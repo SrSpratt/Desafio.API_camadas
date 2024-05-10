@@ -30,6 +30,8 @@ namespace Desafio.Consumer.Controllers
                 {
                     string content = await response.Content.ReadAsStringAsync();
                     products = JsonConvert.DeserializeObject<List<Product>>(content);
+
+                    
                 }
                 else
                 {
@@ -45,11 +47,55 @@ namespace Desafio.Consumer.Controllers
 
         }
 
+        public async Task<IActionResult> ShowName(string type)
+        {
+            try
+            {
+                List<Product> products = null;
+
+                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    products = JsonConvert.DeserializeObject<List<Product>>(content);
+                    if (!string.IsNullOrEmpty(type))
+                    {
+                        products = products.Where(product => product.Name == type).ToList();
+                    }
+
+                }
+                else
+                {
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
+                }
+                return PartialView("_ShowListPartial",products);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
         public async Task<IActionResult> Get(int id)
         {
             try
             {
                 Product result = await Search(id);
+                return View(result);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> GetName(string name)
+        {
+            try
+            {
+                Product result = await SearchName(name);
                 return View(result);
             }
             catch (Exception ex)
@@ -163,6 +209,29 @@ namespace Desafio.Consumer.Controllers
                 return result;
 
             } catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        private async Task<Product> SearchName(string name)
+        {
+            try
+            {
+                Product result = null;
+                string url = $"{ENDPOINT}name/{name}";
+                HttpResponseMessage response = await httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<Product>(content);
+                }
+
+                return result;
+
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

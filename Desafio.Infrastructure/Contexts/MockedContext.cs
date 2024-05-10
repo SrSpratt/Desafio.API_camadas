@@ -86,5 +86,10 @@ namespace Desafio.Infrastructure.Contexts
             int id = _products.Max(index => index.Code) + 1;
             return id;
         }
+
+        public Product GetName(string name)
+        {
+            return _products.FirstOrDefault(index => index.Name == name);
+        }
     }
 }

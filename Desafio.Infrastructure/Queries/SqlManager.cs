@@ -24,6 +24,9 @@ namespace Desafio.Infrastructure.Queries
                 case SqlQueryType.READ:
                     sql = "select Code, Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate from tst_products where Code = @Code";
                     break;
+                case SqlQueryType.READNAME:
+                    sql = "select Code, Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate from tst_products where Name = @Name";
+                    break;
                 case SqlQueryType.UPDATE:
                     sql = "update tst_products set Name = @Name, Description = @Description, SaleValue = @SaleValue, Supplier = @Supplier, Value = @Value, Category = @Category, ExpirationDate = @ExpirationDate where Code = @Code";
                     break;

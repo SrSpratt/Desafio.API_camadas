@@ -13,6 +13,8 @@ namespace Desafio.Infrastructure.Contexts
 
         public Product Get(int id);
 
+        public Product GetName(string name);
+
         public void Update(int id, Product product);
 
         public void Add(Product product);

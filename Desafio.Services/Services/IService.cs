@@ -14,6 +14,8 @@ namespace Desafio.Services.Services
 
         public Product Read(int id);
 
+        public Product ReadName(string name);
+
         public void Update(int id, Product product);
         public void Create(Product product);
 

@@ -10,6 +10,7 @@ namespace Desafio.Domain.Enums
     {
         CREATE,
         READ,
+        READNAME,
         READALL,
         UPDATE,
         DELETE

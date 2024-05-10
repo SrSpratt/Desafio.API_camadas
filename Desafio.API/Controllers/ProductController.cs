@@ -27,7 +27,7 @@ namespace Desafio.API.Controllers
             {
                 List<Product> list = _service.ReadAll();
                 List<ProductDto> dtolist = list != null ?Product.ToDtoList(list) : null;
-                return dtolist;
+                return dtolist; // use this to make conversions
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -43,6 +43,22 @@ namespace Desafio.API.Controllers
                 Product product = _service.Read(id);
                 return product == null ? NoContent() : product.ToDto(); //pode ser nulo
             } catch (Exception ex)
+            {
+                Console.WriteLine($"Error {ex.Message}");
+            }
+
+            return null;
+        }
+
+        [HttpGet("name/{name}")]
+        public ActionResult<ProductDto> GetName(string name)
+        {
+            try
+            {
+                Product product = _service.ReadName(name);
+                return product == null ? NoContent() : product.ToDto(); //pode ser nulo
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine($"Error {ex.Message}");
             }

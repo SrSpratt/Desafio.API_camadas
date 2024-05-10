@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.API", "Desafio.API\Desafio.API.csproj", "{6E2710E0-F872-468A-B9AB-E6A4A6686AA3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.API", "Desafio.API\Desafio.API.csproj", "{6E2710E0-F872-468A-B9AB-E6A4A6686AA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Consumer", "Desafio.Consumer\Desafio.Consumer.csproj", "{77B86DDF-0D22-41D5-AE77-FF831825A8D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Consumer", "Desafio.Consumer\Desafio.Consumer.csproj", "{77B86DDF-0D22-41D5-AE77-FF831825A8D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Domain", "Desafio.Domain\Desafio.Domain.csproj", "{72890301-17BA-4238-9D39-E7F02C19A0A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Domain", "Desafio.Domain\Desafio.Domain.csproj", "{72890301-17BA-4238-9D39-E7F02C19A0A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Infrastructure", "Desafio.Infrastructure\Desafio.Infrastructure.csproj", "{64811BE8-F29A-4BAE-8DE3-52F7A43E9532}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Infrastructure", "Desafio.Infrastructure\Desafio.Infrastructure.csproj", "{64811BE8-F29A-4BAE-8DE3-52F7A43E9532}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desafio.Services", "Desafio.Services\Desafio.Services.csproj", "{D4A9C94E-FCB9-4CFB-8DDF-8A7ABC39A211}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Desafio.Services", "Desafio.Services\Desafio.Services.csproj", "{D4A9C94E-FCB9-4CFB-8DDF-8A7ABC39A211}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Testes", "Testes\Testes.csproj", "{C066208A-32D2-46A7-B564-5E06080BB30F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Testes", "Testes\Testes.csproj", "{C066208A-32D2-46A7-B564-5E06080BB30F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -88,6 +88,55 @@ namespace Desafio.Infrastructure.Contexts
             }
         }
 
+
+        public Product GetName(string Name)
+        {
+            Product result = null;
+            SqlConnection sqlConnection = null;
+
+            try
+            {
+                sqlConnection = _connectionManager.GetConnection();
+                string sql = SqlManager.GetSql(SqlQueryType.READNAME);
+
+                DataSet set = new DataSet();
+
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                cmd.Parameters.Add("@Name", SqlDbType.VarChar).Value = Name;
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(set, "queryResult");
+
+                foreach(DataRow row in set.Tables["queryResult"].Rows)
+                {
+                    result = new Product(
+                        code: Int32.Parse(row["Code"].ToString()),
+                        description: row["Description"].ToString(),
+                        saleValue: Double.Parse(row["SaleValue"].ToString()),
+                        name: row["Name"].ToString(),
+                        supplier: row["Supplier"].ToString(),
+                        value: Double.Parse(row["Value"].ToString()),
+                        category: row["Category"].ToString(),
+                        expirationDate: row["ExpirationDate"].ToString()
+                        );
+                }
+                return result;
+
+                set.Clear();
+                set = null;
+                cmd = null;
+
+            } catch (Exception ex)
+            {
+                throw ex;
+            } finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+                sqlConnection = null;
+            }
+
+        }
+
         public Product Get(int id)
         {
             Product result = null;

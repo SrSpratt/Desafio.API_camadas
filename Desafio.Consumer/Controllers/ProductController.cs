@@ -113,6 +113,7 @@ namespace Desafio.Consumer.Controllers
         //O bind garante que tudo que não foi referenciado recebe 0
         public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate")] Product product)
         {
+            System.Diagnostics.Debug.WriteLine("DEBUG:" + product.SaleValue);
             try
             {
                 string json = JsonConvert.SerializeObject(product);
@@ -137,13 +138,15 @@ namespace Desafio.Consumer.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             Product product = await Search(id);
+            ProductViewModel productModel = product.toProduct();
 
-            return View(product);
+            return View(productModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditHandler([FromForm] Product product)
+        public async Task<IActionResult> EditHandler([FromForm] ProductViewModel productModel)
         {
+            Product product = productModel.toProduct();
             try
             {
                 string json = JsonConvert.SerializeObject(product);

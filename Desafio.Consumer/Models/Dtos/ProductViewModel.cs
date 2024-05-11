@@ -1,4 +1,6 @@
-﻿namespace Desafio.Consumer.Models.Dtos
+﻿using System.Globalization;
+
+namespace Desafio.Consumer.Models.Dtos
 {
     public class ProductViewModel
     {
@@ -15,5 +17,27 @@
         public string Category { get; set; }
 
         public string ExpirationDate { get; set; }
+
+        public Product toProduct()
+        {
+            Product product = new Product();
+            product.Code = Code;
+            product.Description = Description;
+            product.SaleValue = castValues(0);
+            product.Name = Name;
+            product.Supplier = Supplier;
+            product.Value = castValues(1);
+            product.Category = Category;
+            product.ExpirationDate = ExpirationDate;
+            return product;
+        }
+
+        public double castValues(int option)
+        {
+            if ( option == 0 )
+                return double.Parse(SaleValue, CultureInfo.InvariantCulture);
+            else 
+                return double.Parse(Value, CultureInfo.InvariantCulture);
+        }
     }
 }

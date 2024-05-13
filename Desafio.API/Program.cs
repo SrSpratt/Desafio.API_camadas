@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IRepository, ProductRepository>();
 //adicionar serviços
 builder.Services.AddScoped<IService, ProductService>();
 
+//carrega o json
 builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection(nameof(ApiConfig)));
 
 builder.Services.AddSingleton<IApiConfig>(x => x.GetRequiredService<IOptions<ApiConfig>>().Value);

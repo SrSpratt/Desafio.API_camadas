@@ -25,7 +25,7 @@ namespace Desafio.Infrastructure.Queries
                     sql = "select Code, Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate from tst_products where Code = @Code";
                     break;
                 case SqlQueryType.READNAME:
-                    sql = "select Code, Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate from tst_products where Name = @Name";
+                    sql = "SELECT category_name AS 'Category' FROM tst_categories c JOIN tst_product_category pc ON pc.category_id = c.category_id WHERE product_id = @Code";
                     break;
                 case SqlQueryType.UPDATE:
                     sql = "update tst_products set Name = @Name, Description = @Description, SaleValue = @SaleValue, Supplier = @Supplier, Value = @Value, Category = @Category, ExpirationDate = @ExpirationDate where Code = @Code";
@@ -33,6 +33,28 @@ namespace Desafio.Infrastructure.Queries
                 case SqlQueryType.DELETE:
                     sql = "delete from tst_products where Code = @Code";
                     break;
+                case SqlQueryType.NEWCREATE:
+                    sql = "INSERT INTO tst_products(Name, Description) VALUES (@Name, @Description);" +
+                        "INSERT INTO tst_stock(Sale_value, Purchase_value, Amount, Product_id, Supplier) VALUES (@SaleValue, @Value, @Amount, (SELECT Code FROM tst_products WHERE Name = @Name), @Supplier);" +
+                        "INSERT INTO tst_product_category(product_id, category_id) VALUES ((SELECT Code FROM tst_products WHERE Name = @Name),(SELECT category_id FROM tst_categories WHERE category_name = @Category));";
+                    break;
+                case SqlQueryType.NEWREADALL: //esse
+                    sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id ORDER BY p.Name ASC";
+                    break;
+                case SqlQueryType.NEWREAD:
+                    sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_Date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id WHERE p.Code = @Code";
+                    break;
+                case SqlQueryType.NEWUPDATE:
+                    sql = "UPDATE tst_products SET Name = @Name, Description = @Description WHERE Code = @Code;" +
+                        "UPDATE tst_stock SET Sale_value = @SaleValue, Purchase_value = @Value, Amount = @Amount, Expiration_date = @ExpirationDate WHERE Product_id = @Code;" +
+                        "UPDATE tst_product_category SET product_id = @Code, category_id = (SELECT category_id FROM tst_categories WHERE category_name = @Category) WHERE product_id = @Code AND category_id = (SELECT category_id FROM tst_categories WHERE category_name = @OldCategory)"; // Funciona para quando cada produto tem apenas uma categoria, tem que refatorar para o caso de um produto acessar mais categorias
+                    break;
+                case SqlQueryType.NEWDELETE:
+                    sql = "DELETE FROM tst_stock WHERE Product_id = @Code;" +
+                    "DELETE FROM tst_product_category WHERE product_id = @Code;" +
+                    "DELETE FROM tst_products WHERE Code = @Code;" ;
+                    break;
+
             }
             return sql;
         }

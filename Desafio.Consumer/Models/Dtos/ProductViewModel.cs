@@ -16,7 +16,11 @@ namespace Desafio.Consumer.Models.Dtos
 
         public string Category { get; set; }
 
-        public string ExpirationDate { get; set; }
+        public DateTime ExpirationDate { get; set; }
+
+        public int Amount { get; set; }
+
+        public List<Category> categories { get; set; }
 
         public Product toProduct()
         {
@@ -29,9 +33,17 @@ namespace Desafio.Consumer.Models.Dtos
             product.Value = castValues(1);
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
+            product.Amount = Amount;
+            //product.ExpirationDate = castDate();
             return product;
         }
 
+        /*
+        public string castDate()
+        {
+            return ExpirationDate.ToString();   
+        }
+        */
         public double castValues(int option)
         {
             if ( option == 0 )

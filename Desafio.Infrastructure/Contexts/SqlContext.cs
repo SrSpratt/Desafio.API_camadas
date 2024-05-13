@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Entities;
 using Desafio.Domain.Enums;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Connections;
@@ -33,7 +34,7 @@ namespace Desafio.Infrastructure.Contexts
 
             try
             {
-                string sql = SqlManager.GetSql(SqlQueryType.CREATE);
+                string sql = SqlManager.GetSql(SqlQueryType.NEWCREATE);
 
                 sqlConnection = _connectionManager.GetConnection();
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
@@ -44,6 +45,7 @@ namespace Desafio.Infrastructure.Contexts
                 cmd.Parameters.Add("@Value", SqlDbType.Real).Value = product.Value;
                 cmd.Parameters.Add("@Category", SqlDbType.VarChar).Value = product.Category;
                 cmd.Parameters.Add("@ExpirationDate", SqlDbType.VarChar).Value = product.ExpirationDate;
+                cmd.Parameters.Add("@Amount", SqlDbType.Int).Value = product.Amount;
                 sqlConnection.Open();
                 cmd.ExecuteNonQuery();
                 cmd = null;
@@ -67,7 +69,7 @@ namespace Desafio.Infrastructure.Contexts
             try
             {
                 sqlConnection = _connectionManager.GetConnection();
-                string sql = SqlManager.GetSql(SqlQueryType.DELETE);
+                string sql = SqlManager.GetSql(SqlQueryType.NEWDELETE);
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
                 cmd.Parameters.Add("@Code", SqlDbType.Int).Value = id;
                 sqlConnection.Open();
@@ -89,9 +91,9 @@ namespace Desafio.Infrastructure.Contexts
         }
 
 
-        public Product GetName(string Name)
+        public string GetCategory(int id) //método refatorado
         {
-            Product result = null;
+            string result = "";
             SqlConnection sqlConnection = null;
 
             try
@@ -102,22 +104,13 @@ namespace Desafio.Infrastructure.Contexts
                 DataSet set = new DataSet();
 
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
-                cmd.Parameters.Add("@Name", SqlDbType.VarChar).Value = Name;
+                cmd.Parameters.Add("@Code", SqlDbType.VarChar).Value = id;
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 adapter.Fill(set, "queryResult");
 
                 foreach(DataRow row in set.Tables["queryResult"].Rows)
                 {
-                    result = new Product(
-                        code: Int32.Parse(row["Code"].ToString()),
-                        description: row["Description"].ToString(),
-                        saleValue: Double.Parse(row["SaleValue"].ToString()),
-                        name: row["Name"].ToString(),
-                        supplier: row["Supplier"].ToString(),
-                        value: Double.Parse(row["Value"].ToString()),
-                        category: row["Category"].ToString(),
-                        expirationDate: row["ExpirationDate"].ToString()
-                        );
+                    result = row["Category"].ToString();
                 }
                 return result;
 
@@ -144,7 +137,7 @@ namespace Desafio.Infrastructure.Contexts
             try
             {
                 sqlConnection = _connectionManager.GetConnection();
-                string sql = SqlManager.GetSql(SqlQueryType.READ);
+                string sql = SqlManager.GetSql(SqlQueryType.NEWREAD);
 
                 DataSet set = new DataSet();
 
@@ -153,17 +146,29 @@ namespace Desafio.Infrastructure.Contexts
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
                 dataAdapter.Fill(set, "queryResult");
 
-                foreach(DataRow row in set.Tables["queryResult"].Rows)
+                foreach (DataRow row in set.Tables["queryresult"].Rows)
                 {
-                    result = new Product(
-                        code: Int32.Parse(row["Code"].ToString()),
-                        description: row["Description"].ToString(),
-                        saleValue: Double.Parse(row["SaleValue"].ToString()),
-                        name: row["Name"].ToString(),
+                    StockDao stockRep = new StockDao(
+                        amount: Int32.Parse(row["Amount"].ToString()),
+                        saleValue: Double.Parse(row["Value"].ToString()),
                         supplier: row["Supplier"].ToString(),
-                        value: Double.Parse(row["Value"].ToString()),
-                        category: row["Category"].ToString(),
-                        expirationDate: row["ExpirationDate"].ToString()
+                        purchaseValue: Double.Parse(row["Purchase Value"].ToString()),
+                        expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue
+                        );
+                    ProductDao productRep = new ProductDao(
+                        code: Int32.Parse(row["Code"].ToString()),
+                        name: row["Name"].ToString(),
+                        description: row["Description"].ToString()
+                        );
+                    CategoryDao categoryRep = new CategoryDao(
+                        name: row["Category"].ToString(),
+                        description: row["Description"].ToString()
+                        );
+
+                    result = new Product(
+                        categoryInfo: categoryRep,
+                        productInfo: productRep,
+                        stockInfo: stockRep
                         );
                 }
                 return result;
@@ -190,7 +195,7 @@ namespace Desafio.Infrastructure.Contexts
             List<Product> list = new List<Product>();
             SqlConnection sqlConnection = null;
             try
-            {
+            { /*
                 string sql = SqlManager.GetSql(SqlQueryType.READALL);
 
                 DataSet set = new DataSet();
@@ -210,6 +215,42 @@ namespace Desafio.Infrastructure.Contexts
                         value: Double.Parse(row["Value"].ToString()),
                         category: row["Category"].ToString(),
                         expirationDate: row["ExpirationDate"].ToString()
+                        );
+                    list.Add(product);
+                }
+                */
+
+                string sql = SqlManager.GetSql(SqlQueryType.NEWREADALL);
+
+                DataSet set = new DataSet();
+                sqlConnection = _connectionManager.GetConnection();
+                //sqlConnection.Open();
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(set, "queryResult");
+                foreach (DataRow row in set.Tables["queryresult"].Rows)
+                {
+                    StockDao stockRep = new StockDao(
+                        amount: Int32.Parse(row["Amount"].ToString()),
+                        saleValue: Double.Parse(row["Value"].ToString()),
+                        supplier: row["Supplier"].ToString(),
+                        purchaseValue: Double.Parse(row["Purchase Value"].ToString()),
+                        expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue
+                        );
+                    ProductDao productRep = new ProductDao(
+                        code: Int32.Parse(row["Code"].ToString()),
+                        name: row["Name"].ToString(),
+                        description: row["Description"].ToString()
+                        );
+                    CategoryDao categoryRep = new CategoryDao(
+                        name: row["Category"].ToString(),
+                        description: row["Description"].ToString()
+                        );
+
+                    Product product = new Product(
+                        categoryInfo: categoryRep,
+                        productInfo: productRep,
+                        stockInfo: stockRep
                         );
                     list.Add(product);
                 }
@@ -234,12 +275,14 @@ namespace Desafio.Infrastructure.Contexts
 
         public void Update(int id, Product product)
         {
+
+            string category = GetCategory(id);
             Product result = null;
             SqlConnection sqlConnection = null;
             try
             {
                 sqlConnection = _connectionManager.GetConnection();
-                string sql = SqlManager.GetSql(SqlQueryType.UPDATE);
+                string sql = SqlManager.GetSql(SqlQueryType.NEWUPDATE);
 
                 DataSet set = new DataSet();
 
@@ -251,10 +294,14 @@ namespace Desafio.Infrastructure.Contexts
                 cmd.Parameters.Add("@Supplier", SqlDbType.VarChar).Value = product.Supplier;
                 cmd.Parameters.Add("@Value", SqlDbType.Real).Value = product.Value;
                 cmd.Parameters.Add("@Category", SqlDbType.VarChar).Value = product.Category;
-                cmd.Parameters.Add("@ExpirationDate", SqlDbType.VarChar).Value = product.ExpirationDate;
+                cmd.Parameters.Add("@OldCategory", SqlDbType.VarChar).Value = product.Category;
+                cmd.Parameters.Add("@ExpirationDate", SqlDbType.DateTime).Value = product.ExpirationDate;
+                cmd.Parameters.Add("@Amount", SqlDbType.Int).Value = product.Amount;
                 sqlConnection.Open();
                 cmd.ExecuteNonQuery();
                 cmd = null;
+
+
                 /*
                 SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
                 dataAdapter.Fill(set, "queryResult");

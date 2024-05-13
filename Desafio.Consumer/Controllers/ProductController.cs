@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Desafio.Consumer.Controllers
 {
@@ -60,7 +61,7 @@ namespace Desafio.Consumer.Controllers
                     products = JsonConvert.DeserializeObject<List<Product>>(content);
                     if (!string.IsNullOrEmpty(type))
                     {
-                        products = products.Where(product => product.Name == type).ToList();
+                        products = products.Where(product => product.Category == type).ToList();
                     }
 
                 }
@@ -69,6 +70,36 @@ namespace Desafio.Consumer.Controllers
                     ModelState.AddModelError(null, "Error while processing the solicitation");
                 }
                 return PartialView("_ShowListPartial",products);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public async Task<IActionResult> ExhibitName(string name)
+        {
+            try
+            {
+                List<Product> products = null;
+
+                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT); 
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    products = JsonConvert.DeserializeObject<List<Product>>(content);
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        products = products.Where(product => product.Name.Contains(name)).ToList();
+                    }
+
+                }
+                else
+                {
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
+                }
+                return PartialView("_ShowListPartial", products);
             }
             catch (Exception ex)
             {
@@ -105,13 +136,43 @@ namespace Desafio.Consumer.Controllers
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            try
+            {
+                List<Product> products = null;
+                ProductViewModel model = new ProductViewModel();
+                model.categories = new List<Category>();
+
+                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    products = JsonConvert.DeserializeObject<List<Product>>(content);
+
+                    
+                    foreach (Product aux in products)
+                    {
+                        Category auxCat = new Category(aux.Category);
+                        model.categories.Add(auxCat);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
+                }
+
+                return View(model);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         //O bind garante que tudo que não foi referenciado recebe 0
-        public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate")] Product product)
+        public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount")] Product product)
         {
             System.Diagnostics.Debug.WriteLine("DEBUG:" + product.SaleValue);
             try
@@ -139,8 +200,34 @@ namespace Desafio.Consumer.Controllers
         {
             Product product = await Search(id);
             ProductViewModel productModel = product.toProduct();
+            try
+            {
+                List<Product> products = null;
 
-            return View(productModel);
+                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    products = JsonConvert.DeserializeObject<List<Product>>(content);
+                    productModel.categories = new List<Category>();
+                    foreach(Product aux in products)
+                    {
+                        Category auxCat = new Category(aux.Category);
+                        productModel.categories.Add(auxCat);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(null, "Error while processing the solicitation");
+                }
+
+                return View(productModel);
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         [HttpPost]
@@ -217,6 +304,7 @@ namespace Desafio.Consumer.Controllers
             }
         }
 
+        
         private async Task<Product> SearchName(string name)
         {
             try
@@ -239,5 +327,6 @@ namespace Desafio.Consumer.Controllers
                 throw ex;
             }
         }
+        
     }
 }

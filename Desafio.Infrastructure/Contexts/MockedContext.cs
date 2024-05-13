@@ -52,7 +52,8 @@ namespace Desafio.Infrastructure.Contexts
                     product.Supplier,
                     product.Value,
                     product.Category,
-                    product.ExpirationDate
+                    product.ExpirationDate,
+                    product.Amount
                     );
                 _products.Add(selected);
             } else
@@ -75,7 +76,8 @@ namespace Desafio.Infrastructure.Contexts
                         (i*3).ToString(),
                         200.0+(i + (0.5)),
                         (i*10).ToString(),
-                        (2020+i).ToString() + $"-{i}" + $"-{i*2}"
+                        DateTime.Parse((2020+i).ToString() + $"-{i}" + $"-{i*2}"),
+                        i
                         )
                     );
             }
@@ -87,9 +89,9 @@ namespace Desafio.Infrastructure.Contexts
             return id;
         }
 
-        public Product GetName(string name)
+        public string GetCategory(int id)
         {
-            return _products.FirstOrDefault(index => index.Name == name);
+            return _products.FirstOrDefault(index => index.Code == id).Category;
         }
     }
 }

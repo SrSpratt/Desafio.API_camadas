@@ -21,9 +21,11 @@ namespace Desafio.Domain.Dtos
 
         public string Category { get; set; }
 
-        public string ExpirationDate { get; set; }
+        public int Amount { get; set; }
 
-        public ProductDto(int code, string description, double salevalue, string name, string supplier, double value, string category, string expirationDate)
+        public DateTime ExpirationDate { get; set; }
+
+        public ProductDto(int code, string description, double salevalue, string name, string supplier, double value, string category, DateTime expirationDate, int amount)
         {
             Code = code;
             Description = description;
@@ -33,11 +35,12 @@ namespace Desafio.Domain.Dtos
             Value = value;
             Category = category;
             ExpirationDate = expirationDate;
+            Amount = amount;
         }
 
         public Product ToEntity()
         {
-            return new Product(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate);
+            return new Product(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate, Amount);
         }
 
         public static List<Product> ToEntityList(List<ProductDto> products)

@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Dtos\ProductViewDTO.cs" />
     <Compile Remove="Views\Product\_IndexPartial.cshtml.cs" />
     <Compile Remove="Views\Shared\Index.cshtml.cs" />
   </ItemGroup>
@@ -25,10 +26,23 @@
   <ItemGroup>
     <Content Remove="Views\Product\_IndexPartial.cshtml" />
     <Content Remove="Views\Shared\Index.cshtml" />
+    <Content Remove="Views\Shared\Index1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Shared\Index1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Shared\Index1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\Index1.cshtml" />
   </ItemGroup>
 
 </Project>

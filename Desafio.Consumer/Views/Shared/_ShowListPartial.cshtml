@@ -4,6 +4,9 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Code)
             </th>
             <th>
@@ -11,9 +14,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.SaleValue)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Supplier)
@@ -35,6 +35,9 @@
         {
             <tr>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
                     @Html.DisplayFor(modelItem => item.Code)
                 </td>
                 <td>
@@ -42,9 +45,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.SaleValue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Supplier)

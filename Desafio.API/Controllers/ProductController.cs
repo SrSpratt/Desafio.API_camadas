@@ -51,12 +51,12 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet("name/{name}")]
-        public ActionResult<ProductDto> GetName(string name)
+        public ActionResult<string> GetCategory(int id)
         {
             try
             {
-                Product product = _service.ReadName(name);
-                return product == null ? NoContent() : product.ToDto(); //pode ser nulo
+                string product = _service.ReadCategory(id);
+                return product == null ? NoContent() : product; //pode ser nulo
             }
             catch (Exception ex)
             {

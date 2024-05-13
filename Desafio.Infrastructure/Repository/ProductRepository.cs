@@ -42,9 +42,9 @@ namespace Desafio.Infrastructure.Repository
             return _context.Get(id);
         }
 
-        public Product ReadName(string name)
+        public string ReadCategory(int id)
         {
-            return _context.GetName(name);
+            return _context.GetCategory(id);
         }
 
         public List<Product> ReadAll()

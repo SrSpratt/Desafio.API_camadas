@@ -17,7 +17,7 @@ namespace Desafio.Infrastructure.Repository
 
         public Product Read(int id);
 
-        public Product ReadName(string name);
+        public string ReadCategory(int id);
 
         public List<Product> ReadAll();
     }

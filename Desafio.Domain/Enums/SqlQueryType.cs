@@ -13,7 +13,12 @@ namespace Desafio.Domain.Enums
         READNAME,
         READALL,
         UPDATE,
-        DELETE
+        DELETE,
+        NEWCREATE,
+        NEWREAD,
+        NEWREADALL,
+        NEWUPDATE,
+        NEWDELETE
 
     }
 }

@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Dtos;
+﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,9 +22,11 @@ namespace Desafio.Domain.Entities
 
         public string Category { get; set; }
 
-        public string ExpirationDate { get; set; }
+        public int Amount { get; set; }
 
-        public Product(int code, string description, double saleValue, string name, string supplier, double value, string category, string expirationDate)
+        public DateTime ExpirationDate { get; set; }
+
+        public Product(int code, string description, double saleValue, string name, string supplier, double value, string category, DateTime expirationDate, int amount)
         {
             SaleValue = saleValue;
             Code = code;
@@ -33,11 +36,25 @@ namespace Desafio.Domain.Entities
             Value = value;
             Category = category;
             ExpirationDate = expirationDate;
+            Amount = amount;
+        }
+
+        public Product(CategoryDao categoryInfo, ProductDao productInfo, StockDao stockInfo )
+        {
+            SaleValue = stockInfo.SaleValue;
+            Code = productInfo.Code;
+            Description = productInfo.Description;
+            Name = productInfo.Name;
+            Supplier = stockInfo.Supplier;
+            Value = stockInfo.PurchaseValue;
+            Category = categoryInfo.Name;
+            ExpirationDate = stockInfo.ExpirationDate;
+            Amount = stockInfo.Amount;
         }
 
         public ProductDto ToDto()
         {
-            return new ProductDto(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate);
+            return new ProductDto(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate, Amount);
         }
 
         public static List<ProductDto> ToDtoList(List<Product> products)

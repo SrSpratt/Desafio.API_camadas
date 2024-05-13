@@ -15,15 +15,17 @@
     @using (Html.BeginForm ("Index", "Home", FormMethod.Get))
     {
         <b>Search By: </b>
-        @*@Html.RadioButton("SearchBy", "Name", true) <text>Name</text>
-        @Html.RadioButton("SearchBy", "Category") <text>Category</text>
-        @Html.TextBox("search")
-        *@
-        <form asp-action="Index">
-            <select id="SelectProduct" name="name" asp-items="@(new SelectList(Model, "Name","Name" ))">
-                <option>  Selecionar  </option>
-            </select>
-        </form>
+        <div class="searchSpace d-flex">
+            <form asp-action="Index">
+                <select id="SelectProduct" name="name" asp-items="@(new SelectList(Model, "Category","Category" ))">
+                    <option>  Category </option>
+                </select>
+            </form>
+            <form asp-action="Index">
+                <input type="text" id="SearchProduct" placeholder="Name" />
+            </form>
+        </div>
+
     }
 </p>
 
@@ -32,9 +34,12 @@
 </div>
 @{
     string url = Url.Action("ShowName", "Product");
+    string secondurl = Url.Action("ExhibitName", "Product");
     <script>
         vanilla_fire_ajax("SelectProduct", "@url", "partialList");
+        vanilla_fire_ajax_search("SearchProduct", "@secondurl", "partialList");
     </script>
+
 }
 
 

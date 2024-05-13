@@ -20,6 +20,8 @@ namespace Desafio.Domain.Entities
 
         public string Category { get; set; }
 
-        public string ExpirationDate { get; set; }
+        public int Amount {  get; set; }
+
+        public DateTime ExpirationDate { get; set; }
     }
 }

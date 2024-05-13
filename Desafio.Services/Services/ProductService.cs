@@ -27,9 +27,9 @@ namespace Desafio.Services.Services
             return _repository.Read(id);
         }
 
-        public Product ReadName(string name)
+        public string ReadCategory(int id)
         {
-            return _repository.ReadName(name);
+            return _repository.ReadCategory(id);
         }
 
         public void Update(int id, Product product)

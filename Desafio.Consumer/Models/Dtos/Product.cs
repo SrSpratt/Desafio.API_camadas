@@ -23,10 +23,10 @@
             ProductViewModel product = new ProductViewModel();
             product.Code = Code;
             product.Description = Description;
-            product.SaleValue = castValues(0);
+            product.Value = castValues(0);
             product.Name = Name;
             product.Supplier = Supplier;
-            product.Value = castValues(1);
+            product.SaleValue = castValues(1);
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;

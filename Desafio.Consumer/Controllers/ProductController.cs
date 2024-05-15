@@ -62,7 +62,7 @@ namespace Desafio.Consumer.Controllers
                 {
                     string content = await response.Content.ReadAsStringAsync();
                     products = JsonConvert.DeserializeObject<List<Product>>(content);
-                    if (!string.IsNullOrEmpty(type))
+                    if (!string.IsNullOrEmpty(type) && (type != "Category"))
                     {
                         products = products.Where(product => product.Category == type).ToList();
                     }
@@ -220,7 +220,9 @@ namespace Desafio.Consumer.Controllers
                     foreach(Product aux in products)
                     {
                         Category auxCat = new Category(aux.Category);
-                        productModel.categories.Add(auxCat);
+                        bool isDuplicate = productModel.categories.Any(duplicates => duplicates.Name == auxCat.Name);
+                        if (!isDuplicate)
+                            productModel.categories.Add(auxCat);
                     }
                 }
                 else

@@ -7,13 +7,13 @@ namespace Desafio.Consumer.Models.Dtos
     {
         public int Code { get; set; }
         public string Description { get; set; }
-        [Display(Name = "Purchase Value")]
+        [Display(Name = "Sale Value")]
         public string SaleValue { get; set; } //double
         public string Name { get; set; }
 
         public string Supplier { get; set; }
 
-        [Display(Name = "Sale Value")]
+        [Display(Name = "Purchase Value")]
         public string Value { get; set; } //double
 
         public string Category { get; set; }
@@ -32,10 +32,10 @@ namespace Desafio.Consumer.Models.Dtos
             Product product = new Product();
             product.Code = Code;
             product.Description = Description;
-            product.Value = castValues(0);
+            product.Value = castValues(1);
             product.Name = Name;
             product.Supplier = Supplier;
-            product.SaleValue = castValues(1);
+            product.SaleValue = castValues(0);
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;

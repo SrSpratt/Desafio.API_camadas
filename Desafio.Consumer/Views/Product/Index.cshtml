@@ -1,14 +1,21 @@
-﻿@model IEnumerable<Desafio.Consumer.Models.Dtos.Product>
+﻿@using Desafio.Consumer.Models.Dtos
+@model IEnumerable<Desafio.Consumer.Models.Dtos.Product>
 
 @{
-    ViewData["Title"] = "Index";
+    List<Category> categories = new List<Category>();
+    foreach (Product item in Model)
+    {
+        bool isDuplicate = categories.Any(duplicate => duplicate.Name == item.Category);
+        if (!isDuplicate)
+            categories.Add(new Category(item.Category));
+    }
 }
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/js/JavaScript.js"></script>
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-custom">Create New</a>
 </p>
 
 <p>
@@ -17,7 +24,7 @@
         <b>Search By: </b>
         <div class="searchSpace d-flex">
             <form asp-action="Index">
-                <select id="SelectProduct" name="name" asp-items="@(new SelectList(Model, "Category","Category" ))">
+                <select id="SelectProduct" name="name" asp-items="@(new SelectList(categories, "Name","Name" ))">
                     <option>  Category </option>
                 </select>
             </form>

@@ -8,14 +8,14 @@ namespace Desafio.Consumer.Models.Dtos
         public string Description { get; set; }
 
         [DisplayFormat(DataFormatString = "{0:F2} R$")]
-        [Display(Name = "Purchase Value")]
+        [Display(Name = "Sale Value")]
         public double SaleValue { get; set; }
         public string Name { get; set; }
 
         public string Supplier { get; set; }
         [DisplayFormat(DataFormatString = "{0:F2} R$")]
 
-        [Display(Name = "Sale Value")]
+        [Display(Name = "Purchase Value")]
         public double Value { get; set; }
 
         public string Category { get; set; }
@@ -31,10 +31,10 @@ namespace Desafio.Consumer.Models.Dtos
             ProductViewModel product = new ProductViewModel();
             product.Code = Code;
             product.Description = Description;
-            product.Value = castValues(0);
+            product.Value = castValues(1);
             product.Name = Name;
             product.Supplier = Supplier;
-            product.SaleValue = castValues(1);
+            product.SaleValue = castValues(0);
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;

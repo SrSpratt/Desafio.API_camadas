@@ -8,6 +8,10 @@
         {
             Name = name;
         }
+        public Category()
+        {
+
+        }
 
     }
 }

@@ -93,5 +93,36 @@ namespace Desafio.Infrastructure.Contexts
         {
             return _products.FirstOrDefault(index => index.Code == id).Category;
         }
+
+        Task<List<Product>> IContext.GetAll()
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Product> IContext.Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<string> IContext.GetCategory(int name)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task IContext.Update(int id, Product product)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        Task IContext.Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<int> IContext.Add(Product product)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -21,12 +21,12 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<ProductDto>> GetAll()
+        public async Task<ActionResult<List<ProductDto>>> GetAll()
         {
             try
             {
-                List<Product> list = _service.ReadAll();
-                List<ProductDto> dtolist = list != null ?Product.ToDtoList(list) : null;
+                List<Product> list = await _service.ReadAll();
+                List<ProductDto> dtolist = list != null ? Product.ToDtoList(list) : null;
                 return dtolist; // use this to make conversions
             } catch (Exception ex)
             {
@@ -36,11 +36,11 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<ProductDto> Get(int id)
+        public async Task<ActionResult<ProductDto>> Get(int id)
         {
             try
             {
-                Product product = _service.Read(id);
+                Product product = await _service.Read(id);
                 return product == null ? NoContent() : product.ToDto(); //pode ser nulo
             } catch (Exception ex)
             {
@@ -51,11 +51,11 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet("name/{name}")]
-        public ActionResult<string> GetCategory(int id)
+        public async Task<ActionResult<string>> GetCategory(int id)
         {
             try
             {
-                string product = _service.ReadCategory(id);
+                string product = await _service.ReadCategory(id);
                 return product == null ? NoContent() : product; //pode ser nulo
             }
             catch (Exception ex)
@@ -67,13 +67,14 @@ namespace Desafio.API.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ProductDto> Post([Bind("Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate")]ProductDto productdto)
+        public async Task<ActionResult<ProductDto>> Post([Bind("Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate")]ProductDto productdto)
         {
             try
             {
                 Product product = productdto.ToEntity();
-                _service.Create(product);
-                return Ok();
+                var productid = await _service.Create(product);
+                var response = CreatedAtAction(nameof(Get), new { id = productid }, null);
+                return response; // Colocar um created at action aqui
             } catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
@@ -84,12 +85,12 @@ namespace Desafio.API.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<ProductDto> Put(int id, [FromBody]ProductDto productdto)
+        public async Task<ActionResult<ProductDto>> Put(int id, [FromBody]ProductDto productdto)
         {
             try
             {
                 Product product = productdto.ToEntity();
-                _service.Update(id, product);
+                await _service.Update(id, product);
                 return Ok();
             }
             catch (Exception ex)
@@ -101,12 +102,12 @@ namespace Desafio.API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                _service.Delete(id);
-                return _service.Read(id) == null ? Ok() : NotFound();
+                await _service.Delete(id);
+                return await _service.Read(id) == null ? Ok() : NotFound();
                 
             }
             catch (Exception ex)

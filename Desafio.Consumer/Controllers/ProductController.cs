@@ -1,6 +1,9 @@
 ﻿using Desafio.Consumer.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.ResponseCompression;
 using Newtonsoft.Json;
+using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Xml.Linq;
 
@@ -154,7 +157,10 @@ namespace Desafio.Consumer.Controllers
                     foreach (Product aux in products)
                     {
                         Category auxCat = new Category(aux.Category);
-                        model.categories.Add(auxCat);
+
+                        bool isDuplicate = model.categories.Any(duplicate => duplicate.Name == auxCat.Name);
+                        if (!isDuplicate)
+                            model.categories.Add(auxCat);
                     }
                 }
                 else
@@ -174,7 +180,8 @@ namespace Desafio.Consumer.Controllers
         //O bind garante que tudo que não foi referenciado recebe 0
         public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount")] Product product)
         {
-            System.Diagnostics.Debug.WriteLine("DEBUG:" + product.SaleValue);
+            //System.Diagnostics.Debug.WriteLine("DEBUG:" + product.SaleValue);
+            //product.ExpirationDate = DateTime.Parse(product.ExpirationDate.ToString(), CultureInfo.InvariantCulture);
             try
             {
                 string json = JsonConvert.SerializeObject(product);

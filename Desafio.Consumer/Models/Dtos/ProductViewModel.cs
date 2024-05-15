@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace Desafio.Consumer.Models.Dtos
 {
@@ -6,18 +7,22 @@ namespace Desafio.Consumer.Models.Dtos
     {
         public int Code { get; set; }
         public string Description { get; set; }
-
+        [Display(Name = "Purchase Value")]
         public string SaleValue { get; set; } //double
         public string Name { get; set; }
 
         public string Supplier { get; set; }
 
+        [Display(Name = "Sale Value")]
         public string Value { get; set; } //double
 
         public string Category { get; set; }
 
+        [Display(Name = "Expiration Date")]
+        [DataType(DataType.Date)]
         public DateTime ExpirationDate { get; set; }
 
+        [Display(Name = "Qty.")]
         public int Amount { get; set; }
 
         public List<Category> categories { get; set; }

@@ -50,7 +50,7 @@
             <div class="form-group">
                 <label asp-for="Category" class="control-label"></label>
                 <!-- <input asp-for="Category" class="form-control" /> -->
-                <select asp-for="Category" asp-items="@(new SelectList(Model.categories, "Name","Name" ))" class="select-label" >
+                <select asp-for="Category" asp-items="@(new SelectList(Model.categories, "Name","Name" ))" class="form-control" >
                     <option>  Category </option>
                 </select>
                 <span asp-validation-for="Category" class="text-danger"></span>

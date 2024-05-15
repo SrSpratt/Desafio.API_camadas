@@ -9,17 +9,17 @@ namespace Desafio.Infrastructure.Contexts
 {
     public interface IContext
     {
-        List<Product> GetAll();
+        Task<List<Product>> GetAll();
 
-        public Product Get(int id);
+        public Task<Product> Get(int id);
 
-        public string GetCategory(int name);
+        public Task<string> GetCategory(int name);
 
-        public void Update(int id, Product product);
+        public Task Update(int id, Product product);
 
-        public void Add(Product product);
+        public Task<int> Add(Product product);
 
-        public void Delete(int id);
+        public Task Delete(int id);
 
         public int NextId();
     }

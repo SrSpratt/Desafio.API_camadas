@@ -10,15 +10,15 @@ namespace Desafio.Services.Services
 {
     public interface IService
     {
-        public List<Product> ReadAll();
+        public Task<List<Product>> ReadAll();
 
-        public Product Read(int id);
+        public Task<Product> Read(int id);
 
-        public string ReadCategory(int id);
+        public Task<string> ReadCategory(int id);
 
-        public void Update(int id, Product product);
-        public void Create(Product product);
+        public Task Update(int id, Product product);
+        public Task<int> Create(Product product);
 
-        public void Delete(int id);
+        public Task Delete(int id);
     }
 }

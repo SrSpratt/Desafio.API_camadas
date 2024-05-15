@@ -34,15 +34,15 @@ namespace Desafio.Infrastructure.Queries
                     sql = "delete from tst_products where Code = @Code";
                     break;
                 case SqlQueryType.NEWCREATE:
-                    sql = "INSERT INTO tst_products(Name, Description) VALUES (@Name, @Description);" +
-                        "INSERT INTO tst_stock(Sale_value, Purchase_value, Amount, Product_id, Supplier) VALUES (@SaleValue, @Value, @Amount, (SELECT Code FROM tst_products WHERE Name = @Name), @Supplier);" +
+                    sql = "INSERT INTO tst_products(Name, Description) OUTPUT INSERTED.Code VALUES (@Name, @Description);" +
+                        "INSERT INTO tst_stock(Sale_value, Purchase_value, Amount, Product_id, Supplier, Expiration_date) VALUES (@SaleValue, @Value, @Amount, (SELECT Code FROM tst_products WHERE Name = @Name), @Supplier, @ExpirationDate);" +
                         "INSERT INTO tst_product_category(product_id, category_id) VALUES ((SELECT Code FROM tst_products WHERE Name = @Name),(SELECT category_id FROM tst_categories WHERE category_name = @Category));";
                     break;
                 case SqlQueryType.NEWREADALL: //esse
                     sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id ORDER BY p.Name ASC";
                     break;
                 case SqlQueryType.NEWREAD:
-                    sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_Date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id WHERE p.Code = @Code";
+                    sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id WHERE p.Code = @Code";
                     break;
                 case SqlQueryType.NEWUPDATE:
                     sql = "UPDATE tst_products SET Name = @Name, Description = @Description WHERE Code = @Code;" +

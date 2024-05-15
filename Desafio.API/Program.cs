@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 //adicionar repositório {deixarei o singleton enquanto for mockado}
 builder.Services.AddSingleton<IRepository, ProductRepository>();
+
 //adicionar serviços
 builder.Services.AddScoped<IService, ProductService>();
 
@@ -21,6 +22,8 @@ builder.Services.AddScoped<IService, ProductService>();
 builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection(nameof(ApiConfig)));
 
 builder.Services.AddSingleton<IApiConfig>(x => x.GetRequiredService<IOptions<ApiConfig>>().Value);
+
+builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
 
 var app = builder.Build();
 

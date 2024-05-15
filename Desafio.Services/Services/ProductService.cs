@@ -17,34 +17,34 @@ namespace Desafio.Services.Services
             _repository = repository;
         }
 
-        public List<Product> ReadAll()
+        public async Task<List<Product>> ReadAll()
         {
-            return _repository.ReadAll();
+            return await _repository.ReadAll();
         }
 
-        public Product Read(int id)
+        public async Task<Product> Read(int id)
         {
-            return _repository.Read(id);
+            return await _repository.Read(id);
         }
 
-        public string ReadCategory(int id)
+        public async Task<string> ReadCategory(int id)
         {
-            return _repository.ReadCategory(id);
+            return await _repository.ReadCategory(id);
         }
 
-        public void Update(int id, Product product)
+        public async Task Update(int id, Product product)
         {
-            _repository.Update(id, product);
+            await _repository.Update(id, product);
         }
 
-        public void Create(Product product)
+        public async Task<int> Create(Product product)
         {
-            _repository.Create(product);
+            return await _repository.Create(product);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            _repository.Delete(id);
+            await _repository.Delete(id);
         }
     }
 }

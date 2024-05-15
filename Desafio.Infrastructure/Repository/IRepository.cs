@@ -9,16 +9,16 @@ namespace Desafio.Infrastructure.Repository
 {
     public interface IRepository
     {
-        public void Create(Product product);
+        public Task<int> Create(Product product);
 
-        public void Update(int id, Product product);
+        public Task Update(int id, Product product);
 
-        public void Delete(int id);
+        public Task Delete(int id);
 
-        public Product Read(int id);
+        public Task<Product> Read(int id);
 
-        public string ReadCategory(int id);
+        public Task<string> ReadCategory(int id);
 
-        public List<Product> ReadAll();
+        public Task<List<Product>> ReadAll();
     }
 }

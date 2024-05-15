@@ -22,39 +22,39 @@ namespace Desafio.Infrastructure.Repository
             else
                 _context = new SqlContext(_apiConfig);
         }
-        public void Create(Product product)
+        public async Task<int> Create(Product product)
         {
             if (Settings.SELECTED_DATABASE == DatabaseType.Volatile)
             {
                 int newid = _context.NextId();
                 product.Code = newid;
             }
-            _context.Add(product);
+            return await _context.Add(product);
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            _context.Delete(id);
+            await _context.Delete(id);
         }
 
-        public Product Read(int id)
+        public async Task<Product> Read(int id)
         {
-            return _context.Get(id);
+            return await _context.Get(id);
         }
 
-        public string ReadCategory(int id)
+        public async Task<string> ReadCategory(int id)
         {
-            return _context.GetCategory(id);
+            return await _context.GetCategory(id);
         }
 
-        public List<Product> ReadAll()
+        public async Task<List<Product>> ReadAll()
         {
-            return _context.GetAll();
+            return await _context.GetAll();
         }
 
-        public void Update(int id, Product product)
+        public async Task Update(int id, Product product)
         {
-            _context.Update(id, product);
+            await _context.Update(id, product);
         }
     }
 }

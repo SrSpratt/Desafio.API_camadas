@@ -6,12 +6,14 @@ namespace Desafio.Consumer.Models.Dtos
     {
         public int Code { get; set; }
         public string Description { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:F2} R$")]
         [Display(Name = "Purchase Value")]
         public double SaleValue { get; set; }
         public string Name { get; set; }
 
         public string Supplier { get; set; }
-        [DisplayFormat(DataFormatString = "{0:F2}")]
+        [DisplayFormat(DataFormatString = "{0:F2} R$")]
 
         [Display(Name = "Sale Value")]
         public double Value { get; set; }

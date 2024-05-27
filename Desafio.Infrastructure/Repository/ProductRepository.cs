@@ -17,18 +17,10 @@ namespace Desafio.Infrastructure.Repository
         public ProductRepository(IApiConfig apiConfig)
         {
             _apiConfig = apiConfig;
-            if (Settings.SELECTED_DATABASE == DatabaseType.Volatile)
-                _context = new MockedContext();
-            else
-                _context = new SqlContext(_apiConfig);
+            _context = new SqlContext(_apiConfig);
         }
         public async Task<int> Create(Product product)
         {
-            if (Settings.SELECTED_DATABASE == DatabaseType.Volatile)
-            {
-                int newid = _context.NextId();
-                product.Code = newid;
-            }
             return await _context.Add(product);
         }
 

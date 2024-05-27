@@ -2,7 +2,7 @@
 using System.Globalization;
 
 namespace Desafio.Consumer.Models.Dtos
-{
+{ //criado para facilitar a exibição dos valores, tem um conversor de produto para cá e de cá para produto
     public class ProductViewModel
     {
         public int Code { get; set; }
@@ -39,16 +39,9 @@ namespace Desafio.Consumer.Models.Dtos
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;
-            //product.ExpirationDate = castDate();
             return product;
         }
 
-        /*
-        public string castDate()
-        {
-            return ExpirationDate.ToString();   
-        }
-        */
         public double castValues(int option)
         {
             if ( option == 0 )

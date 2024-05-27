@@ -125,20 +125,6 @@ namespace Desafio.Consumer.Controllers
             }
         }
 
-        public async Task<IActionResult> GetName(string name)
-        {
-            try
-            {
-                Product result = await SearchName(name);
-                return View(result);
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-        }
-
         public async Task<IActionResult> Create()
         {
             try
@@ -180,8 +166,6 @@ namespace Desafio.Consumer.Controllers
         //O bind garante que tudo que não foi referenciado recebe 0
         public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount")] Product product)
         {
-            //System.Diagnostics.Debug.WriteLine("DEBUG:" + product.SaleValue);
-            //product.ExpirationDate = DateTime.Parse(product.ExpirationDate.ToString(), CultureInfo.InvariantCulture);
             try
             {
                 string json = JsonConvert.SerializeObject(product);

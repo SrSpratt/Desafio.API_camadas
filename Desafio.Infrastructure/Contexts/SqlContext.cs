@@ -217,30 +217,7 @@ namespace Desafio.Infrastructure.Contexts
             List<Product> list = new List<Product>();
             SqlConnection sqlConnection = null;
             try
-            { /*
-                string sql = SqlManager.GetSql(SqlQueryType.READALL);
-
-                DataSet set = new DataSet();
-                sqlConnection = _connectionManager.GetConnection();
-                //sqlConnection.Open();
-                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
-                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                adapter.Fill(set, "queryResult");
-                foreach(DataRow row in set.Tables["queryresult"].Rows)
-                {
-                    Product product = new Product(
-                        code: Int32.Parse(row["Code"].ToString()),
-                        description: row["Description"].ToString(),
-                        saleValue: Double.Parse(row["SaleValue"].ToString()),
-                        name: row["Name"].ToString(),
-                        supplier: row["Supplier"].ToString(),
-                        value: Double.Parse(row["Value"].ToString()),
-                        category: row["Category"].ToString(),
-                        expirationDate: row["ExpirationDate"].ToString()
-                        );
-                    list.Add(product);
-                }
-                */
+            { 
                 string sql = SqlManager.GetSql(SqlQueryType.NEWREADALL);
 
                 DataSet set = new DataSet();
@@ -331,25 +308,6 @@ namespace Desafio.Infrastructure.Contexts
                         cmd = null;
                     });
 
-
-                /*
-                SqlDataAdapter dataAdapter = new SqlDataAdapter(cmd);
-                dataAdapter.Fill(set, "queryResult");
-                
-                foreach (DataRow row in set.Tables["queryResult"].Rows)
-                {
-                    result = new Product(
-                        code: Int32.Parse(row["Code"].ToString()),
-                        description: row["Description"].ToString(),
-                        SaleValue: Double.Parse(row["SaleValue"].ToString()),
-                        name: row["Name"].ToString(),
-                        supplier: row["Supplier"].ToString(),
-                        value: Double.Parse(row["Value"].ToString()),
-                        category: row["Category"].ToString(),
-                        expirationDate: row["ExpirationDate"].ToString()
-                        );
-                }
-                return result;*/
 
                 set.Clear();
                 set = null;

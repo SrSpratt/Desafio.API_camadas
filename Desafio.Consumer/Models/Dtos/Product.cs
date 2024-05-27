@@ -38,16 +38,8 @@ namespace Desafio.Consumer.Models.Dtos
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;
-            //product.ExpirationDate = castDate();
             return product;
         }
-
-        /*
-        public DateTime castDate()
-        {
-            return DateTime.Parse(ExpirationDate);
-        }
-        */
 
         public string castValues(int option)
         {

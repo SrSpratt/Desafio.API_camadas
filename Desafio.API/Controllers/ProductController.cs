@@ -30,7 +30,7 @@ namespace Desafio.API.Controllers
                 return dtolist; // use this to make conversions
             } catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new ArgumentException(ex.Message);
             }
             return null;
         }
@@ -44,23 +44,8 @@ namespace Desafio.API.Controllers
                 return product == null ? NoContent() : product.ToDto(); //pode ser nulo
             } catch (Exception ex)
             {
-                Console.WriteLine($"Error {ex.Message}");
-            }
-
-            return null;
-        }
-
-        [HttpGet("name/{name}")]
-        public async Task<ActionResult<string>> GetCategory(int id)
-        {
-            try
-            {
-                string product = await _service.ReadCategory(id);
-                return product == null ? NoContent() : product; //pode ser nulo
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error {ex.Message}");
+                
+                throw new ArgumentException(ex.Message);
             }
 
             return null;

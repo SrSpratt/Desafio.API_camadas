@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Desafio.Consumer.Validations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Desafio.Consumer.Models.Dtos
 {
@@ -9,6 +10,7 @@ namespace Desafio.Consumer.Models.Dtos
 
         [DisplayFormat(DataFormatString = "{0:F2} R$")]
         [Display(Name = "Sale Value")]
+        [ValidateValues(0.01f, 100.0f)]
         public double SaleValue { get; set; }
         public string Name { get; set; }
 
@@ -16,6 +18,7 @@ namespace Desafio.Consumer.Models.Dtos
         [DisplayFormat(DataFormatString = "{0:F2} R$")]
 
         [Display(Name = "Purchase Value")]
+        [ValidateValues(0.01f, 100.0f)]
         public double Value { get; set; }
 
         public string Category { get; set; }

@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Desafio.Consumer.Validations;
+using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 
 namespace Desafio.Consumer.Models.Dtos
@@ -7,13 +9,17 @@ namespace Desafio.Consumer.Models.Dtos
     {
         public int Code { get; set; }
         public string Description { get; set; }
+        [Required]
         [Display(Name = "Sale Value")]
+        [ValidateValues(0.01f, 100.0f, ErrorMessage ="Put a valid value!")]
+        [BindProperty]
         public string SaleValue { get; set; } //double
         public string Name { get; set; }
 
         public string Supplier { get; set; }
 
         [Display(Name = "Purchase Value")]
+        [ValidateValues(0.01f, 100.0f)]
         public string Value { get; set; } //double
 
         public string Category { get; set; }
@@ -24,8 +30,9 @@ namespace Desafio.Consumer.Models.Dtos
 
         [Display(Name = "Qty.")]
         public int Amount { get; set; }
+        
 
-        public List<Category> categories { get; set; }
+        public List<Category>? categories { get; set; }
 
         public Product toProduct()
         {

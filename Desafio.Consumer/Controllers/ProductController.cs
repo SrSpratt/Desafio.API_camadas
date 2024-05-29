@@ -1,7 +1,9 @@
 ﻿using Desafio.Consumer.Models.Dtos;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.ResponseCompression;
 using Newtonsoft.Json;
+using NuGet.Protocol.Plugins;
 using System.Globalization;
 using System.Net;
 using System.Text;
@@ -189,6 +191,7 @@ namespace Desafio.Consumer.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
+
             Product product = await Search(id);
             ProductViewModel productModel = product.toProduct();
             try
@@ -226,25 +229,29 @@ namespace Desafio.Consumer.Controllers
         [HttpPost]
         public async Task<IActionResult> EditHandler([FromForm] ProductViewModel productModel)
         {
-            Product product = productModel.toProduct();
-            try
+            if (ModelState.IsValid)
             {
-                string json = JsonConvert.SerializeObject(product);
-                byte[] buffer = Encoding.UTF8.GetBytes(json);
-                ByteArrayContent byteContent = new ByteArrayContent(buffer);
-                byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ("application/json");
-                string url = $"{ENDPOINT}{product.Code}";
-                HttpResponseMessage response =  await httpClient.PutAsync(url, byteContent);
+                Product product = productModel.toProduct();
+                try
+                {
+                    string json = JsonConvert.SerializeObject(product);
+                    byte[] buffer = Encoding.UTF8.GetBytes(json);
+                    ByteArrayContent byteContent = new ByteArrayContent(buffer);
+                    byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                    string url = $"{ENDPOINT}{product.Code}";
+                    HttpResponseMessage response = await httpClient.PutAsync(url, byteContent);
 
-                if (!response.IsSuccessStatusCode)
-                    ModelState.AddModelError(null, "Error while processing the solicitation");
-                return RedirectToAction("Index");
-            }
-            catch (Exception ex)
-            {
+                    if (!response.IsSuccessStatusCode)
+                        ModelState.AddModelError(null, "Error while processing the solicitation");
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
 
-                throw ex;
+                    throw ex;
+                }
             }
+            return RedirectToAction("Edit", new { id = productModel.Code });
         }
 
         public async Task<IActionResult> Delete(int id)

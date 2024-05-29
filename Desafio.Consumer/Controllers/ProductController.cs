@@ -7,6 +7,7 @@ using NuGet.Protocol.Plugins;
 using System.Globalization;
 using System.Net;
 using System.Text;
+using System.Web.WebPages.Html;
 using System.Xml.Linq;
 
 namespace Desafio.Consumer.Controllers
@@ -217,6 +218,23 @@ namespace Desafio.Consumer.Controllers
                     ModelState.AddModelError(null, "Error while processing the solicitation");
                 }
 
+                if (TempData["Errors"] is not null)
+                {
+                    var modelStateString = TempData["Errors"].ToString();
+                    var listError = JsonConvert.DeserializeObject<Dictionary<string, string>>(modelStateString);
+                    var modelState = new Microsoft.AspNetCore.Mvc.ModelBinding.ModelStateDictionary();
+                    foreach (var item in listError)
+                    {
+                        modelState.AddModelError(item.Key, item.Value ?? "");
+                    }
+
+                    ViewData.ModelState.Merge(modelState);
+                    if (!ModelState.IsValid)
+                    {
+                        return View(productModel);
+                    }
+                }
+
                 return View(productModel);
             }
             catch (Exception ex)
@@ -251,6 +269,13 @@ namespace Desafio.Consumer.Controllers
                     throw ex;
                 }
             }
+            var errors = ModelState.Values.SelectMany(modelState => modelState.Errors);
+            ModelState.AddModelError("SaleValue", "Error");
+            var listError = ModelState.Where(x => x.Value.Errors.Any())
+                .ToDictionary(m => m.Key, m => m.Value.Errors
+                .Select(s => s.ErrorMessage)
+                .FirstOrDefault(s => s != null));
+            TempData["Errors"] = JsonConvert.SerializeObject(listError);
             return RedirectToAction("Edit", new { id = productModel.Code });
         }
 

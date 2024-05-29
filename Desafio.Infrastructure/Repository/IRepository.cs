@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Dtos;
+using Desafio.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Desafio.Infrastructure.Repository
 {
     public interface IRepository
     {
+        public Task<UserDTO> Login();
         public Task<int> Create(Product product);
 
         public Task Update(int id, Product product);

@@ -15,23 +15,11 @@ namespace Desafio.Infrastructure.Queries
 
             switch (queryType)
             {
-                case SqlQueryType.CREATE:
-                    sql = "insert into tst_products(Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate) values(@Name, @Description, @SaleValue, @Supplier, @Value, @Category, @ExpirationDate)";
-                    break;
-                case SqlQueryType.READALL:
-                    sql = "select Code, Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate from tst_products";
-                    break;
-                case SqlQueryType.READ:
-                    sql = "select Code, Name, Description, SaleValue, Supplier, Value, Category, ExpirationDate from tst_products where Code = @Code";
+                case SqlQueryType.READUSER:
+                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id FROM tst_users JOIN tst_roles ON user_role = role_id";
                     break;
                 case SqlQueryType.READNAME:
                     sql = "SELECT category_name AS 'Category' FROM tst_categories c JOIN tst_product_category pc ON pc.category_id = c.category_id WHERE product_id = @Code";
-                    break;
-                case SqlQueryType.UPDATE:
-                    sql = "update tst_products set Name = @Name, Description = @Description, SaleValue = @SaleValue, Supplier = @Supplier, Value = @Value, Category = @Category, ExpirationDate = @ExpirationDate where Code = @Code";
-                    break;
-                case SqlQueryType.DELETE:
-                    sql = "delete from tst_products where Code = @Code";
                     break;
                 case SqlQueryType.NEWCREATE:
                     sql = "INSERT INTO tst_products(Name, Description) OUTPUT INSERTED.Code VALUES (@Name, @Description);" +

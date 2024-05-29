@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Dtos;
+using Desafio.Domain.Entities;
 using Desafio.Domain.Enums;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Contexts;
@@ -47,6 +48,11 @@ namespace Desafio.Infrastructure.Repository
         public async Task Update(int id, Product product)
         {
             await _context.Update(id, product);
+        }
+
+        public async Task<UserDTO> Login()
+        {
+            return await _context.Login();
         }
     }
 }

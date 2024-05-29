@@ -227,6 +227,7 @@ namespace Desafio.Consumer.Controllers
                     {
                         modelState.AddModelError(item.Key, item.Value ?? "");
                     }
+                    TempData["Errors"] = JsonConvert.SerializeObject(listError);
 
                     ViewData.ModelState.Merge(modelState);
                     if (!ModelState.IsValid)

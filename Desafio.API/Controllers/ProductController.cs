@@ -20,6 +20,14 @@ namespace Desafio.API.Controllers
             _config = config;
         }
 
+        [Route("Login")]
+        [HttpGet]
+        public async Task<ActionResult<UserDTO>> Login()
+        {
+            return await _service.Login();
+        }
+
+
         [HttpGet]
         public async Task<ActionResult<List<ProductDto>>> GetAll()
         {

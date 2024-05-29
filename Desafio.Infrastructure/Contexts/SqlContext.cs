@@ -1,4 +1,5 @@
 ﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Dtos;
 using Desafio.Domain.Entities;
 using Desafio.Domain.Enums;
 using Desafio.Domain.Setup;
@@ -99,6 +100,50 @@ namespace Desafio.Infrastructure.Contexts
                     sqlConnection.Close();
                 sqlConnection = null;
             }
+        }
+
+        public async Task<UserDTO> Login()
+        {
+            SqlConnection sqlConnection = null;
+            UserDTO user = null;
+            try
+            {
+                sqlConnection = _connectionManager.GetConnection();
+                string sql = SqlManager.GetSql(SqlQueryType.READUSER);
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                await sqlConnection.OpenAsync();
+                var row = await cmd.ExecuteReaderAsync();
+                if (await row.ReadAsync())
+                {
+                    for (int i = 0; i < 6; i++)
+                    {
+                        var a = row.GetValue(i);
+                    }
+                    user = new UserDTO(
+                            new UserDAO
+                            {
+                                ID = row.GetInt32(0),
+                                Name = row.GetString(1),
+                                Password = row.GetString(3),
+                                Email = row.GetString(2),
+                            },
+                            new RoleDAO
+                            {
+                                ID = row.GetInt32(6),
+                                Type = row.GetString(5)
+                            }
+                        );
+                }
+            } catch (Exception ex)
+            {
+                throw ex;
+            } finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+                sqlConnection = null;
+            }
+            return user;
         }
 
 

@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Dtos;
+using Desafio.Domain.Entities;
 using Desafio.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
@@ -45,6 +46,11 @@ namespace Desafio.Services.Services
         public async Task Delete(int id)
         {
             await _repository.Delete(id);
+        }
+
+        public async Task<UserDTO> Login()
+        {
+            return await _repository.Login();
         }
     }
 }

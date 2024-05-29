@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Dtos;
+using Desafio.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Desafio.Infrastructure.Contexts
 {
     public interface IContext
     {
+        Task<UserDTO> Login();
         Task<List<Product>> GetAll();
 
         public Task<Product> Get(int id);

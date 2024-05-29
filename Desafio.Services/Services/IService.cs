@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Entities;
+﻿using Desafio.Domain.Dtos;
+using Desafio.Domain.Entities;
 using Desafio.Infrastructure.Repository;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ namespace Desafio.Services.Services
 {
     public interface IService
     {
+        public Task<UserDTO> Login();
         public Task<List<Product>> ReadAll();
 
         public Task<Product> Read(int id);

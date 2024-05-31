@@ -329,30 +329,6 @@ namespace Desafio.Consumer.Controllers
                 throw ex;
             }
         }
-
-        
-        private async Task<Product> SearchName(string name)
-        {
-            try
-            {
-                Product result = null;
-                string url = $"{ENDPOINT}name/{name}";
-                HttpResponseMessage response = await httpClient.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    result = JsonConvert.DeserializeObject<Product>(content);
-                }
-
-                return result;
-
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         
     }
 }

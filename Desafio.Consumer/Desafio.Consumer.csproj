@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Compile Remove="Models\Dtos\ProductViewDTO.cs" />
+    <Compile Remove="Models\Dtos\UserDTO.cs" />
     <Compile Remove="Views\Product\_IndexPartial.cshtml.cs" />
     <Compile Remove="Views\Shared\Index.cshtml.cs" />
   </ItemGroup>

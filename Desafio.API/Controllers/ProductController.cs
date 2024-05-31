@@ -32,14 +32,12 @@ namespace Desafio.API.Controllers
         {
             try
             {
-                List<Product> list = await _service.ReadAll();
-                List<ProductDto> dtolist = list != null ? Product.ToDtoList(list) : null;
-                return dtolist; // use this to make conversions
+                List<ProductDto> dtolist = await _service.ReadAll(); 
+                return dtolist == null ? NoContent() : Ok(dtolist); // use this to make conversions
             } catch (Exception ex)
             {
                 throw new ArgumentException(ex.Message);
             }
-            return null;
         }
 
         [HttpGet("{id}")]
@@ -47,29 +45,25 @@ namespace Desafio.API.Controllers
         {
             try
             {
-                Product product = await _service.Read(id);
-                return product == null ? NoContent() : product.ToDto(); //pode ser nulo
+                ProductDto product = await _service.Read(id);
+                return product == null ? NoContent() : Ok(product); //pode ser nulo
             } catch (Exception ex)
             {
                 
                 throw new ArgumentException(ex.Message);
             }
-
-            return null;
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductDto>> Post([Bind("Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate")]ProductDto productdto)
+        public async Task<ActionResult<ProductDto>> Post([FromBody]ProductDto productdto)
         {
             try
             {
-                Product product = productdto.ToEntity();
-                var productid = await _service.Create(product);
-                var response = CreatedAtAction(nameof(Get), new { id = productid }, null);
-                return response; // Colocar um created at action aqui
+                var productid = await _service.Create(productdto);
+                return CreatedAtAction(nameof(Get), new { id = productid }, null);
             } catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new ArgumentException(ex.Message);
             }
 
             return BadRequest();
@@ -81,8 +75,7 @@ namespace Desafio.API.Controllers
         {
             try
             {
-                Product product = productdto.ToEntity();
-                await _service.Update(id, product);
+                await _service.Update(id, productdto);
                 return Ok();
             }
             catch (Exception ex)

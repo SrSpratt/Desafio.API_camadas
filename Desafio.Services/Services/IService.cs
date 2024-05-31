@@ -12,14 +12,12 @@ namespace Desafio.Services.Services
     public interface IService
     {
         public Task<UserDTO> Login(string username);
-        public Task<List<Product>> ReadAll();
+        public Task<List<ProductDto>> ReadAll();
 
-        public Task<Product> Read(int id);
+        public Task<ProductDto> Read(int id);
 
-        public Task<string> ReadCategory(int id);
-
-        public Task Update(int id, Product product);
-        public Task<int> Create(Product product);
+        public Task Update(int id, ProductDto product);
+        public Task<int> Create(ProductDto product);
 
         public Task Delete(int id);
     }

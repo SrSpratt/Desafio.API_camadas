@@ -35,11 +35,6 @@ namespace Desafio.Infrastructure.Repository
             return await _context.Get(id);
         }
 
-        public async Task<string> ReadCategory(int id)
-        {
-            return await _context.GetCategory(id);
-        }
-
         public async Task<List<Product>> ReadAll()
         {
             return await _context.GetAll();

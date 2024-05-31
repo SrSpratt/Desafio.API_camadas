@@ -18,9 +18,6 @@ namespace Desafio.Infrastructure.Repository
         public Task Delete(int id);
 
         public Task<Product> Read(int id);
-
-        public Task<string> ReadCategory(int id);
-
         public Task<List<Product>> ReadAll();
     }
 }

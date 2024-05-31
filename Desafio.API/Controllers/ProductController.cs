@@ -20,11 +20,10 @@ namespace Desafio.API.Controllers
             _config = config;
         }
 
-        [Route("Login")]
-        [HttpGet]
-        public async Task<ActionResult<UserDTO>> Login()
+        [HttpGet("Login/{username:alpha}")]
+        public async Task<ActionResult<UserDTO>> Login(string username)
         {
-            return await _service.Login();
+            return await _service.Login(username);
         }
 
 

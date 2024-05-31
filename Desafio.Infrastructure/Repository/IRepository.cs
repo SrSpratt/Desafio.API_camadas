@@ -10,7 +10,7 @@ namespace Desafio.Infrastructure.Repository
 {
     public interface IRepository
     {
-        public Task<UserDTO> Login();
+        public Task<UserDTO> Login(string username);
         public Task<int> Create(Product product);
 
         public Task Update(int id, Product product);

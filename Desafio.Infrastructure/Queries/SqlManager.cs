@@ -16,7 +16,7 @@ namespace Desafio.Infrastructure.Queries
             switch (queryType)
             {
                 case SqlQueryType.READUSER:
-                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id FROM tst_users JOIN tst_roles ON user_role = role_id";
+                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id FROM tst_users JOIN tst_roles ON user_role = role_id WHERE username = @username";
                     break;
                 case SqlQueryType.READNAME:
                     sql = "SELECT category_name AS 'Category' FROM tst_categories c JOIN tst_product_category pc ON pc.category_id = c.category_id WHERE product_id = @Code";

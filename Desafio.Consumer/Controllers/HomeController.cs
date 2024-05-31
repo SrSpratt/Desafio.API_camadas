@@ -26,18 +26,25 @@ namespace Desafio.Consumer.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.result = "not authenticated";
+            if (TempData["auth"] != null)
+            {
+                ViewBag.result = TempData["auth"];
+            }
             return View();
         }
 
-        public async Task<IActionResult> LoginHandler()
+        public async Task<IActionResult> LoginHandler([FromForm] User user)
         {
-            return View();
+            if (ModelState.IsValid)
+                TempData["auth"] = "authenticated";
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ExhibitUser()
         {
             User result = null;
-            string url = $"{ENDPOINT}Login";
+            string url = $"{ENDPOINT}Login/nome"; //vou tirar isso e colocar uma variável
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {

@@ -10,7 +10,7 @@ namespace Desafio.Infrastructure.Contexts
 {
     public interface IContext
     {
-        Task<UserDTO> Login();
+        Task<UserDTO> Login(string username);
         Task<List<Product>> GetAll();
 
         public Task<Product> Get(int id);

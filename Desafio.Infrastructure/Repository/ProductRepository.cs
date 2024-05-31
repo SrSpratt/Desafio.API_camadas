@@ -50,9 +50,9 @@ namespace Desafio.Infrastructure.Repository
             await _context.Update(id, product);
         }
 
-        public async Task<UserDTO> Login()
+        public async Task<UserDTO> Login(string username)
         {
-            return await _context.Login();
+            return await _context.Login(username);
         }
     }
 }

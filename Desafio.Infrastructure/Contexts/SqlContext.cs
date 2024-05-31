@@ -102,7 +102,7 @@ namespace Desafio.Infrastructure.Contexts
             }
         }
 
-        public async Task<UserDTO> Login()
+        public async Task<UserDTO> Login(string username)
         {
             SqlConnection sqlConnection = null;
             UserDTO user = null;
@@ -111,6 +111,7 @@ namespace Desafio.Infrastructure.Contexts
                 sqlConnection = _connectionManager.GetConnection();
                 string sql = SqlManager.GetSql(SqlQueryType.READUSER);
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                cmd.Parameters.Add("@username", SqlDbType.VarChar).Value = username;
                 await sqlConnection.OpenAsync();
                 var row = await cmd.ExecuteReaderAsync();
                 if (await row.ReadAsync())

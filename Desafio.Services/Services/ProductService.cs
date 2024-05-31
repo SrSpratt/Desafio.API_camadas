@@ -48,9 +48,9 @@ namespace Desafio.Services.Services
             await _repository.Delete(id);
         }
 
-        public async Task<UserDTO> Login()
+        public async Task<UserDTO> Login(string username)
         {
-            return await _repository.Login();
+            return await _repository.Login(username);
         }
     }
 }

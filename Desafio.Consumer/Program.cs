@@ -1,3 +1,4 @@
+using Desafio.Consumer.Services;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
@@ -6,6 +7,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<EndpointGetter>();
+builder.Services.AddAuthentication(
+    "CookieAuthentication"
+    ).AddCookie("CookieAuthentication",
+    cookie =>
+    {
+        cookie.LoginPath = "/Home/Index";
+        cookie.LogoutPath = "/Home/Logout";
+    }
+    );
 
 var app = builder.Build();
 
@@ -33,10 +44,11 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=ExhibitUser}");
+    pattern: "{controller=Home}/{action=Index}");
 
 app.Run();

@@ -1,38 +1,34 @@
 ﻿using Desafio.Consumer.Models.Dtos;
+using Desafio.Consumer.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.ResponseCompression;
 using Newtonsoft.Json;
-using NuGet.Protocol.Plugins;
-using System.Globalization;
-using System.Net;
 using System.Text;
-using System.Web.WebPages.Html;
-using System.Xml.Linq;
 
 namespace Desafio.Consumer.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly string ENDPOINT = "";
         private readonly HttpClient httpClient = null;
+        private readonly EndpointGetter _endpointGetter;
 
-        private readonly IConfiguration _configuration;
-
-        public ProductController(IConfiguration configuration)
+        public ProductController(EndpointGetter endpointGetter)
         {
-            _configuration = configuration;
-            ENDPOINT = _configuration["App_url"];
             this.httpClient = new HttpClient();
-            httpClient.BaseAddress = new Uri(ENDPOINT);
+            _endpointGetter = endpointGetter;
+            httpClient.BaseAddress = new Uri(_endpointGetter.BaseUrl);
         }
+
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             try
             {
                 List<Product> products = null;
 
-                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                var url = _endpointGetter.GenerateEndpoint("");
+                HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -48,8 +44,7 @@ namespace Desafio.Consumer.Controllers
 
             } catch (Exception ex)
             {
-                string message = ex.Message;
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
 
         }
@@ -60,7 +55,8 @@ namespace Desafio.Consumer.Controllers
             {
                 List<Product> products = null;
 
-                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                var url = _endpointGetter.GenerateEndpoint("");
+                HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -79,8 +75,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -90,7 +85,8 @@ namespace Desafio.Consumer.Controllers
             {
                 List<Product> products = null;
 
-                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT); 
+                var url = _endpointGetter.GenerateEndpoint("");
+                HttpResponseMessage response = await httpClient.GetAsync(url); 
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -109,8 +105,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -123,8 +118,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -136,7 +130,8 @@ namespace Desafio.Consumer.Controllers
                 ProductViewModel model = new ProductViewModel();
                 model.categories = new List<Category>();
 
-                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                var url = _endpointGetter.GenerateEndpoint("");
+                HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -161,8 +156,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -176,7 +170,7 @@ namespace Desafio.Consumer.Controllers
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
                 byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-                string url = $"{ENDPOINT}";
+                var url = _endpointGetter.GenerateEndpoint("");
                 HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
 
                 if (!response.IsSuccessStatusCode)
@@ -185,8 +179,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -199,7 +192,8 @@ namespace Desafio.Consumer.Controllers
             {
                 List<Product> products = null;
 
-                HttpResponseMessage response = await httpClient.GetAsync(ENDPOINT);
+                var url = _endpointGetter.GenerateEndpoint("");
+                HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
@@ -240,8 +234,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -257,7 +250,7 @@ namespace Desafio.Consumer.Controllers
                     byte[] buffer = Encoding.UTF8.GetBytes(json);
                     ByteArrayContent byteContent = new ByteArrayContent(buffer);
                     byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-                    string url = $"{ENDPOINT}{product.Code}";
+                    var url = _endpointGetter.GenerateEndpoint($"{product.Code}");
                     HttpResponseMessage response = await httpClient.PutAsync(url, byteContent);
 
                     if (!response.IsSuccessStatusCode)
@@ -266,8 +259,7 @@ namespace Desafio.Consumer.Controllers
                 }
                 catch (Exception ex)
                 {
-
-                    throw ex;
+                    return RedirectToAction("Error", "Home", new { Message = ex.Message });
                 }
             }
             var errors = ModelState.Values.SelectMany(modelState => modelState.Errors);
@@ -293,7 +285,7 @@ namespace Desafio.Consumer.Controllers
             try
             {
                 int id = Int32.Parse(Code);
-                string url = $"{ENDPOINT}{id}";
+                var url = _endpointGetter.GenerateEndpoint($"{id}");
 
                 HttpResponseMessage response = await httpClient.DeleteAsync(url);
 
@@ -304,7 +296,7 @@ namespace Desafio.Consumer.Controllers
             }
             catch (Exception ex)
             {
-                throw ex;
+                return RedirectToAction("Error", "Home", new { Message = ex.Message });
             }
         }
 
@@ -313,7 +305,7 @@ namespace Desafio.Consumer.Controllers
             try
             {
                 Product result = null;
-                string url = $"{ENDPOINT}{id}";
+                var url = _endpointGetter.GenerateEndpoint($"{id}");
                 HttpResponseMessage response = await httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

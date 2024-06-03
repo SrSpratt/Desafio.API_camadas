@@ -17,6 +17,7 @@ namespace Desafio.Consumer.Controllers
         {
             this.httpClient = new HttpClient();
             _endpointGetter = endpointGetter;
+            _endpointGetter.SetBaseUrl(1);
             httpClient.BaseAddress = new Uri(_endpointGetter.BaseUrl);
         }
 

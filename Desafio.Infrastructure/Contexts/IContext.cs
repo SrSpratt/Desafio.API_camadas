@@ -10,7 +10,16 @@ namespace Desafio.Infrastructure.Contexts
 {
     public interface IContext
     {
-        Task<UserDTO> Login(string username);
+        Task<int> CreateUser(UserDTO user);
+
+        Task UpdateUser(int id, UserDTO user);
+        Task<List<UserDTO>> GetAllUsers();
+        Task<UserDTO> GetUser(int id);
+
+        Task DeleteUser(int id);
+
+        Task<UserDTO> Login(string name);
+
         Task<List<Product>> GetAll();
 
         public Task<Product> Get(int id);
@@ -23,6 +32,5 @@ namespace Desafio.Infrastructure.Contexts
 
         public Task Delete(int id);
 
-        public int NextId();
     }
 }

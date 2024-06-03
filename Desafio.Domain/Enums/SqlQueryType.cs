@@ -14,7 +14,13 @@ namespace Desafio.Domain.Enums
         NEWREADALL,
         NEWUPDATE,
         NEWDELETE,
-        READUSER
+        READUSER,
+        READUSERS,
+        CREATEUSER,
+        DELETEUSER,
+        UPDATEUSER,
+        READROLE,
+        READUSERNAME
 
     }
 }

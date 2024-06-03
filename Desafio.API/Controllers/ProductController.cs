@@ -20,12 +20,6 @@ namespace Desafio.API.Controllers
             _config = config;
         }
 
-        [HttpGet("Login/{username:alpha}")]
-        public async Task<ActionResult<UserDTO>> Login(string username)
-        {
-            return await _service.Login(username);
-        }
-
 
         [HttpGet]
         public async Task<ActionResult<List<ProductDto>>> GetAll()
@@ -40,7 +34,7 @@ namespace Desafio.API.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductDto>> Get(int id)
         {
             try
@@ -70,7 +64,7 @@ namespace Desafio.API.Controllers
             
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<ActionResult<ProductDto>> Put(int id, [FromBody]ProductDto productdto)
         {
             try
@@ -80,13 +74,13 @@ namespace Desafio.API.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                throw new ArgumentException(ex.Message);
             }
 
             return BadRequest();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             try

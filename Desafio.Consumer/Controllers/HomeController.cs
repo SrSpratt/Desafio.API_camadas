@@ -1,13 +1,9 @@
 using Desafio.Consumer.Models;
 using Desafio.Consumer.Models.Dtos;
 using Desafio.Consumer.Services;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Net;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -24,6 +20,7 @@ namespace Desafio.Consumer.Controllers
             _logger = logger;
             httpClient = new HttpClient();
             _endpointGetter = endpointGetter;
+            _endpointGetter.SetBaseUrl(2);
             httpClient.BaseAddress = new Uri(endpointGetter.BaseUrl);
             _authenticationMVC = authenticationMVC;
         }
@@ -43,6 +40,28 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "administrator")]
+        public async Task<IActionResult> Users()
+        {
+            List<User> users = null;
+            try
+            {
+                string url = _endpointGetter.GenerateEndpoint("");
+                var response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                }
+                return users != null ? View(users) : View();
+
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", new { Message = ex.Message });
+            }
+        }
+
         [Authorize]
         public async Task<IActionResult> Logout()
         {
@@ -55,7 +74,7 @@ namespace Desafio.Consumer.Controllers
         public async Task<IActionResult> ExhibitUser()
         {
             User result = null;
-            string url = $"{_endpointGetter.BaseUrl}Login/{HttpContext.User.Identity.Name}"; //vou tirar isso e colocar uma variável
+            string url = $"{_endpointGetter.BaseUrl}{3}"; //vou tirar isso e colocar uma variável
             ViewBag.Role = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value);
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode) // retorna verdadeiro para no content também
@@ -70,7 +89,7 @@ namespace Desafio.Consumer.Controllers
         private async Task<User> GetUserInfo(User user)
         {
             User result = null;
-            string url = $"{_endpointGetter.BaseUrl}Login/{user.Name}";
+            string url = $"{_endpointGetter.BaseUrl}{user.Name}";
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode) // retorna verdadeiro para no content também
             {

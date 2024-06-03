@@ -16,6 +16,7 @@ builder.Services.AddAuthentication(
     {
         cookie.LoginPath = "/Home/Index";
         cookie.LogoutPath = "/Home/Logout";
+        cookie.AccessDeniedPath = "/Home/Index";
     }
 );
 builder.Services.AddScoped<AuthenticationMVC>();

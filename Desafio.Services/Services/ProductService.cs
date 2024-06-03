@@ -44,9 +44,34 @@ namespace Desafio.Services.Services
             await _repository.Delete(id);
         }
 
-        public async Task<UserDTO> Login(string username)
+        public async Task<UserDTO> ReadUser(int id)
         {
-            return await _repository.Login(username);
+            return await _repository.ReadUser(id);
+        }
+
+        public async Task<List<UserDTO>> ReadUsers()
+        {
+            return await _repository.ReadUsers();
+        }
+
+        public async Task<int> CreateUser(UserDTO user)
+        {
+            return await _repository.CreateUser(user);
+        }
+
+        public async Task UpdateUser(int id, UserDTO user)
+        {
+            await _repository.UpdateUser(id, user);
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            await _repository.DeleteUser(id);
+        }
+
+        public async Task<UserDTO> Login(string name)
+        {
+            return await _repository.Login(name);
         }
     }
 }

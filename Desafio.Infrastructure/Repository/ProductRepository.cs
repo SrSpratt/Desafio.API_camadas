@@ -45,9 +45,34 @@ namespace Desafio.Infrastructure.Repository
             await _context.Update(id, product);
         }
 
-        public async Task<UserDTO> Login(string username)
+        public async Task<UserDTO> ReadUser(int id)
         {
-            return await _context.Login(username);
+            return await _context.GetUser(id);
+        }
+
+        public async Task<List<UserDTO>> ReadUsers()
+        {
+            return await _context.GetAllUsers();
+        }
+
+        public async Task<int> CreateUser(UserDTO user)
+        {
+            return await _context.CreateUser(user);
+        }
+
+        public async Task UpdateUser(int id, UserDTO user)
+        {
+            await _context.UpdateUser(id, user);
+        }
+
+        public async Task DeleteUser(int id)
+        {
+            await _context.DeleteUser(id);
+        }
+
+        public async Task<UserDTO> Login(string name)
+        {
+            return await _context.Login(name);
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Desafio.Domain.Dtos
@@ -19,6 +20,15 @@ namespace Desafio.Domain.Dtos
 
         public string Role { get; set; }
 
+        [JsonConstructor]
+        public UserDTO(int id, string name, string email, string password, string role)
+        {
+            ID = id;
+            Name = name;
+            Email = email;
+            Password = password;
+            Role = role;
+        }
 
         public UserDTO(UserDAO user, RoleDAO role)
         {

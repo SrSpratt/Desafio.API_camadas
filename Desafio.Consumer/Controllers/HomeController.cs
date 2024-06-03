@@ -40,7 +40,7 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Index");
         }
 
-        [Authorize(Roles = "administrator")]
+        [Authorize(Roles = "administrator, employee")]
         public async Task<IActionResult> Users()
         {
             List<User> users = null;

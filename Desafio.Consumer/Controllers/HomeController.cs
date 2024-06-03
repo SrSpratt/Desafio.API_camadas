@@ -95,9 +95,28 @@ namespace Desafio.Consumer.Controllers
             {
                 string content = await response.Content.ReadAsStringAsync();
                 result = string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
             }
             return result;
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            User user = null;
+
+            return View(user);
+        }
+        
+        public async Task<IActionResult> Details(int id)
+        {
+            User result = null;
+            string url = $"{_endpointGetter.GenerateEndpoint(id.ToString())}";
+            HttpResponseMessage response = await httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                result = string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            }
+            return View(result);
         }
 
         public IActionResult Privacy()

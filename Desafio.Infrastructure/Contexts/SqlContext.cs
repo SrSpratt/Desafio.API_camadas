@@ -7,7 +7,6 @@ using Desafio.Infrastructure.Connections;
 using Desafio.Infrastructure.Queries;
 using System.Data;
 using System.Data.SqlClient;
-using System.Net.WebSockets;
 using System.Text;
 
 namespace Desafio.Infrastructure.Contexts

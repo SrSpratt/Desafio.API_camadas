@@ -18,47 +18,45 @@ namespace Desafio.Consumer.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient httpClient = null;
         private readonly EndpointGetter _endpointGetter;
-        public HomeController(ILogger<HomeController> logger, EndpointGetter endpointGetter)
+        private readonly AuthenticationMVC _authenticationMVC;
+        public HomeController(ILogger<HomeController> logger, EndpointGetter endpointGetter, AuthenticationMVC authenticationMVC)
         {
             _logger = logger;
             httpClient = new HttpClient();
             _endpointGetter = endpointGetter;
             httpClient.BaseAddress = new Uri(endpointGetter.BaseUrl);
+            _authenticationMVC = authenticationMVC;
         }
 
         public IActionResult Index()
         {
-            ViewBag.result = "not authenticated";
-            if (TempData["auth"] != null)
-            {
-                ViewBag.result = TempData["auth"];
-            }
-            return View();
+            return HttpContext.User.Identity.IsAuthenticated ? RedirectToAction("Index", "Product") : View();
         }
 
         public async Task<IActionResult> LoginHandler([FromForm] User user)
         {
-            if (ModelState.IsValid && user.Password.Equals("senha"))
+            User fromDataBase = await GetUserInfo(user);
+            if (ModelState.IsValid && fromDataBase is not null && user.Password.Equals(fromDataBase.Password))
             {
-                List<Claim> userClaim = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Name, user.Name),
-                    new Claim(ClaimTypes.NameIdentifier, user.Name)
-                };
-
-                var myId = new ClaimsIdentity(userClaim, "User");
-                var userPrincipal = new ClaimsPrincipal(new[] { myId });
-                HttpContext.SignInAsync(userPrincipal);
-                TempData["auth"] = "authenticated";
+                await _authenticationMVC.Login(HttpContext, fromDataBase);
             }
             return RedirectToAction("Index");
         }
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _authenticationMVC.Logout(HttpContext);
+            return RedirectToAction("Index");
+        }
+
 
         [Authorize]
         public async Task<IActionResult> ExhibitUser()
         {
             User result = null;
             string url = $"{_endpointGetter.BaseUrl}Login/{HttpContext.User.Identity.Name}"; //vou tirar isso e colocar uma variável
+            ViewBag.Role = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value);
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode) // retorna verdadeiro para no content também
             {
@@ -67,6 +65,20 @@ namespace Desafio.Consumer.Controllers
 
             }
             return View(result);
+        }
+
+        private async Task<User> GetUserInfo(User user)
+        {
+            User result = null;
+            string url = $"{_endpointGetter.BaseUrl}Login/{user.Name}";
+            HttpResponseMessage response = await httpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode) // retorna verdadeiro para no content também
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                result = string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+
+            }
+            return result;
         }
 
         public IActionResult Privacy()

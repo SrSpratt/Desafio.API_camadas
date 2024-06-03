@@ -1,4 +1,6 @@
 using Desafio.Consumer.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 
@@ -9,14 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<EndpointGetter>();
 builder.Services.AddAuthentication(
-    "CookieAuthentication"
-    ).AddCookie("CookieAuthentication",
-    cookie =>
+    CookieAuthenticationDefaults.AuthenticationScheme
+    ).AddCookie(cookie =>
     {
         cookie.LoginPath = "/Home/Index";
         cookie.LogoutPath = "/Home/Logout";
     }
-    );
+);
+builder.Services.AddScoped<AuthenticationMVC>();
 
 var app = builder.Build();
 
@@ -46,6 +48,14 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseCookiePolicy(
+    new CookiePolicyOptions
+    { 
+        MinimumSameSitePolicy = SameSiteMode.Strict,
+        HttpOnly = HttpOnlyPolicy.Always
+    }
+    );
 
 app.MapControllerRoute(
     name: "default",

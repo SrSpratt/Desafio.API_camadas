@@ -4,6 +4,14 @@
     ViewData["Title"] = "ExhibitUser";
 }
 
+
+@Html.ActionLink("Logout", "Logout", "Home")
+
+@foreach(var role in ViewBag.Role)
+{
+    <p>Role:<u>@role</u></p>
+}
+
 <h1>ExhibitUser</h1>
 
 <div>

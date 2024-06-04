@@ -59,7 +59,7 @@ namespace Desafio.Services.Services
         public async Task<int> CreateUser(UserDTO user)
         {
             var passwordHash = _passwordHasher.Hash(user.Password);
-            var verified = _passwordHasher.Verify(passwordHash, user.Password);
+            user.Password = passwordHash;
             return await _repository.CreateUser(user);
         }
 
@@ -76,14 +76,14 @@ namespace Desafio.Services.Services
         public async Task<LoginResponse> Login(string name, string Password)
         {
             UserDTO user = await _repository.Login(name);
-            var passwordHash = 
-                _passwordHasher.Hash(Password);
+            //var passwordHash = 
+            //    _passwordHasher.Hash(Password);
             LoginResponse login = new LoginResponse()
             {
                 Name = user.Name,
                 Email = user.Email,
                 Role = user.Role,
-                Verified = _passwordHasher.Verify(passwordHash, user.Password)
+                Verified = _passwordHasher.Verify(user.Password, Password)
             };
             return login;
         }

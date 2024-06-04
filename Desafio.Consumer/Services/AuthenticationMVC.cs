@@ -14,7 +14,7 @@ namespace Desafio.Consumer.Services
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.NameIdentifier, user.Name),
-                new Claim(ClaimTypes.Role, user.Role)
+                new Claim(ClaimTypes.Role, user.Role),
             };
 
             var myId = new ClaimsIdentity(userClaim, CookieAuthenticationDefaults.AuthenticationScheme);

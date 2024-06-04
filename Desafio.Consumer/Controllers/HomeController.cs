@@ -3,6 +3,8 @@ using Desafio.Consumer.Models.Dtos;
 using Desafio.Consumer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.ResponseCompression;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Text;
@@ -33,13 +35,6 @@ namespace Desafio.Consumer.Controllers
 
         public async Task<IActionResult> LoginHandler([FromForm] Login user)
         {
-            /*
-            User fromDataBase = await GetUserInfo(user);
-            if (ModelState.IsValid && fromDataBase is not null && user.Password.Equals(fromDataBase.Password))
-            {
-                await _authenticationMVC.Login(HttpContext, fromDataBase);
-            }
-            */
             LoginResponse fromDataBase = await PostUserInfo(user);
             if (ModelState.IsValid && fromDataBase is not null && fromDataBase.Verified)
             {
@@ -82,7 +77,7 @@ namespace Desafio.Consumer.Controllers
         public async Task<IActionResult> ExhibitUser()
         {
             User result = null;
-            string url = $"{_endpointGetter.BaseUrl}{3}"; //vou tirar isso e colocar uma variável
+            string url = $"{_endpointGetter.BaseUrl}{User.Identity.Name}"; //vou tirar isso e colocar uma variável
             ViewBag.Role = HttpContext.User.Claims.Where(x => x.Type == ClaimTypes.Role).Select(x => x.Value);
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode) // retorna verdadeiro para no content também
@@ -94,10 +89,10 @@ namespace Desafio.Consumer.Controllers
             return View(result);
         }
 
-        private async Task<User> GetUserInfo(Login user)
+        private async Task<User> GetUserInfo(int id)
         {
             User result = null;
-            string url = $"{_endpointGetter.BaseUrl}{user.Name}";
+            string url = $"{_endpointGetter.BaseUrl}{id}";
             HttpResponseMessage response = await httpClient.GetAsync(url);
             if (response.IsSuccessStatusCode) // retorna verdadeiro para no content também
             {
@@ -130,9 +125,25 @@ namespace Desafio.Consumer.Controllers
 
         public async Task<IActionResult> Create()
         {
-            User user = null;
+            return View();
+        }
 
-            return View(user);
+        public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role")]User user)
+        {
+            string url = $"{_endpointGetter.BaseUrl}";
+            string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            ByteArrayContent byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ("application/json");
+
+            HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(null, "Error while processing the solicitation");
+            }
+
+            return RedirectToAction("Users");
         }
         
         public async Task<IActionResult> Details(int id)
@@ -154,12 +165,58 @@ namespace Desafio.Consumer.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error(string Message)
+        public IActionResult Error(string Message, string ReasonPhrase, string StatusCode)
         {
             return View(new ErrorViewModel {
                 RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier,
-                Message = Message
+                Message = Message,
+                ReasonPhrase = ReasonPhrase,
+                StatusCode = StatusCode
             });
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await GetUserInfo(id);
+            return View(result);
+        }
+
+        public async Task<IActionResult> DeleteHandler(int id)
+        {
+            string url = $"{_endpointGetter.BaseUrl}{id}";
+            HttpResponseMessage response = await httpClient.DeleteAsync(url);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(null, "Error");
+            }
+            return RedirectToAction("Users");
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var result = await GetUserInfo(id);
+            return View(result);
+        }
+
+        public async Task<IActionResult> EditHandler([FromForm]User user)
+        {
+            string url = $"{_endpointGetter.BaseUrl}{user.Id}";
+            string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            ByteArrayContent byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = await httpClient.PutAsync(url, byteContent);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                string statusCode = ((int)response.StatusCode).ToString();
+                string typeError = response.ReasonPhrase;
+                string message = await response.Content.ReadAsStringAsync();
+                return RedirectToAction("Error", new { Message = message, ReasonPhrase = typeError, StatusCode =statusCode});
+            }
+
+            return RedirectToAction("Users");
         }
     }
 }

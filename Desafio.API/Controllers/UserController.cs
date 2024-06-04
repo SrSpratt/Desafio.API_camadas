@@ -11,10 +11,10 @@ namespace Desafio.API.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IService _service;
+        private readonly IUserService _service;
         private readonly IApiConfig _config;
 
-        public UserController(IService service, IApiConfig config)
+        public UserController(IUserService service, IApiConfig config)
         {
             _service = service;
             _config = config;
@@ -27,6 +27,8 @@ namespace Desafio.API.Controllers
             return user == null ? NoContent() : Ok(user);
         }
 
+
+        //Talvez eu use 
         [HttpGet("{name:alpha}")]
         public async Task<ActionResult<UserDTO>> Login(string name)
         {

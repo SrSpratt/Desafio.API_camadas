@@ -11,10 +11,10 @@ namespace Desafio.API.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IService _service;
+        private readonly IProductService _service;
         private readonly IApiConfig _config;
 
-        public ProductController(IService service, IApiConfig config)
+        public ProductController(IProductService service, IApiConfig config)
         {
             _service = service;
             _config = config;

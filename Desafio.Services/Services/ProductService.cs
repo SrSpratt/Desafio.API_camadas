@@ -4,15 +4,13 @@ using Desafio.Infrastructure.Repository;
 
 namespace Desafio.Services.Services
 {
-    public class ProductService : IService
+    public class ProductService : IProductService
     {
-        private readonly IRepository _repository;
-        private readonly IPasswordHasher _passwordHasher;
+        private readonly IProductRepository _repository;
 
-        public ProductService(IRepository repository, IPasswordHasher passwordHasher)
+        public ProductService(IProductRepository repository)
         {
             _repository = repository;
-            _passwordHasher = passwordHasher;
         }
 
         public async Task<List<ProductDto>> ReadAll()
@@ -46,46 +44,5 @@ namespace Desafio.Services.Services
             await _repository.Delete(id);
         }
 
-        public async Task<UserDTO> ReadUser(int id)
-        {
-            return await _repository.ReadUser(id);
-        }
-
-        public async Task<List<UserDTO>> ReadUsers()
-        {
-            return await _repository.ReadUsers();
-        }
-
-        public async Task<int> CreateUser(UserDTO user)
-        {
-            var passwordHash = _passwordHasher.Hash(user.Password);
-            user.Password = passwordHash;
-            return await _repository.CreateUser(user);
-        }
-
-        public async Task UpdateUser(int id, UserDTO user)
-        {
-            await _repository.UpdateUser(id, user);
-        }
-
-        public async Task DeleteUser(int id)
-        {
-            await _repository.DeleteUser(id);
-        }
-
-        public async Task<LoginResponse> Login(string name, string Password)
-        {
-            UserDTO user = await _repository.Login(name);
-            //var passwordHash = 
-            //    _passwordHasher.Hash(Password);
-            LoginResponse login = new LoginResponse()
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Role = user.Role,
-                Verified = _passwordHasher.Verify(user.Password, Password)
-            };
-            return login;
-        }
     }
 }

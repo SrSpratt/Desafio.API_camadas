@@ -42,7 +42,7 @@ namespace Desafio.Infrastructure.Contexts
                 cmd.Parameters.Add("@Category", SqlDbType.VarChar).Value = product.Category;
                 cmd.Parameters.Add("@ExpirationDate", SqlDbType.DateTime).Value = product.ExpirationDate;
                 cmd.Parameters.Add("@Amount", SqlDbType.Int).Value = product.Amount;
-                
+                //string[] newsql = sql.Split(";");
                 return await Task.Run(
                     () => {
                         sqlConnection.Open();

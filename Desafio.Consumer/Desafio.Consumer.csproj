@@ -27,24 +27,11 @@
   <ItemGroup>
     <Content Remove="Views\Product\_IndexPartial.cshtml" />
     <Content Remove="Views\Shared\Index.cshtml" />
-    <Content Remove="Views\Shared\Index1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.3.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <UpToDateCheckInput Remove="Views\Shared\Index1.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="Views\Shared\Index1.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Shared\Index1.cshtml" />
   </ItemGroup>
 
 </Project>

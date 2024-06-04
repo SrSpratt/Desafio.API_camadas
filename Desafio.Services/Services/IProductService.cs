@@ -9,12 +9,12 @@ namespace Desafio.Services.Services
 {
     public interface IProductService
     {        
-        Task<List<ProductDto>> ReadAll();
+        Task<List<ProductDTO>> ReadAll();
 
-        Task<ProductDto> Read(int id);
+        Task<ProductDTO> Read(int id);
 
-        Task Update(int id, ProductDto product);
-        Task<int> Create(ProductDto product);
+        Task Update(int id, ProductDTO product);
+        Task<int> Create(ProductDTO product);
 
         Task Delete(int id);
     }

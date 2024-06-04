@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Desafio.Domain.Daos
 {
-    public class StockDao
+    public class StockDAO
     {
         public int Amount { get; set; }
 
@@ -19,7 +19,7 @@ namespace Desafio.Domain.Daos
 
         public DateTime ExpirationDate { get; set; }
 
-        public StockDao(int amount, double saleValue, double purchaseValue, string supplier, DateTime expirationDate) {
+        public StockDAO(int amount, double saleValue, double purchaseValue, string supplier, DateTime expirationDate) {
             this.Amount = amount;
             this.SaleValue = saleValue;
             this.PurchaseValue = purchaseValue;

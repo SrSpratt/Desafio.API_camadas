@@ -10,13 +10,13 @@ namespace Desafio.Infrastructure.Repository
 {
     public interface IProductRepository
     {
-        Task<int> Create(Product product);
+        Task<int> Create(ProductDTO product);
 
-        Task Update(int id, Product product);
+        Task Update(int id, ProductDTO product);
 
         Task Delete(int id);
 
-        Task<Product> Read(int id);
-        Task<List<Product>> ReadAll();
+        Task<ProductDTO> Read(int id);
+        Task<List<ProductDTO>> ReadAll();
     }
 }

@@ -20,9 +20,9 @@ namespace Desafio.Infrastructure.Repository
             _apiConfig = apiConfig;
             _context = new SqlContext(_apiConfig);
         }
-        public async Task<int> Create(Product product)
+        public async Task<int> Create(ProductDTO product)
         {
-            return await _context.Add(product);
+            return await _context.Create(product);
         }
 
         public async Task Delete(int id)
@@ -30,17 +30,17 @@ namespace Desafio.Infrastructure.Repository
             await _context.Delete(id);
         }
 
-        public async Task<Product> Read(int id)
+        public async Task<ProductDTO> Read(int id)
         {
             return await _context.Get(id);
         }
 
-        public async Task<List<Product>> ReadAll()
+        public async Task<List<ProductDTO>> ReadAll()
         {
             return await _context.GetAll();
         }
 
-        public async Task Update(int id, Product product)
+        public async Task Update(int id, ProductDTO product)
         {
             await _context.Update(id, product);
         }

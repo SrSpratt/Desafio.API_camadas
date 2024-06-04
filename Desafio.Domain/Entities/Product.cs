@@ -39,7 +39,7 @@ namespace Desafio.Domain.Entities
             Amount = amount;
         }
 
-        public Product(CategoryDao categoryInfo, ProductDao productInfo, StockDao stockInfo )
+        public Product(CategoryDAO categoryInfo, ProductDAO productInfo, StockDAO stockInfo )
         {
             SaleValue = stockInfo.SaleValue;
             Code = productInfo.Code;
@@ -52,17 +52,17 @@ namespace Desafio.Domain.Entities
             Amount = stockInfo.Amount;
         }
 
-        public ProductDto ToDto()
+        public ProductDTO ToDTO()
         {
-            return new ProductDto(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate, Amount);
+            return new ProductDTO(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate, Amount);
         }
 
-        public static List<ProductDto> ToDtoList(List<Product> products)
+        public static List<ProductDTO> ToDTOList(List<Product> products)
         {
-            List<ProductDto> list = new List<ProductDto>();
+            List<ProductDTO> list = new List<ProductDTO>();
             foreach(Product product in products)
             {
-                list.Add(product.ToDto());
+                list.Add(product.ToDTO());
             }
 
             return list;

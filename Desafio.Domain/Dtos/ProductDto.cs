@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Desafio.Domain.Dtos
 {
-    public class ProductDto
+    public class ProductDTO
     {
         public int Code { get; set; }
         public string Description { get; set; }
@@ -25,7 +25,7 @@ namespace Desafio.Domain.Dtos
 
         public DateTime ExpirationDate { get; set; }
 
-        public ProductDto(int code, string description, double salevalue, string name, string supplier, double value, string category, DateTime expirationDate, int amount)
+        public ProductDTO(int code, string description, double salevalue, string name, string supplier, double value, string category, DateTime expirationDate, int amount)
         {
             Code = code;
             Description = description;
@@ -43,10 +43,10 @@ namespace Desafio.Domain.Dtos
             return new Product(Code, Description, SaleValue, Name, Supplier, Value, Category, ExpirationDate, Amount);
         }
 
-        public static List<Product> ToEntityList(List<ProductDto> products)
+        public static List<Product> ToEntityList(List<ProductDTO> products)
         {
             List<Product> list = new List<Product>();
-            foreach (ProductDto product in products)
+            foreach (ProductDTO product in products)
             {
                 list.Add(product.ToEntity());
             }

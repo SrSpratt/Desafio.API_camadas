@@ -20,13 +20,12 @@ namespace Desafio.API.Controllers
             _config = config;
         }
 
-
         [HttpGet]
-        public async Task<ActionResult<List<ProductDto>>> GetAll()
+        public async Task<ActionResult<List<ProductDTO>>> GetAll()
         {
             try
             {
-                List<ProductDto> dtolist = await _service.ReadAll(); 
+                List<ProductDTO> dtolist = await _service.ReadAll(); 
                 return dtolist == null ? NoContent() : Ok(dtolist); // use this to make conversions
             } catch (Exception ex)
             {
@@ -35,11 +34,11 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProductDto>> Get(int id)
+        public async Task<ActionResult<ProductDTO>> Get(int id)
         {
             try
             {
-                ProductDto product = await _service.Read(id);
+                ProductDTO product = await _service.Read(id);
                 return product == null ? NoContent() : Ok(product); //pode ser nulo
             } catch (Exception ex)
             {
@@ -49,11 +48,11 @@ namespace Desafio.API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductDto>> Post([FromBody]ProductDto productdto)
+        public async Task<ActionResult<ProductDTO>> Post([FromBody]ProductDTO ProductDTO)
         {
             try
             {
-                var productid = await _service.Create(productdto);
+                var productid = await _service.Create(ProductDTO);
                 return CreatedAtAction(nameof(Get), new { id = productid }, null);
             } catch (Exception ex)
             {
@@ -65,11 +64,11 @@ namespace Desafio.API.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ActionResult<ProductDto>> Put(int id, [FromBody]ProductDto productdto)
+        public async Task<ActionResult<ProductDTO>> Put(int id, [FromBody]ProductDTO ProductDTO)
         {
             try
             {
-                await _service.Update(id, productdto);
+                await _service.Update(id, ProductDTO);
                 return Ok();
             }
             catch (Exception ex)
@@ -84,7 +83,7 @@ namespace Desafio.API.Controllers
         public async Task<ActionResult> Delete(int id)
         {
             try
-            {
+            { //TODO: verificar se encontra antes, para gerar erro (?)
                 await _service.Delete(id);
                 return await _service.Read(id) == null ? Ok() : NotFound();
                 

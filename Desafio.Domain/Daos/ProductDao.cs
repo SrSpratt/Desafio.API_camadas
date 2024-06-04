@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Desafio.Domain.Daos
 {
-    public class ProductDao
+    public class ProductDAO
     {
         public int Code { get; set; }
 
@@ -15,7 +15,7 @@ namespace Desafio.Domain.Daos
 
         public string Description { get; set; }
 
-        public ProductDao(int code, string name, string description) {
+        public ProductDAO(int code, string name, string description) {
             Code = code;
             Name = name;
             Description = description;

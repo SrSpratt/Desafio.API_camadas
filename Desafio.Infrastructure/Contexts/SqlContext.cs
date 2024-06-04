@@ -24,7 +24,7 @@ namespace Desafio.Infrastructure.Contexts
             _connectionManager = new ConnectionManager(_connectionString);
         }
 
-        public async Task<int> Add(Product product)
+        public async Task<int> Create(ProductDTO product)
         {
             SqlConnection sqlConnection = null;
 
@@ -361,7 +361,7 @@ namespace Desafio.Infrastructure.Contexts
 
         }
 
-        public async Task<Product> Get(int id)
+        public async Task<ProductDTO> Get(int id)
         {
             Product result = null;
             SqlConnection sqlConnection = null;
@@ -384,19 +384,19 @@ namespace Desafio.Infrastructure.Contexts
 
                         foreach (DataRow row in set.Tables["queryresult"].Rows)
                         {
-                            StockDao stockRep = new StockDao(
+                            StockDAO stockRep = new StockDAO(
                                 amount: Int32.Parse(row["Amount"].ToString()),
                                 saleValue: Double.Parse(row["Value"].ToString()),
                                 supplier: row["Supplier"].ToString(),
                                 purchaseValue: Double.Parse(row["Purchase Value"].ToString()),
                                 expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue
                                 );
-                            ProductDao productRep = new ProductDao(
+                            ProductDAO productRep = new ProductDAO(
                                 code: Int32.Parse(row["Code"].ToString()),
                                 name: row["Name"].ToString(),
                                 description: row["Description"].ToString()
                                 );
-                            CategoryDao categoryRep = new CategoryDao(
+                            CategoryDAO categoryRep = new CategoryDAO(
                                 name: row["Category"].ToString(),
                                 description: row["Description"].ToString()
                                 );
@@ -407,7 +407,7 @@ namespace Desafio.Infrastructure.Contexts
                                 stockInfo: stockRep
                                 );
                         }
-                        return result!;
+                        return result == null? null : result.ToDTO();
                     });
 
                 set.Clear();
@@ -426,10 +426,10 @@ namespace Desafio.Infrastructure.Contexts
             }
         }
 
-        public async Task<List<Product>> GetAll()
+        public async Task<List<ProductDTO>> GetAll()
         {
 
-            List<Product> list = new List<Product>();
+            List<ProductDTO> list = new List<ProductDTO>();
             SqlConnection sqlConnection = null;
             try
             { 
@@ -446,19 +446,19 @@ namespace Desafio.Infrastructure.Contexts
                         adapter.Fill(set, "queryResult");
                         foreach (DataRow row in set.Tables["queryresult"].Rows)
                         {
-                            StockDao stockRep = new StockDao(
+                            StockDAO stockRep = new StockDAO(
                                 amount: Int32.Parse(row["Amount"].ToString()),
                                 saleValue: Double.Parse(row["Value"].ToString()),
                                 supplier: row["Supplier"].ToString(),
                                 purchaseValue: Double.Parse(row["Purchase Value"].ToString()),
                                 expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue
                                 );
-                            ProductDao productRep = new ProductDao(
+                            ProductDAO productRep = new ProductDAO(
                                 code: Int32.Parse(row["Code"].ToString()),
                                 name: row["Name"].ToString(),
                                 description: row["Description"].ToString()
                                 );
-                            CategoryDao categoryRep = new CategoryDao(
+                            CategoryDAO categoryRep = new CategoryDAO(
                                 name: row["Category"].ToString(),
                                 description: row["Description"].ToString()
                                 );
@@ -468,7 +468,7 @@ namespace Desafio.Infrastructure.Contexts
                                 productInfo: productRep,
                                 stockInfo: stockRep
                                 );
-                            list.Add(product);
+                            list.Add(product.ToDTO());
                         }
                         return list;
                     });
@@ -516,11 +516,11 @@ namespace Desafio.Infrastructure.Contexts
 
         }
 
-        public async Task Update(int id, Product product)
+        public async Task Update(int id, ProductDTO product)
         {
 
             string category = await GetCategory(id);
-            Product result = null;
+            ProductDTO result = null;
             SqlConnection sqlConnection = null;
             try
             {

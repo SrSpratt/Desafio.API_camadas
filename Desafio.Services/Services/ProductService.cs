@@ -13,30 +13,26 @@ namespace Desafio.Services.Services
             _repository = repository;
         }
 
-        public async Task<List<ProductDto>> ReadAll()
+        public async Task<List<ProductDTO>> ReadAll()
         {
-            List<Product> list = await _repository.ReadAll();
-            List<ProductDto> dtolist = list != null ? Product.ToDtoList(list) : null;
+            List<ProductDTO> dtolist = await _repository.ReadAll();
             return dtolist;
         }
 
-        public async Task<ProductDto> Read(int id)
+        public async Task<ProductDTO> Read(int id)
         {
-            Product product = await _repository.Read(id);
-            ProductDto productDto = product != null ? product.ToDto() : null;
+            ProductDTO productDto = await _repository.Read(id);
             return productDto;
         }
 
-        public async Task Update(int id, ProductDto productDto)
+        public async Task Update(int id, ProductDTO productDto)
         {
-            Product product = productDto.ToEntity();
-            await _repository.Update(id, product);
+            await _repository.Update(id, productDto);
         }
 
-        public async Task<int> Create(ProductDto productDto)
+        public async Task<int> Create(ProductDTO productDto)
         {
-            Product product = productDto.ToEntity();
-            return await _repository.Create(product);
+            return await _repository.Create(productDto);
         }
 
         public async Task Delete(int id)

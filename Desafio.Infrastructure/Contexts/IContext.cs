@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio.Infrastructure.Contexts
 {
@@ -20,15 +19,15 @@ namespace Desafio.Infrastructure.Contexts
 
         Task<UserDTO> Login(string name);
 
-        Task<List<Product>> GetAll();
+        Task<List<ProductDTO>> GetAll();
 
-        public Task<Product> Get(int id);
+        public Task<ProductDTO> Get(int id);
 
         public Task<string> GetCategory(int name);
 
-        public Task Update(int id, Product product);
+        public Task Update(int id, ProductDTO product);
 
-        public Task<int> Add(Product product);
+        public Task<int> Create(ProductDTO product);
 
         public Task Delete(int id);
 

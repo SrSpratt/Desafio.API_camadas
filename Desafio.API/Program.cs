@@ -17,6 +17,7 @@ builder.Services.AddSingleton<IRepository, ProductRepository>();
 
 //adicionar serviços
 builder.Services.AddScoped<IService, ProductService>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 //dá um bind no json com a classe api config
 builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection(nameof(ApiConfig)));

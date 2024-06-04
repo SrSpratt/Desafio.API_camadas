@@ -18,7 +18,7 @@ namespace Desafio.Services.Services
         
         Task<UserDTO> ReadUser(int id);
 
-        Task<UserDTO> Login(string name);
+        Task<LoginResponse> Login(string name, string Password);
 
         Task DeleteUser(int id);
 

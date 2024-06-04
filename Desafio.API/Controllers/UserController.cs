@@ -32,9 +32,25 @@ namespace Desafio.API.Controllers
         {
             try
             {
-                var user = await _service.Login(name);
+                var user = await _service.Login(name, "senha");
                 return user == null ? NoContent() : Ok(user);
             } catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Route("login")]
+        [HttpPost]
+        public async Task<ActionResult<LoginResponse>> Login([FromBody]LoginRequest login)
+        {
+
+            try
+            {
+                var user = await _service.Login(login.Name, login.Password);
+                return user == null ? NoContent() : Ok(user);
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

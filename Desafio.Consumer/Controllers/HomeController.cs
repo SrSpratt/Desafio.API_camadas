@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Text;
 using System.Text.Json;
 
 namespace Desafio.Consumer.Controllers
@@ -30,10 +31,17 @@ namespace Desafio.Consumer.Controllers
             return HttpContext.User.Identity.IsAuthenticated ? RedirectToAction("Index", "Product") : View();
         }
 
-        public async Task<IActionResult> LoginHandler([FromForm] User user)
+        public async Task<IActionResult> LoginHandler([FromForm] Login user)
         {
+            /*
             User fromDataBase = await GetUserInfo(user);
             if (ModelState.IsValid && fromDataBase is not null && user.Password.Equals(fromDataBase.Password))
+            {
+                await _authenticationMVC.Login(HttpContext, fromDataBase);
+            }
+            */
+            LoginResponse fromDataBase = await PostUserInfo(user);
+            if (ModelState.IsValid && fromDataBase is not null && fromDataBase.Verified)
             {
                 await _authenticationMVC.Login(HttpContext, fromDataBase);
             }
@@ -86,7 +94,7 @@ namespace Desafio.Consumer.Controllers
             return View(result);
         }
 
-        private async Task<User> GetUserInfo(User user)
+        private async Task<User> GetUserInfo(Login user)
         {
             User result = null;
             string url = $"{_endpointGetter.BaseUrl}{user.Name}";
@@ -96,6 +104,27 @@ namespace Desafio.Consumer.Controllers
                 string content = await response.Content.ReadAsStringAsync();
                 result = string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<User>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
             }
+            return result;
+        }
+
+        private async Task<LoginResponse> PostUserInfo(Login user)
+        {
+            LoginResponse result = null;
+            string url = $"{_endpointGetter.BaseUrl}login";
+            
+            string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            byte[] buffer = Encoding.UTF8.GetBytes(json);
+            ByteArrayContent byteContent = new ByteArrayContent(buffer);
+            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+
+            HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                result = string.IsNullOrEmpty(content) ? null : JsonSerializer.Deserialize<LoginResponse>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+            }
+
             return result;
         }
 

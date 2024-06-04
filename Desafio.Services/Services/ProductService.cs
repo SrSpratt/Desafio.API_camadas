@@ -7,10 +7,12 @@ namespace Desafio.Services.Services
     public class ProductService : IService
     {
         private readonly IRepository _repository;
+        private readonly IPasswordHasher _passwordHasher;
 
-        public ProductService(IRepository repository)
+        public ProductService(IRepository repository, IPasswordHasher passwordHasher)
         {
             _repository = repository;
+            _passwordHasher = passwordHasher;
         }
 
         public async Task<List<ProductDto>> ReadAll()
@@ -56,6 +58,8 @@ namespace Desafio.Services.Services
 
         public async Task<int> CreateUser(UserDTO user)
         {
+            var passwordHash = _passwordHasher.Hash(user.Password);
+            var verified = _passwordHasher.Verify(passwordHash, user.Password);
             return await _repository.CreateUser(user);
         }
 
@@ -69,9 +73,19 @@ namespace Desafio.Services.Services
             await _repository.DeleteUser(id);
         }
 
-        public async Task<UserDTO> Login(string name)
+        public async Task<LoginResponse> Login(string name, string Password)
         {
-            return await _repository.Login(name);
+            UserDTO user = await _repository.Login(name);
+            var passwordHash = 
+                _passwordHasher.Hash(Password);
+            LoginResponse login = new LoginResponse()
+            {
+                Name = user.Name,
+                Email = user.Email,
+                Role = user.Role,
+                Verified = _passwordHasher.Verify(passwordHash, user.Password)
+            };
+            return login;
         }
     }
 }

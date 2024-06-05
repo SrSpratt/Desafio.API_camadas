@@ -1,5 +1,6 @@
 ﻿using Desafio.Domain.Dtos;
 using Desafio.Infrastructure.Repository;
+using Desafio.Services.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Linq;

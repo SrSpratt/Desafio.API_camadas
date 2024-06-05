@@ -1,7 +1,10 @@
+using Desafio.API.Filters;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Repository;
+using Desafio.Services.Authentication;
 using Desafio.Services.Services;
 using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +28,16 @@ builder.Services.Configure<ApiConfig>(builder.Configuration.GetSection(nameof(Ap
 
 builder.Services.AddSingleton<IApiConfig>(x => x.GetRequiredService<IOptions<ApiConfig>>().Value);
 
-builder.Services.AddControllers(options => options.SuppressAsyncSuffixInActionNames = false);
+builder.Services.AddControllers(
+    options =>
+    {
+        options.SuppressAsyncSuffixInActionNames = false;
+        options.Filters.Add(typeof(APIErrorFilter));
+    }).AddJsonOptions(
+    options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    });
 
 var app = builder.Build();
 

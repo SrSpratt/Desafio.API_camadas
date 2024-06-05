@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Desafio.Services.Services
+namespace Desafio.Services.Authentication
 {
     public class PasswordHasher : IPasswordHasher
     {

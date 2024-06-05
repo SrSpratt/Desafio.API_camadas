@@ -3,12 +3,11 @@ using Desafio.Consumer.Models.Dtos;
 using Desafio.Consumer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.ResponseCompression;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using Desafio.Consumer.Services.Filters;
 
 namespace Desafio.Consumer.Controllers
 {

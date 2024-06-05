@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Desafio.Infrastructure\Desafio.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Authentication\" />
-  </ItemGroup>
-
 </Project>

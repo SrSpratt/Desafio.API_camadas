@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Desafio.Services.Services
+namespace Desafio.Services.Authentication
 {
     public interface IPasswordHasher
     {

@@ -1,6 +1,6 @@
 ﻿using Desafio.Consumer.Models.Dtos;
 using Desafio.Consumer.Services;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Desafio.Consumer.Services.Filters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -184,8 +184,11 @@ namespace Desafio.Consumer.Controllers
             }
         }
 
+        [RestoreTempModelState]
         public async Task<IActionResult> Edit(int id)
         {
+
+            var isvalid = ModelState.IsValid;
 
             Product product = await Search(id);
             ProductViewModel productModel = product.toProduct();
@@ -212,7 +215,7 @@ namespace Desafio.Consumer.Controllers
                 {
                     ModelState.AddModelError(null, "Error while processing the solicitation");
                 }
-
+                /*
                 if (TempData["Errors"] is not null)
                 {
                     var modelStateString = TempData["Errors"].ToString();
@@ -230,6 +233,7 @@ namespace Desafio.Consumer.Controllers
                         return View(productModel);
                     }
                 }
+                */
 
                 return View(productModel);
             }
@@ -239,6 +243,7 @@ namespace Desafio.Consumer.Controllers
             }
         }
 
+        [SetTempModelState]
         [HttpPost]
         public async Task<IActionResult> EditHandler([FromForm] ProductViewModel productModel)
         {
@@ -263,6 +268,7 @@ namespace Desafio.Consumer.Controllers
                     return RedirectToAction("Error", "Home", new { Message = ex.Message });
                 }
             }
+            /*
             var errors = ModelState.Values.SelectMany(modelState => modelState.Errors);
             ModelState.AddModelError("SaleValue", "Error");
             var listError = ModelState.Where(x => x.Value.Errors.Any())
@@ -270,6 +276,7 @@ namespace Desafio.Consumer.Controllers
                 .Select(s => s.ErrorMessage)
                 .FirstOrDefault(s => s != null));
             TempData["Errors"] = JsonConvert.SerializeObject(listError);
+            */
             return RedirectToAction("Edit", new { id = productModel.Code });
         }
 
@@ -322,6 +329,29 @@ namespace Desafio.Consumer.Controllers
                 throw ex;
             }
         }
-        
+
+        private async Task<Product> GetCategoriesList()
+        {
+            try
+            {
+                Product result = null;
+                var url = _endpointGetter.GenerateEndpoint($"{}");
+                HttpResponseMessage response = await httpClient.GetAsync(url);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    string content = await response.Content.ReadAsStringAsync();
+                    result = JsonConvert.DeserializeObject<Product>(content);
+                }
+
+                return result;
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

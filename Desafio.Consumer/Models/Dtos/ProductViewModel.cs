@@ -26,6 +26,7 @@ namespace Desafio.Consumer.Models.Dtos
 
         [Display(Name = "Expiration Date")]
         [DataType(DataType.Date)]
+        [ValidateDate]
         public DateTime ExpirationDate { get; set; }
 
         [Display(Name = "Qty.")]

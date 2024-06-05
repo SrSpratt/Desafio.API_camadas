@@ -1,8 +1,6 @@
 ﻿using Desafio.Domain.Setup;
 using Desafio.Domain.Dtos;
-using Desafio.Domain.Entities;
 using Desafio.Services.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Desafio.API.Controllers
@@ -23,79 +21,41 @@ namespace Desafio.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProductDTO>>> GetAll()
         {
-            try
-            {
                 List<ProductDTO> dtolist = await _service.ReadAll(); 
                 return dtolist == null ? NoContent() : Ok(dtolist); // use this to make conversions
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
         }
 
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductDTO>> Get(int id)
         {
-            try
-            {
                 ProductDTO product = await _service.Read(id);
                 return product == null ? NoContent() : Ok(product); //pode ser nulo
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
         }
 
         [HttpPost]
         public async Task<ActionResult<ProductDTO>> Post([FromBody]ProductDTO ProductDTO)
         {
-            try
-            {
                 var productid = await _service.Create(ProductDTO);
                 return CreatedAtAction(nameof(Get), new { id = productid }, null);
-            } catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
-            
         }
 
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ProductDTO>> Put(int id, [FromBody]ProductDTO ProductDTO)
         {
-            try
-            {
                 if (await _service.Read(id) is null)
                     return NotFound();
                 await _service.Update(id, ProductDTO);
                 return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
-            }
-
         }
 
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            try
-            { //TODO: verificar se encontra antes, para gerar erro (?)
                 if (await _service.Read(id) is null)
                     return NotFound();
                 await _service.Delete(id);
-                return await _service.Read(id) == null ? Ok() : throw new ArgumentException("Something happened");
-                
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Something happened");
-            }
+                return await _service.Read(id) == null ? NoContent() : throw new ArgumentException("Something happened");
         }
-
-
 
     }
 }

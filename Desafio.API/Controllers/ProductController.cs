@@ -29,7 +29,7 @@ namespace Desafio.API.Controllers
                 return dtolist == null ? NoContent() : Ok(dtolist); // use this to make conversions
             } catch (Exception ex)
             {
-                throw new ArgumentException(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -42,8 +42,7 @@ namespace Desafio.API.Controllers
                 return product == null ? NoContent() : Ok(product); //pode ser nulo
             } catch (Exception ex)
             {
-                
-                throw new ArgumentException(ex.Message);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -56,10 +55,9 @@ namespace Desafio.API.Controllers
                 return CreatedAtAction(nameof(Get), new { id = productid }, null);
             } catch (Exception ex)
             {
-                throw new ArgumentException(ex.Message);
+                return StatusCode(500, ex.Message);
             }
 
-            return BadRequest();
             
         }
 
@@ -68,15 +66,16 @@ namespace Desafio.API.Controllers
         {
             try
             {
+                if (await _service.Read(id) is null)
+                    return NotFound();
                 await _service.Update(id, ProductDTO);
                 return Ok();
             }
             catch (Exception ex)
             {
-                throw new ArgumentException(ex.Message);
+                return StatusCode(500, ex.Message);
             }
 
-            return BadRequest();
         }
 
         [HttpDelete("{id:int}")]
@@ -84,16 +83,16 @@ namespace Desafio.API.Controllers
         {
             try
             { //TODO: verificar se encontra antes, para gerar erro (?)
+                if (await _service.Read(id) is null)
+                    return NotFound();
                 await _service.Delete(id);
-                return await _service.Read(id) == null ? Ok() : NotFound();
+                return await _service.Read(id) == null ? Ok() : throw new ArgumentException("Something happened");
                 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Something happened");
             }
-
-            return BadRequest();
         }
 
 

@@ -9,11 +9,11 @@ namespace Desafio.Domain.Enums
     public enum SqlQueryType
     {
         READNAME,
-        NEWCREATE,
-        NEWREAD,
-        NEWREADALL,
-        NEWUPDATE,
-        NEWDELETE,
+        CREATE,
+        READ,
+        READALL,
+        UPDATE,
+        DELETE,
         READUSER,
         READUSERS,
         CREATEUSER,

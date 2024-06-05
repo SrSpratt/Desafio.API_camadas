@@ -30,7 +30,7 @@ namespace Desafio.Infrastructure.Contexts
 
             try
             {
-                string sql = SqlManager.GetSql(SqlQueryType.NEWCREATE);
+                string sql = SqlManager.GetSql(SqlQueryType.CREATE);
 
                 sqlConnection = _connectionManager.GetConnection();
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
@@ -72,7 +72,7 @@ namespace Desafio.Infrastructure.Contexts
             try
             {
                 sqlConnection = _connectionManager.GetConnection();
-                string sql = SqlManager.GetSql(SqlQueryType.NEWDELETE);
+                string sql = SqlManager.GetSql(SqlQueryType.DELETE);
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
                 cmd.Parameters.Add("@Code", SqlDbType.Int).Value = id;
 
@@ -368,7 +368,7 @@ namespace Desafio.Infrastructure.Contexts
             try
             {
                 sqlConnection = _connectionManager.GetConnection();
-                string sql = SqlManager.GetSql(SqlQueryType.NEWREAD);
+                string sql = SqlManager.GetSql(SqlQueryType.READ);
 
                 DataSet set = new DataSet();
 
@@ -433,7 +433,7 @@ namespace Desafio.Infrastructure.Contexts
             SqlConnection sqlConnection = null;
             try
             { 
-                string sql = SqlManager.GetSql(SqlQueryType.NEWREADALL);
+                string sql = SqlManager.GetSql(SqlQueryType.READALL);
 
                 DataSet set = new DataSet();
                 sqlConnection = _connectionManager.GetConnection();
@@ -525,7 +525,7 @@ namespace Desafio.Infrastructure.Contexts
             try
             {
                 sqlConnection = _connectionManager.GetConnection();
-                string sql = SqlManager.GetSql(SqlQueryType.NEWUPDATE);
+                string sql = SqlManager.GetSql(SqlQueryType.UPDATE);
 
                 DataSet set = new DataSet();
 
@@ -544,8 +544,13 @@ namespace Desafio.Infrastructure.Contexts
                         cmd.Parameters.Add("@ExpirationDate", SqlDbType.DateTime).Value = product.ExpirationDate;
                         cmd.Parameters.Add("@Amount", SqlDbType.Int).Value = product.Amount;
                         sqlConnection.Open();
-                        cmd.ExecuteNonQuery();
+                        var affectedRows = cmd.ExecuteNonQuery();
                         cmd = null;
+
+                        if(affectedRows < 1)
+                        {
+                            throw new ArgumentException("Update not made");
+                        }
                     });
 
 

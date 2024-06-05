@@ -206,13 +206,14 @@ namespace Desafio.Consumer.Controllers
             ByteArrayContent byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = await httpClient.PutAsync(url, byteContent);
+            throw new ArgumentException("Error!");
 
             if (!response.IsSuccessStatusCode)
             {
                 string statusCode = ((int)response.StatusCode).ToString();
                 string typeError = response.ReasonPhrase;
                 string message = await response.Content.ReadAsStringAsync();
-                return RedirectToAction("Error", new { Message = message, ReasonPhrase = typeError, StatusCode =statusCode});
+                //return RedirectToAction("Error", new { Message = message, ReasonPhrase = typeError, StatusCode =statusCode});
             }
 
             return RedirectToAction("Users");

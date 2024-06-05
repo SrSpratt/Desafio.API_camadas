@@ -8,12 +8,20 @@ namespace Desafio.Domain.Enums
 {
     public enum SqlQueryType
     {
+        //Product
         READNAME,
         CREATE,
         READ,
         READALL,
         UPDATE,
         DELETE,
+        //Category
+        READCATEGORY,
+        CREATECATEGORY,
+        READALLCATEGORIES,
+        UPDATECATEGORY,
+        DELETECATEGORY,
+        //User
         READUSER,
         READUSERS,
         CREATEUSER,

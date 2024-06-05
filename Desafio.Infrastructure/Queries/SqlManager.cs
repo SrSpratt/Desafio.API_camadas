@@ -15,6 +15,18 @@ namespace Desafio.Infrastructure.Queries
 
             switch (queryType)
             {
+                case SqlQueryType.READALLCATEGORIES:
+                    sql = "SELECT category_id, category_name, category_description FROM tst_categories";
+                    break;
+                case SqlQueryType.READCATEGORY:
+                    sql = "SELECT category_id, category_name, category_description FROM tst_categories WHERE category_id = @id";
+                    break;
+                case SqlQueryType.CREATECATEGORY:
+                    sql = "INSERT INTO tst_categories(category_id, category_description, category_name) VALUES (@category_id, @category_description, @category_name)";
+                    break;
+                case SqlQueryType.DELETECATEGORY:
+                    sql = "DELETE FROM tst_categories WHERE category_id = @id";
+                    break;
                 case SqlQueryType.READROLE:
                     sql = "SELECT role_id FROM tst_roles WHERE role_type = @role";
                     break;
@@ -36,7 +48,7 @@ namespace Desafio.Infrastructure.Queries
                 case SqlQueryType.DELETEUSER:
                     sql = "DELETE FROM tst_users WHERE user_id = @id";
                     break;
-                case SqlQueryType.READNAME:
+                case SqlQueryType.READNAME: //Isso deve ficar como readmaincategory
                     sql = "SELECT category_name AS 'Category' FROM tst_categories c JOIN tst_product_category pc ON pc.category_id = c.category_id WHERE product_id = @Code";
                     break;
                 case SqlQueryType.CREATE:
@@ -46,7 +58,7 @@ namespace Desafio.Infrastructure.Queries
                             INSERT INTO tst_product_category(product_id, category_id) VALUES ((SELECT Code FROM @output_table),(SELECT category_id FROM tst_categories WHERE category_name = @Category))
                             SELECT code FROM @output_table;";
                     break;
-                case SqlQueryType.READALL: //esse
+                case SqlQueryType.READALL:
                     sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id ORDER BY p.Name ASC";
                     break;
                 case SqlQueryType.READ:
@@ -55,7 +67,7 @@ namespace Desafio.Infrastructure.Queries
                 case SqlQueryType.UPDATE:
                     sql = "UPDATE tst_products SET Name = @Name, Description = @Description WHERE Code = @Code;" +
                         "UPDATE tst_stock SET Sale_value = @SaleValue, Purchase_value = @Value, Amount = @Amount, Expiration_date = @ExpirationDate WHERE Product_id = @Code;" +
-                        "UPDATE tst_product_category SET product_id = @Code, category_id = (SELECT category_id FROM tst_categories WHERE category_name = @Category) WHERE product_id = @Code AND category_id = (SELECT category_id FROM tst_categories WHERE category_name = @OldCategory)"; // Funciona para quando cada produto tem apenas uma categoria, tem que refatorar para o caso de um produto acessar mais categorias
+                        "UPDATE tst_product_category SET product_id = @Code, category_id = (SELECT category_id FROM tst_categories WHERE category_name = @Category) WHERE product_id = @Code AND category_id = (SELECT category_id FROM tst_categories WHERE category_name = @OldCategory)";
                     break;
                 case SqlQueryType.DELETE:
                     sql = "DELETE FROM tst_stock WHERE Product_id = @Code;" +

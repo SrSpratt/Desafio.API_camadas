@@ -1,14 +1,16 @@
 using Desafio.Consumer.Services;
+using Desafio.Consumer.Services.Filters;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+
 builder.Services.AddScoped<EndpointGetter>();
 builder.Services.AddAuthentication(
     CookieAuthenticationDefaults.AuthenticationScheme
@@ -20,7 +22,11 @@ builder.Services.AddAuthentication(
     }
 );
 builder.Services.AddScoped<AuthenticationMVC>();
-
+builder.Services.AddControllersWithViews(
+    options =>
+    {
+        options.Filters.Add<MVCErrorFilter>();
+    });
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

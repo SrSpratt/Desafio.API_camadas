@@ -33,5 +33,27 @@ namespace Desafio.Consumer.Services
         {
             return BaseUrl + metadata;
         }
+
+        public string GenerateCrossEndpoint(string metadata, int apiController)
+        {
+            /*  1 -> Product
+                2 -> Category
+                3 -> User
+            */
+            string endpoint = ENDPOINT;
+            switch (apiController)
+            {
+                case 1:
+                    endpoint += _configuration["App_url:Product"];
+                    break;
+                case 2:
+                    endpoint += _configuration["App_url:Category"];
+                    break;
+                case 3:
+                    endpoint += _configuration["App_url:User"];
+                    break;
+            }
+            return endpoint;
+        }
     }
 }

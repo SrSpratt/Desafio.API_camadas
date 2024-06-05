@@ -37,10 +37,6 @@ namespace Desafio.Consumer.Controllers
 
                     
                 }
-                else
-                {
-                    ModelState.AddModelError(null, "Error while processing the solicitation");
-                }
                 return View(products);
 
             } catch (Exception ex)
@@ -68,10 +64,6 @@ namespace Desafio.Consumer.Controllers
                     }
 
                 }
-                else
-                {
-                    ModelState.AddModelError(null, "Error while processing the solicitation");
-                }
                 return PartialView("_ShowListPartial",products);
             }
             catch (Exception ex)
@@ -98,10 +90,6 @@ namespace Desafio.Consumer.Controllers
                     }
 
                 }
-                else
-                {
-                    ModelState.AddModelError(null, "Error while processing the solicitation");
-                }
                 return PartialView("_ShowListPartial", products);
             }
             catch (Exception ex)
@@ -127,30 +115,16 @@ namespace Desafio.Consumer.Controllers
         {
             try
             {
-                List<Product> products = null;
                 ProductViewModel model = new ProductViewModel();
-                model.categories = new List<Category>();
+                List<Category> categories = null;
 
-                var url = _endpointGetter.GenerateEndpoint("");
+                var url = _endpointGetter.GenerateCrossEndpoint("", 2);
                 HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    products = JsonConvert.DeserializeObject<List<Product>>(content);
-
-                    
-                    foreach (Product aux in products)
-                    {
-                        Category auxCat = new Category(aux.Category);
-
-                        bool isDuplicate = model.categories.Any(duplicate => duplicate.Name == auxCat.Name);
-                        if (!isDuplicate)
-                            model.categories.Add(auxCat);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(null, "Error while processing the solicitation");
+                    categories = JsonConvert.DeserializeObject<List<Category>>(content);
+                    model.categories = categories;
                 }
 
                 return View(model);
@@ -194,26 +168,15 @@ namespace Desafio.Consumer.Controllers
             ProductViewModel productModel = product.toProduct();
             try
             {
-                List<Product> products = null;
+                List<Category> categories = null;
 
-                var url = _endpointGetter.GenerateEndpoint("");
+                var url = _endpointGetter.GenerateCrossEndpoint("", 2);
                 HttpResponseMessage response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await response.Content.ReadAsStringAsync();
-                    products = JsonConvert.DeserializeObject<List<Product>>(content);
-                    productModel.categories = new List<Category>();
-                    foreach(Product aux in products)
-                    {
-                        Category auxCat = new Category(aux.Category);
-                        bool isDuplicate = productModel.categories.Any(duplicates => duplicates.Name == auxCat.Name);
-                        if (!isDuplicate)
-                            productModel.categories.Add(auxCat);
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError(null, "Error while processing the solicitation");
+                    categories = JsonConvert.DeserializeObject<List<Category>>(content);
+                    productModel.categories = categories;
                 }
                 /*
                 if (TempData["Errors"] is not null)
@@ -335,7 +298,7 @@ namespace Desafio.Consumer.Controllers
             try
             {
                 Product result = null;
-                var url = _endpointGetter.GenerateEndpoint($"{}");
+                var url = _endpointGetter.GenerateEndpoint($"");
                 HttpResponseMessage response = await httpClient.GetAsync(url);
 
                 if (response.IsSuccessStatusCode)

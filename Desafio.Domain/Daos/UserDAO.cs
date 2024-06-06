@@ -19,5 +19,7 @@ namespace Desafio.Domain.Daos
         public DateTime DateRegistered { get; set; }
 
         public string UserRegistered { get; set; }
+
+        public string RealName { get; set; }
     }
 }

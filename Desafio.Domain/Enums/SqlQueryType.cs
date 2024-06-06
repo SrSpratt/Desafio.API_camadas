@@ -28,7 +28,9 @@ namespace Desafio.Domain.Enums
         DELETEUSER,
         UPDATEUSER,
         READROLE,
-        READUSERNAME
+        READUSERNAME,
+        //UserAggregated
+        INSERTNAMEUSER
 
     }
 }

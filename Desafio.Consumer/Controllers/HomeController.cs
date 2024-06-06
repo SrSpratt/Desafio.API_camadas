@@ -46,8 +46,6 @@ namespace Desafio.Consumer.Controllers
         public async Task<IActionResult> Users()
         {
             List<User> users = null;
-            try
-            {
                 string url = _endpointGetter.GenerateEndpoint("");
                 var response = await httpClient.GetAsync(url);
                 if (response.IsSuccessStatusCode)
@@ -56,12 +54,6 @@ namespace Desafio.Consumer.Controllers
                     users = JsonSerializer.Deserialize<List<User>>(content, new JsonSerializerOptions(JsonSerializerDefaults.Web));
                 }
                 return users != null ? View(users) : View();
-
-            }
-            catch (Exception ex)
-            {
-                return RedirectToAction("Error", new { Message = ex.Message });
-            }
         }
 
         [Authorize]
@@ -127,7 +119,7 @@ namespace Desafio.Consumer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role, DateRegistered, UserRegistered")]User user)
+        public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role, DateRegistered, UserRegistered, RealName")]User user)
         {
             string url = $"{_endpointGetter.BaseUrl}";
             string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
@@ -139,7 +131,7 @@ namespace Desafio.Consumer.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(null, "Error while processing the solicitation");
+                throw new ArgumentException("Response not right! \n" + $"FromAPI: {await response.Content.ReadAsStringAsync()}");
             }
 
             return RedirectToAction("Users");

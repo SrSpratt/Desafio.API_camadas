@@ -349,7 +349,8 @@ namespace Desafio.Infrastructure.Contexts
                                 Password = row.GetString(row.GetOrdinal("user_password")),
                                 Email = row.GetString(row.GetOrdinal("user_email")),
                                 DateRegistered = row.GetDateTime(row.GetOrdinal("date_registered")),
-                                UserRegistered = row.GetString(row.GetOrdinal("user_registered"))
+                                UserRegistered = row.GetString(row.GetOrdinal("user_registered")),
+                                RealName = row.GetString(row.GetOrdinal("concatenated_user_names"))
                             },
                             new RoleDAO
                             {
@@ -424,15 +425,18 @@ namespace Desafio.Infrastructure.Contexts
                     user = new UserDTO(
                             new UserDAO
                             {
-                                ID = row.GetInt32(0),
-                                Name = row.GetString(1),
-                                Password = row.GetString(3),
-                                Email = row.GetString(2),
+                                ID = row.GetInt32(row.GetOrdinal("user_id")),
+                                Name = row.GetString(row.GetOrdinal("username")),
+                                Password = row.GetString(row.GetOrdinal("user_password")),
+                                Email = row.GetString(row.GetOrdinal("user_email")),
+                                DateRegistered = row.GetDateTime(row.GetOrdinal("date_registered")),
+                                UserRegistered = row.GetString(row.GetOrdinal("user_registered")),
+                                RealName = row.GetString(row.GetOrdinal("concatenated_user_names"))
                             },
                             new RoleDAO
                             {
-                                ID = row.GetInt32(6),
-                                Type = row.GetString(5)
+                                ID = row.GetInt32("role_id"),
+                                Type = row.GetString("role_type")
                             }
                         );
                 }
@@ -450,7 +454,7 @@ namespace Desafio.Infrastructure.Contexts
             return user;
         }
 
-        public async Task<UserDTO> Login(string name)
+        public async Task<UserDTO> Login(string name) //GetUserByName
         {
             SqlConnection sqlConnection = null;
             UserDTO user = null;
@@ -527,6 +531,7 @@ namespace Desafio.Infrastructure.Contexts
 
         public async Task<int> CreateUser(UserDTO user)
         {
+            
             SqlConnection sqlConnection = null;
             int role = await GetRole(user.Role);
             if (role == 0)
@@ -543,7 +548,23 @@ namespace Desafio.Infrastructure.Contexts
                 cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = user.UserRegistered;
                 sqlConnection.OpenAsync();
                 var id = (int)await cmd.ExecuteScalarAsync();
-                cmd = null;
+
+                sql = null;
+                sql = SqlManager.GetSql(SqlQueryType.INSERTNAMEUSER);
+                string[] names = user.RealName.Split(" ");
+                foreach (string name in names)
+                {
+                    cmd = null;
+                    cmd = new SqlCommand(sql, sqlConnection);
+                    cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                    cmd.Parameters.Add("@realname", SqlDbType.VarChar).Value = name;
+                    var rows = await cmd.ExecuteNonQueryAsync();
+                    if (rows < 1)
+                    {
+                        throw new ArgumentException("Create not working!");
+                    }
+                }
+
                 return id;
             }
             catch (Exception ex)

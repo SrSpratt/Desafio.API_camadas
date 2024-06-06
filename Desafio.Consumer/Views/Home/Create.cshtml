@@ -13,6 +13,16 @@
         <form asp-action="CreateHandler">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
+                <label asp-for="UserRegistered" class="control-label"></label>
+                <input asp-for="UserRegistered" value="@User.Identity.Name" class="form-control" readonly="@true"/>
+                <span asp-validation-for="UserRegistered" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateRegistered" class="control-label"></label>
+                <input id="DateRegistered" name="DateRegistered" value="@DateTime.Now.ToString()" class="form-control" readonly="@true" />
+                <span asp-validation-for="DateRegistered" class="text-danger"></span>
+            </div>
+            <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>

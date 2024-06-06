@@ -80,6 +80,7 @@ namespace Desafio.Consumer.Controllers
             return View(result);
         }
 
+        [RestoreTempModelState]
         public async Task<IActionResult> Create()
         {
             ProductViewModel model = new ProductViewModel();
@@ -97,21 +98,25 @@ namespace Desafio.Consumer.Controllers
             return View(model);
         }
 
+        [SetTempModelState]
         //O bind garante que tudo que não foi referenciado recebe 0
         public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount")] Product product)
         {
-            string json = JsonConvert.SerializeObject(product);
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
-            ByteArrayContent byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            if (ModelState.IsValid)
+            {
+                string json = JsonConvert.SerializeObject(product);
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                ByteArrayContent byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-            var url = _endpointGetter.GenerateEndpoint("");
-            HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
+                var url = _endpointGetter.GenerateEndpoint("");
+                HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
 
-            if (!response.IsSuccessStatusCode)
-                throw new ArgumentException("There was a problem while processing the solicitation!");
-            return RedirectToAction("Index");
-
+                if (!response.IsSuccessStatusCode)
+                    throw new ArgumentException("There was a problem while processing the solicitation!");
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Create");
         }
 
         [RestoreTempModelState]

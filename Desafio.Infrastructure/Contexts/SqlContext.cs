@@ -348,6 +348,8 @@ namespace Desafio.Infrastructure.Contexts
                                 Name = row.GetString(row.GetOrdinal("username")),
                                 Password = row.GetString(row.GetOrdinal("user_password")),
                                 Email = row.GetString(row.GetOrdinal("user_email")),
+                                DateRegistered = row.GetDateTime(row.GetOrdinal("date_registered")),
+                                UserRegistered = row.GetString(row.GetOrdinal("user_registered"))
                             },
                             new RoleDAO
                             {
@@ -538,6 +540,7 @@ namespace Desafio.Infrastructure.Contexts
                 cmd.Parameters.Add("@email", SqlDbType.VarChar).Value = user.Email;
                 cmd.Parameters.Add("@password", SqlDbType.VarChar).Value = user.Password;
                 cmd.Parameters.Add("@role", SqlDbType.Int).Value = role;
+                cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = user.UserRegistered;
                 sqlConnection.OpenAsync();
                 var id = (int)await cmd.ExecuteScalarAsync();
                 cmd = null;

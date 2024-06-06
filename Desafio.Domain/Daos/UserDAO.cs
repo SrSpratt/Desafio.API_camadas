@@ -15,5 +15,9 @@ namespace Desafio.Domain.Daos
         public string Password { get; set; }
 
         public string Email { get; set; }
+
+        public DateTime DateRegistered { get; set; }
+
+        public string UserRegistered { get; set; }
     }
 }

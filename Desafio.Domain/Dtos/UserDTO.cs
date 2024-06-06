@@ -20,14 +20,20 @@ namespace Desafio.Domain.Dtos
 
         public string Role { get; set; }
 
+        public DateTime DateRegistered { get; set; }
+
+        public string UserRegistered { get; set; }
+
         [JsonConstructor]
-        public UserDTO(int id, string name, string email, string password, string role)
+        public UserDTO(int id, string name, string email, string password, string role, DateTime dateRegistered, string userRegistered)
         {
             ID = id;
             Name = name;
             Email = email;
             Password = password;
             Role = role;
+            DateRegistered = dateRegistered;
+            UserRegistered = userRegistered;
         }
 
         public UserDTO(UserDAO user, RoleDAO role)
@@ -36,6 +42,8 @@ namespace Desafio.Domain.Dtos
             Name = user.Name;
             Email = user.Email;
             Password = user.Password;
+            DateRegistered = user.DateRegistered;
+            UserRegistered = user.UserRegistered;
             Role = role.Type;
         }
     }

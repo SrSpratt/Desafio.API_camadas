@@ -127,7 +127,7 @@ namespace Desafio.Consumer.Controllers
             return View();
         }
 
-        public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role")]User user)
+        public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role, DateRegistered, UserRegistered")]User user)
         {
             string url = $"{_endpointGetter.BaseUrl}";
             string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));

@@ -31,16 +31,16 @@ namespace Desafio.Infrastructure.Queries
                     sql = "SELECT role_id FROM tst_roles WHERE role_type = @role";
                     break;
                 case SqlQueryType.READUSERNAME:
-                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id FROM tst_users JOIN tst_roles ON user_role = role_id WHERE username = @name";
+                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id, date_registered, user_registered FROM tst_users JOIN tst_roles ON user_role = role_id WHERE username = @name";
                     break;
                 case SqlQueryType.READUSER:
-                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id FROM tst_users JOIN tst_roles ON user_role = role_id WHERE user_id = @user_id";
+                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id, date_registered, user_registered FROM tst_users JOIN tst_roles ON user_role = role_id WHERE user_id = @user_id";
                     break;
                 case SqlQueryType.READUSERS:
-                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id FROM tst_users JOIN tst_roles ON user_role = role_id";
+                    sql = "SELECT user_id, username, user_email, user_password, user_role, role_type, role_id, date_registered, user_registered FROM tst_users JOIN tst_roles ON user_role = role_id";
                     break;
                 case SqlQueryType.CREATEUSER:
-                    sql = "INSERT INTO tst_users(username, user_email, user_password, date_registered, user_role) OUTPUT INSERTED.user_id VALUES(@username, @email, @password, GETDATE(), @role)";
+                    sql = "INSERT INTO tst_users(username, user_email, user_password, date_registered, user_role, user_registered) OUTPUT INSERTED.user_id VALUES(@username, @email, @password, GETDATE(), @role, @user)";
                     break;
                 case SqlQueryType.UPDATEUSER:
                     sql = "UPDATE tst_users SET user_email = @email, user_password = @password, user_role = @role WHERE user_id = @id";

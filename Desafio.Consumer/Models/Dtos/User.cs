@@ -14,6 +14,8 @@ namespace Desafio.Consumer.Models.Dtos
 
         public string? Role { get; set; } //vou deixar anulável só temporariamente para testar a conexão
 
+        public DateTime DateRegistered { get; set; }
 
+        public string UserRegistered { get; set; }
     }
 }

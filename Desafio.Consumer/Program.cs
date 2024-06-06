@@ -26,6 +26,8 @@ builder.Services.AddControllersWithViews(
     options =>
     {
         options.Filters.Add<MVCErrorFilter>();
+        //options.Filters.Add<SetTempModelStateAttribute>();
+        //options.Filters.Add<RestoreTempModelStateAttribute>();
     });
 var app = builder.Build();
 

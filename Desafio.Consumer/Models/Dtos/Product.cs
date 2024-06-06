@@ -1,4 +1,5 @@
 ﻿using Desafio.Consumer.Validations;
+using Desafio.Consumer.Validations.ForProduct;
 using System.ComponentModel.DataAnnotations;
 
 namespace Desafio.Consumer.Models.Dtos

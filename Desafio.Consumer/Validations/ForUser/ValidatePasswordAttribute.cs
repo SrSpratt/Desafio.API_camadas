@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Desafio.Consumer.Validations
+namespace Desafio.Consumer.Validations.ForUser
 {
     public class ValidatePasswordAttribute : ValidationAttribute
     {

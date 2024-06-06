@@ -1,4 +1,5 @@
 ﻿using Desafio.Consumer.Validations;
+using Desafio.Consumer.Validations.ForProduct;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -22,6 +23,7 @@ namespace Desafio.Consumer.Models.Dtos
         [ValidateValues(0.01f, 100.0f)]
         public string Value { get; set; } //double
 
+        [ValidateCategory("category")]
         public string Category { get; set; }
 
         [Display(Name = "Expiration Date")]
@@ -30,9 +32,9 @@ namespace Desafio.Consumer.Models.Dtos
         public DateTime ExpirationDate { get; set; }
 
         [Display(Name = "Qty.")]
+        [ValidateQuantity]
         public int Amount { get; set; }
         
-
         public List<Category>? categories { get; set; }
 
         public Product toProduct()

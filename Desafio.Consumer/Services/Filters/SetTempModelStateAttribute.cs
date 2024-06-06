@@ -7,7 +7,7 @@ namespace Desafio.Consumer.Services.Filters
 {
     public class SetTempModelStateAttribute : ActionFilterAttribute, IActionFilter
     { 
-        public void OnActionExecuted(ActionExecutedContext context)
+        public override void OnActionExecuted(ActionExecutedContext context)
         {
             var controller = context.Controller as Controller;
             var modelState = controller?.ViewData.ModelState;
@@ -29,7 +29,7 @@ namespace Desafio.Consumer.Services.Filters
         {
         }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
             var controller = context.Controller as Controller;
             var tempData = controller?.TempData?.Keys;

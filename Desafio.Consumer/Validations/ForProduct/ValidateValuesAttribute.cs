@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
-namespace Desafio.Consumer.Validations
+namespace Desafio.Consumer.Validations.ForProduct
 {
     public class ValidateValuesAttribute : ValidationAttribute
     {
@@ -35,8 +35,8 @@ namespace Desafio.Consumer.Validations
         {
             var rule = new ModelClientValidationRule
             {
-                ValidationType="validatevalues",
-                ErrorMessage= "The field is not valid!"
+                ValidationType = "validatevalues",
+                ErrorMessage = "The field is not valid!"
             };
             rule.ValidationParameters.Add("fields", string.Join(",", _fields));
             yield return rule;

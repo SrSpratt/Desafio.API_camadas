@@ -1,6 +1,5 @@
 ﻿using Desafio.Domain.Daos;
 using Desafio.Domain.Dtos;
-using Desafio.Domain.Entities;
 using Desafio.Domain.Enums;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Connections;
@@ -48,7 +47,7 @@ namespace Desafio.Infrastructure.Contexts
                 return await Task.Run(
                     () => {
                         sqlConnection.Open();
-                        int id = (int) cmd.ExecuteScalar();
+                        int id = (int)cmd.ExecuteScalar();
 
                         cmd = null;
                         return id;
@@ -145,7 +144,7 @@ namespace Desafio.Infrastructure.Contexts
 
         public async Task<ProductDTO> Get(int id)
         {
-            Product result = null;
+            ProductDTO result = null;
             SqlConnection sqlConnection = null;
             try
             {
@@ -160,7 +159,7 @@ namespace Desafio.Infrastructure.Contexts
 
 
                 return await Task.Run(
-                    () => 
+                    () =>
                     {
                         dataAdapter.Fill(set, "queryResult");
 
@@ -183,13 +182,13 @@ namespace Desafio.Infrastructure.Contexts
                                 description: row["Description"].ToString()
                                 );
 
-                            result = new Product(
+                            result = new ProductDTO(
                                 categoryInfo: categoryRep,
                                 productInfo: productRep,
                                 stockInfo: stockRep
                                 );
                         }
-                        return result == null? null : result.ToDTO();
+                        return result;
                     });
 
                 set.Clear();
@@ -214,7 +213,7 @@ namespace Desafio.Infrastructure.Contexts
             List<ProductDTO> list = new List<ProductDTO>();
             SqlConnection sqlConnection = null;
             try
-            { 
+            {
                 string sql = SqlManager.GetSql(SqlQueryType.READALL);
 
                 DataSet set = new DataSet();
@@ -245,27 +244,27 @@ namespace Desafio.Infrastructure.Contexts
                                 description: row["Description"].ToString()
                                 );
 
-                            Product product = new Product(
+                            ProductDTO product = new ProductDTO(
                                 categoryInfo: categoryRep,
                                 productInfo: productRep,
                                 stockInfo: stockRep
                                 );
-                            list.Add(product.ToDTO());
+                            list.Add(product);
                         }
                         return list;
                     });
-                
-            } catch (Exception ex) 
+
+            } catch (Exception ex)
             {
                 throw ex;
             }
             finally
             {
-                if(sqlConnection.State == ConnectionState.Open)
+                if (sqlConnection.State == ConnectionState.Open)
                     sqlConnection.Close();
                 sqlConnection = null;
             }
-            
+
         }
 
         public async Task Update(int id, ProductDTO product)
@@ -299,7 +298,7 @@ namespace Desafio.Infrastructure.Contexts
                         var affectedRows = cmd.ExecuteNonQuery();
                         cmd = null;
 
-                        if(affectedRows < 1)
+                        if (affectedRows < 1)
                         {
                             throw new ArgumentException("Update not made");
                         }
@@ -324,6 +323,48 @@ namespace Desafio.Infrastructure.Contexts
         }
 
         #endregion 
+
+        public async Task<List<OperationDTO>> GetAllOperations(int id)
+        {
+            string sql = SqlManager.GetSql(SqlQueryType.READOPERATIONS);
+            List<OperationDTO> operations = new List<OperationDTO>();
+            SqlConnection sqlConnection = null;
+
+            try
+            {
+                sqlConnection = _connectionManager.GetConnection();
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+
+                cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
+                await sqlConnection.OpenAsync();
+                var row = await cmd.ExecuteReaderAsync();
+                while (await row.ReadAsync())
+                {
+                    operations.Add(
+                        new OperationDTO(
+                            new OperationDAO()
+                            {
+                                OperationId = row.GetInt32(row.GetOrdinal("operation_id")),
+                                OperationAmount = row.GetInt32(row.GetOrdinal("operation_amount")),
+                                OperationType = row.GetString(row.GetOrdinal("operation_type")),
+                                OperationDate = row.GetDateTime(row.GetOrdinal("operation_date")),
+                                OperationUser = row.GetString(row.GetOrdinal("operation_user")),
+                                StockId = row.GetInt32(row.GetOrdinal("stock_id"))
+                            }
+                            )
+                        );
+                }
+                return operations;
+            } catch (Exception ex)
+            {
+                throw ex;
+            } finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+                sqlConnection = null;
+            }
+        }
 
         #region //Users
         public async Task<List<UserDTO>> GetAllUsers()

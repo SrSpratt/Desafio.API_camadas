@@ -1,5 +1,4 @@
 ﻿using Desafio.Domain.Dtos;
-using Desafio.Domain.Entities;
 using Desafio.Infrastructure.Repository;
 
 namespace Desafio.Services.Services

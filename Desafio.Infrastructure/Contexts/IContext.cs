@@ -1,9 +1,4 @@
 ﻿using Desafio.Domain.Dtos;
-using Desafio.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace Desafio.Infrastructure.Contexts
 {
@@ -33,6 +28,8 @@ namespace Desafio.Infrastructure.Contexts
         Task<int> Create(ProductDTO product);
 
         Task Delete(int id);
+
+        Task<List<OperationDTO>> GetAllOperations(int id);
 
 
         //Category

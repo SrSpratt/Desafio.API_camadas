@@ -105,11 +105,12 @@ namespace Desafio.Infrastructure.Queries
                     sql = "SELECT category_name AS 'Category' FROM tst_categories c JOIN tst_product_category pc ON pc.category_id = c.category_id WHERE product_id = @Code";
                     break;
                 case SqlQueryType.CREATE:
-                    sql = @"DECLARE @output_table TABLE (code int)
-                            INSERT INTO tst_products(Name, Description) OUTPUT INSERTED.Code INTO @output_table(code) VALUES (@Name, @Description)
-                            INSERT INTO tst_stock(Sale_value, Purchase_value, Amount, Product_id, Supplier, Expiration_date) VALUES (@SaleValue, @Value, @Amount, (SELECT code FROM @output_table), @Supplier, @ExpirationDate)
-                            INSERT INTO tst_product_category(product_id, category_id) VALUES ((SELECT Code FROM @output_table),(SELECT category_id FROM tst_categories WHERE category_name = @Category))
-                            SELECT code FROM @output_table;";
+                    sql = @"DECLARE @output_table TABLE (code int, stock_id int)
+                            INSERT INTO tst_products(Name, Description) OUTPUT INSERTED.Code INTO @output_table(code) VALUES (@name, @description)
+                            INSERT INTO tst_stock(Sale_value, Purchase_value, Amount, Product_id, Supplier, Expiration_date) OUTPUT INSERTED.stock_id INTO @output_table(stock_id) VALUES (@salevalue, @purchasevalue, @amount, (SELECT TOP 1 code FROM @output_table), @supplier, @expirationdate)
+                            INSERT INTO tst_product_category(product_id, category_id) VALUES ((SELECT TOP 1 code FROM @output_table),(SELECT category_id FROM tst_categories WHERE category_name = @category))
+                            INSERT INTO tst_stock_updates(stock_id, operation_type, operation_date, operation_user, operation_amount) VALUES ((SELECT TOP 1 stock_id FROM @output_Table where stock_id is not null), @operation, GETDATE(), (SELECT username FROM tst_users WHERE username = @username), @operationamount)
+                            SELECT TOP 1 stock_id FROM @output_table WHERE stock_id is not null;";
                     break;
                 case SqlQueryType.READALL:
                     sql = "SELECT p.Code AS 'Code', p.Name AS 'Name', p.Description AS 'Description', c.category_name AS 'Category', s.Sale_value AS 'Value', s.Amount AS 'Amount', s.Purchase_value AS 'Purchase Value', s.Supplier AS 'Supplier', s.Expiration_date AS 'Expiration Date' FROM tst_products p JOIN tst_stock s ON p.Code = s.Product_id JOIN tst_product_category aux ON p.Code = aux.product_id JOIN tst_categories c ON c.category_id = aux.category_id ORDER BY p.Name ASC";
@@ -126,6 +127,11 @@ namespace Desafio.Infrastructure.Queries
                     sql = "DELETE FROM tst_stock WHERE Product_id = @Code;" +
                     "DELETE FROM tst_product_category WHERE product_id = @Code;" +
                     "DELETE FROM tst_products WHERE Code = @Code;" ;
+                    break;
+                case SqlQueryType.READOPERATIONS:
+                    sql = @"SELECT * FROM
+	                          tst_stock_updates 
+                            WHERE stock_id = @id";
                     break;
 
             }

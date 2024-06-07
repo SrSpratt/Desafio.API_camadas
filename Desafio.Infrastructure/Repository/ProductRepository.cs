@@ -1,13 +1,6 @@
 ﻿using Desafio.Domain.Dtos;
-using Desafio.Domain.Entities;
-using Desafio.Domain.Enums;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Contexts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio.Infrastructure.Repository
 {

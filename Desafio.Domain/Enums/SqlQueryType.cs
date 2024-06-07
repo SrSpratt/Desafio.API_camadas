@@ -15,6 +15,11 @@ namespace Desafio.Domain.Enums
         READALL,
         UPDATE,
         DELETE,
+        //ProductAggregated
+        READOPERATIONS,
+        READLATESTOPERATION,
+        READFIRSTOPERATION,
+        READDAYOPERATION,
         //Category
         READCATEGORY,
         CREATECATEGORY,
@@ -31,6 +36,5 @@ namespace Desafio.Domain.Enums
         READUSERNAME,
         //UserAggregated
         INSERTNAMEUSER
-
     }
 }

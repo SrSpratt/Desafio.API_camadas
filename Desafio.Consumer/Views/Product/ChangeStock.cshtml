@@ -39,7 +39,7 @@
     <div class="col">
         <h4>@Html.DisplayNameFor(model => model.Operation)</h4>
         <hr/>
-        <form asp-action="StockHandler">
+        <form asp-action="EditHandler">
             <div class="form-group">
                 <select name="Operation.OperationType" id="Operation.OperationType" class="form-control">
                     <option>Add</option>
@@ -49,11 +49,24 @@
             <div class="form-group">
                 <label asp-for="Operation.OperationAmount" class="control-label"></label>
                 <input asp-for="Operation.OperationAmount" class="form-control" type="number" min="1" max="99"/>
+                <input type="hidden" asp-for="Operation.OperationUser" value="@User.Identity.Name" />
+                <input type="hidden" asp-for="Operation.OperationDate" value="@DateTime.Now.ToString()" />
+                <input type="hidden" asp-for="Name"/>
+                <input type="hidden" asp-for="Amount" />
+                <input type="hidden" asp-for="Category"  />
+                <input type="hidden" asp-for="Description" />
+                <input type="hidden" asp-for="SaleValue" />
+                <input type="hidden" asp-for="Code" />
+                <input type="hidden" asp-for="Supplier"/>
+                <input type="hidden" asp-for="Value" />
+                <input type="hidden" asp-for="ExpirationDate" />
+                <input type="hidden" asp-for="StockId" />
             </div>
+            <input type="submit" value="Save" class="btn btn-primary" />
         </form>
     </div>
 </div>
 <div>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Details", "Get", new { id = Model.Code }) |
     <a asp-action="Index">Back to List</a>
 </div>

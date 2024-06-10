@@ -62,7 +62,7 @@
         {
             @if (User.IsInRole("administrator"))
             {
-                @Html.ActionLink("Stock Operations","GetOperations", new {id = Model.Code})
+                @Html.ActionLink("Stock Operations","GetOperations", new {id = Model.StockId})
             }
         }
     </dl>

@@ -173,7 +173,8 @@ namespace Desafio.Infrastructure.Contexts
                                 saleValue: Double.Parse(row["Value"].ToString()),
                                 supplier: row["Supplier"].ToString(),
                                 purchaseValue: Double.Parse(row["Purchase Value"].ToString()),
-                                expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue
+                                expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue,
+                                id: Int32.Parse(row["Stock"].ToString())
                                 );
                             ProductDAO productRep = new ProductDAO(
                                 code: Int32.Parse(row["Code"].ToString()),
@@ -233,7 +234,8 @@ namespace Desafio.Infrastructure.Contexts
                                 saleValue: Double.Parse(row["Value"].ToString()),
                                 supplier: row["Supplier"].ToString(),
                                 purchaseValue: Double.Parse(row["Purchase Value"].ToString()),
-                                expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue
+                                expirationDate: !string.IsNullOrEmpty(row["Expiration Date"].ToString()) ? DateTime.Parse(row["Expiration Date"].ToString()) : DateTime.MinValue,
+                                id: Int32.Parse(row["Stock"].ToString())
                                 );
                             ProductDAO productRep = new ProductDAO(
                                 code: Int32.Parse(row["Code"].ToString()),
@@ -296,6 +298,10 @@ namespace Desafio.Infrastructure.Contexts
                         cmd.Parameters.Add("@OldCategory", SqlDbType.VarChar).Value = product.Category;
                         cmd.Parameters.Add("@ExpirationDate", SqlDbType.DateTime).Value = product.ExpirationDate;
                         cmd.Parameters.Add("@Amount", SqlDbType.Int).Value = product.Amount;
+                        cmd.Parameters.Add("@stock_id", SqlDbType.Int).Value = product.StockId;
+                        cmd.Parameters.Add("@operationamount", SqlDbType.Int).Value = product.Operation.OperationAmount;
+                        cmd.Parameters.Add("@operation", SqlDbType.VarChar).Value = product.Operation.OperationType;
+                        cmd.Parameters.Add("@user", SqlDbType.VarChar).Value = product.Operation.OperationUser;
                         sqlConnection.Open();
                         var affectedRows = cmd.ExecuteNonQuery();
                         cmd = null;

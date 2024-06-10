@@ -144,7 +144,8 @@ namespace Desafio.Infrastructure.Queries
                                    s.Amount AS 'Amount', 
                                    s.Purchase_value AS 'Purchase Value', 
                                    s.Supplier AS 'Supplier', 
-                                   s.Expiration_date AS 'Expiration Date' 
+                                   s.Expiration_date AS 'Expiration Date',
+                                   s.stock_id AS 'Stock'
                            FROM tst_products p 
                            JOIN tst_stock s ON p.Code = s.Product_id 
                            JOIN tst_product_category aux ON p.Code = aux.product_id 
@@ -160,7 +161,8 @@ namespace Desafio.Infrastructure.Queries
                                    s.Amount AS 'Amount', 
                                    s.Purchase_value AS 'Purchase Value', 
                                    s.Supplier AS 'Supplier', 
-                                   s.Expiration_date AS 'Expiration Date' 
+                                   s.Expiration_date AS 'Expiration Date',
+                                   s.stock_id AS 'Stock'
                            FROM tst_products p 
                            JOIN tst_stock s ON p.Code = s.Product_id 
                            JOIN tst_product_category aux ON p.Code = aux.product_id 
@@ -186,7 +188,9 @@ namespace Desafio.Infrastructure.Queries
                             WHERE product_id = @Code 
                             AND category_id = (SELECT category_id FROM 
                                                       tst_categories 
-                                               WHERE category_name = @OldCategory)";
+                                               WHERE category_name = @OldCategory)
+                            INSERT INTO tst_stock_updates(stock_id, operation_type, operation_date, operation_user, operation_amount) 
+                            VALUES (@stock_id, @operation, GETDATE(), @user, @operationamount);";
                     break;
                 case SqlQueryType.DELETE:
                     sql = @"DELETE FROM tst_stock 

@@ -2,6 +2,7 @@
 using Desafio.Domain.Dtos;
 using Desafio.Services.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Desafio.API.Controllers
 {

@@ -38,6 +38,5 @@ namespace Desafio.Services.Services
         {
             await _repository.Delete(id);
         }
-
     }
 }

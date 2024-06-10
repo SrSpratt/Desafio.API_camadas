@@ -32,6 +32,8 @@ namespace Desafio.Consumer.Models.Dtos
 
         public StockOperation Operation { get; set; }
 
+        public int StockId { get; set; }
+
         public ProductViewModel toProduct()
         {
             ProductViewModel product = new ProductViewModel();
@@ -44,6 +46,7 @@ namespace Desafio.Consumer.Models.Dtos
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;
+            product.StockId = StockId;
             product.Operation = Operation;
             return product;
         }

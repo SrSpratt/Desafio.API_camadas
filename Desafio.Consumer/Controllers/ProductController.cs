@@ -170,6 +170,10 @@ namespace Desafio.Consumer.Controllers
             if (ModelState.IsValid)
             {
                 Product product = productModel.toProduct();
+                if (string.Equals(product.Operation.OperationType, "Add"))
+                    product.Amount += product.Operation.OperationAmount;
+                else
+                    product.Amount -= product.Operation.OperationAmount;
                 string json = JsonConvert.SerializeObject(product);
                 byte[] buffer = Encoding.UTF8.GetBytes(json);
                 ByteArrayContent byteContent = new ByteArrayContent(buffer);
@@ -178,7 +182,10 @@ namespace Desafio.Consumer.Controllers
                 HttpResponseMessage response = await httpClient.PutAsync(url, byteContent);
 
                 if (!response.IsSuccessStatusCode)
-                    throw new ArgumentException("There was a problem while processing the solicitation!");
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException("There was a problem while processing the solicitation!" + message);
+                }
                 return RedirectToAction("Index");
             }
 

@@ -37,6 +37,5 @@ namespace Desafio.Infrastructure.Repository
         {
             await _context.Update(id, product);
         }
-
     }
 }

@@ -15,6 +15,7 @@ namespace Desafio.Domain.Enums
         READALL,
         UPDATE,
         DELETE,
+        REPLACE,
         //ProductAggregated
         READOPERATIONS,
         READLATESTOPERATION,

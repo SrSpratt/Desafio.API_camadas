@@ -39,6 +39,7 @@ namespace Desafio.Consumer.Services
             /*  1 -> Product
                 2 -> Category
                 3 -> User
+                4 -> Operation
             */
             string endpoint = ENDPOINT;
             switch (apiController)
@@ -51,6 +52,9 @@ namespace Desafio.Consumer.Services
                     break;
                 case 3:
                     endpoint += _configuration["App_url:User"];
+                    break;
+                case 4:
+                    endpoint += _configuration["App_url:Operation"];
                     break;
             }
             return endpoint;

@@ -80,6 +80,25 @@ namespace Desafio.Consumer.Controllers
             return View(result);
         }
 
+
+
+        [Route("Operations/{id:int}")]
+        [HttpGet]
+        public async Task<ActionResult<List<StockOperation>>> GetOperations(int id)
+        {
+            List<StockOperation> operations = new List<StockOperation>();
+            string url = _endpointGetter.GenerateCrossEndpoint("GetAllOperations", 4);
+            url += $"{id}";
+            HttpResponseMessage response = await httpClient.GetAsync(url);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                operations = JsonConvert.DeserializeObject<List<StockOperation>>(content);
+            }
+            return View(operations);
+        }
+
         [RestoreTempModelState]
         public async Task<IActionResult> Create()
         {
@@ -100,7 +119,7 @@ namespace Desafio.Consumer.Controllers
 
         [SetTempModelState]
         //O bind garante que tudo que não foi referenciado recebe 0
-        public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount")] Product product)
+        public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount, Operation")] Product product)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +132,10 @@ namespace Desafio.Consumer.Controllers
                 HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
 
                 if (!response.IsSuccessStatusCode)
-                    throw new ArgumentException("There was a problem while processing the solicitation!");
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException("There was a problem while processing the solicitation!\n\n" + message);
+                }
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Create");

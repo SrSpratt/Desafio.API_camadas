@@ -34,6 +34,8 @@ namespace Desafio.Consumer.Models.Dtos
         [Display(Name = "Qty.")]
         [ValidateQuantity]
         public int Amount { get; set; }
+
+        public StockOperation Operation { get; set; }
         
         public List<Category>? categories { get; set; }
 
@@ -49,6 +51,7 @@ namespace Desafio.Consumer.Models.Dtos
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;
+            product.Operation = Operation;
             return product;
         }
 

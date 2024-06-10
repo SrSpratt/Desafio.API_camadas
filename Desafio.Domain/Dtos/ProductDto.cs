@@ -21,8 +21,12 @@ namespace Desafio.Domain.Dtos
 
         public DateTime ExpirationDate { get; set; }
 
+        //public int StockId { get; set; } //temporariamente
+
+        public OperationDTO Operation { get; set; }
+
         [JsonConstructor] //desativar isso aqui para testar os erros no navegador
-        public ProductDTO(int code, string description, double salevalue, string name, string supplier, double value, string category, DateTime expirationDate, int amount)
+        public ProductDTO(int code, string description, double salevalue, string name, string supplier, double value, string category, DateTime expirationDate, int amount, OperationDTO operation)
         {
             Code = code;
             Description = description;
@@ -33,6 +37,7 @@ namespace Desafio.Domain.Dtos
             Category = category;
             ExpirationDate = expirationDate;
             Amount = amount;
+            Operation = operation;
         }
 
         public ProductDTO(ProductDAO productInfo, CategoryDAO categoryInfo, StockDAO stockInfo)
@@ -45,6 +50,7 @@ namespace Desafio.Domain.Dtos
             Value = stockInfo.PurchaseValue;
             ExpirationDate = stockInfo.ExpirationDate;
             Amount = stockInfo.Amount;
+            //StockId = stockInfo.ID;
             Category = categoryInfo.Name;
         }
 

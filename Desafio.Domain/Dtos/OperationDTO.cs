@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Desafio.Domain.Dtos
@@ -17,6 +18,14 @@ namespace Desafio.Domain.Dtos
 
         public int OperationAmount { get; set; }
 
+        [JsonConstructor]
+        public OperationDTO(string operationType, DateTime operationDate, string operationUser, int operationAmount)
+        {
+            OperationType = operationType;
+            OperationDate = operationDate;
+            OperationUser = operationUser;
+            OperationAmount = operationAmount;
+        }
         public OperationDTO(OperationDAO operation) 
         {
             OperationType = operation.OperationType;

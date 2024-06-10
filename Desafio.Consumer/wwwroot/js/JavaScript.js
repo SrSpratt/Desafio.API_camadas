@@ -30,3 +30,11 @@ function vanilla_fire_ajax_search(selectid, urlBase, partialDiv) {
         xhr.send();
     });
 }
+
+function fill_value_on_input(fromid, toid, event) {
+    document.addEventListener("DOMContentLoaded", function () {
+        document.getElementById(fromid).addEventListener(event, function (event) {
+            document.getElementById(toid).value = event.target.value;
+        })
+    });
+}

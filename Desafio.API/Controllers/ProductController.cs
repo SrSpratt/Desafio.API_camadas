@@ -54,7 +54,7 @@ namespace Desafio.API.Controllers
                 if (await _service.Read(id) is null)
                     return NotFound();
                 await _service.Delete(id);
-                return await _service.Read(id) == null ? NoContent() : throw new ArgumentException("Something happened");
+                return await _service.Read(id) == null ? NoContent() : throw new ArgumentException("Something happened!");
         }
 
     }

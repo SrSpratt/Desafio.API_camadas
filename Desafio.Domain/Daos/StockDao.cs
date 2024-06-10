@@ -9,6 +9,7 @@ namespace Desafio.Domain.Daos
 {
     public class StockDAO
     {
+        public int ID { get; set; }
         public int Amount { get; set; }
 
         public double SaleValue { get; set; }

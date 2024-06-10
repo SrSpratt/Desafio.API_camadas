@@ -35,14 +35,17 @@ namespace Desafio.Infrastructure.Contexts
 
                 sqlConnection = _connectionManager.GetConnection();
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
-                cmd.Parameters.Add("@Name", SqlDbType.VarChar).Value = product.Name;
-                cmd.Parameters.Add("@Description", SqlDbType.VarChar).Value = product.Description;
-                cmd.Parameters.Add("@SaleValue", SqlDbType.Real).Value = product.SaleValue;
-                cmd.Parameters.Add("@Supplier", SqlDbType.VarChar).Value = product.Supplier;
-                cmd.Parameters.Add("@Value", SqlDbType.Real).Value = product.Value;
-                cmd.Parameters.Add("@Category", SqlDbType.VarChar).Value = product.Category;
-                cmd.Parameters.Add("@ExpirationDate", SqlDbType.DateTime).Value = product.ExpirationDate;
-                cmd.Parameters.Add("@Amount", SqlDbType.Int).Value = product.Amount;
+                cmd.Parameters.Add("@name", SqlDbType.VarChar).Value = product.Name;
+                cmd.Parameters.Add("@description", SqlDbType.VarChar).Value = product.Description;
+                cmd.Parameters.Add("@saleValue", SqlDbType.Real).Value = product.SaleValue;
+                cmd.Parameters.Add("@supplier", SqlDbType.VarChar).Value = product.Supplier;
+                cmd.Parameters.Add("@purchasevalue", SqlDbType.Real).Value = product.Value;
+                cmd.Parameters.Add("@category", SqlDbType.VarChar).Value = product.Category;
+                cmd.Parameters.Add("@expirationdate", SqlDbType.DateTime).Value = product.ExpirationDate;
+                cmd.Parameters.Add("@amount", SqlDbType.Int).Value = product.Amount;
+                cmd.Parameters.Add("@username", SqlDbType.VarChar).Value = product.Operation.OperationUser;
+                cmd.Parameters.Add("@operation", SqlDbType.VarChar).Value = product.Operation.OperationType;
+                cmd.Parameters.Add("@operationamount", SqlDbType.Int).Value = product.Operation.OperationAmount;
                 //string[] newsql = sql.Split(";");
                 return await Task.Run(
                     () => {
@@ -188,12 +191,10 @@ namespace Desafio.Infrastructure.Contexts
                                 stockInfo: stockRep
                                 );
                         }
+
                         return result;
                     });
 
-                set.Clear();
-                set = null;
-                cmd = null;
             }
             catch (Exception ex)
             {
@@ -222,7 +223,7 @@ namespace Desafio.Infrastructure.Contexts
                 SqlCommand cmd = new SqlCommand(sql, sqlConnection);
                 SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                 return await Task.Run(
-                    () =>
+                    async () =>
                     {
                         adapter.Fill(set, "queryResult");
                         foreach (DataRow row in set.Tables["queryresult"].Rows)
@@ -251,6 +252,7 @@ namespace Desafio.Infrastructure.Contexts
                                 );
                             list.Add(product);
                         }
+
                         return list;
                     });
 
@@ -354,6 +356,7 @@ namespace Desafio.Infrastructure.Contexts
                             )
                         );
                 }
+
                 return operations;
             } catch (Exception ex)
             {

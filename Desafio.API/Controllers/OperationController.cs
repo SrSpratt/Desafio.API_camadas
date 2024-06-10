@@ -22,5 +22,6 @@ namespace Desafio.API.Controllers
         {
             return await _service.GetAllOperations(id);
         }
+
     }
 }

@@ -30,6 +30,8 @@ namespace Desafio.Consumer.Models.Dtos
         [DataType(DataType.Date)]
         public DateTime ExpirationDate { get; set; }
 
+        public StockOperation Operation { get; set; }
+
         public ProductViewModel toProduct()
         {
             ProductViewModel product = new ProductViewModel();
@@ -42,6 +44,7 @@ namespace Desafio.Consumer.Models.Dtos
             product.Category = Category;
             product.ExpirationDate = ExpirationDate;
             product.Amount = Amount;
+            product.Operation = Operation;
             return product;
         }
 

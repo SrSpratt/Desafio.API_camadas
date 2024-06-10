@@ -59,7 +59,18 @@
                     @Html.DisplayFor(modelItem => item.ExpirationDate)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Code }) |
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.IsInRole("administrator"))
+                        {
+                            @Html.ActionLink("Edit", "Edit", new { id = item.Code })
+                        }
+                        else if (User.IsInRole("employee"))
+                        {
+                            @Html.ActionLink("Stock", "ChangeStock", new { id = item.Code })
+                        }
+                    }
+                    |
                     @Html.ActionLink("Details", "Get", new { id = item.Code }) |
                     @Html.ActionLink("Delete", "Delete", new { id = item.Code })
                 </td>

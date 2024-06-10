@@ -185,6 +185,13 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Edit", new { id = productModel.Code });
         }
 
+        public async Task<IActionResult> ChangeStock(int id)
+        {
+            Product product = await Search(id);
+
+            return View(product);
+        }
+
         public async Task<IActionResult> Delete(int id)
         {
             Product product = await Search(id);

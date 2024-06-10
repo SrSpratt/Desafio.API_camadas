@@ -16,6 +16,7 @@ namespace Desafio.Consumer.Models.Dtos
         public string Password { get; set; }
 
         [Required]
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")]
         public string Email { get; set; } //vou deixar anulável só temporariamente para testar a conexão
 
         [Required]

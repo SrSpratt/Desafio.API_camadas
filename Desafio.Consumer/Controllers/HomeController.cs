@@ -114,27 +114,33 @@ namespace Desafio.Consumer.Controllers
             return result;
         }
 
+        [RestoreTempModelState]
         public async Task<IActionResult> Create()
         {
             return View();
         }
 
+        [SetTempModelState]
         public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role, DateRegistered, UserRegistered, RealName")]User user)
         {
-            string url = $"{_endpointGetter.BaseUrl}";
-            string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
-            byte[] buffer = Encoding.UTF8.GetBytes(json);
-            ByteArrayContent byteContent = new ByteArrayContent(buffer);
-            byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue ("application/json");
-
-            HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
-
-            if (!response.IsSuccessStatusCode)
+            if (ModelState.IsValid)
             {
-                throw new ArgumentException("Response not right! \n" + $"FromAPI: {await response.Content.ReadAsStringAsync()}");
-            }
+                string url = $"{_endpointGetter.BaseUrl}";
+                string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                ByteArrayContent byteContent = new ByteArrayContent(buffer);
+                byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
 
-            return RedirectToAction("Users");
+                HttpResponseMessage response = await httpClient.PostAsync(url, byteContent);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw new ArgumentException("Response not right! \n" + $"FromAPI: {await response.Content.ReadAsStringAsync()}");
+                }
+
+                return RedirectToAction("Users");
+            }
+            return RedirectToAction("Create");
         }
         
         public async Task<IActionResult> Details(int id)

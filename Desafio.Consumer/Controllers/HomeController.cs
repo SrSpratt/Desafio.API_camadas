@@ -42,6 +42,33 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult SystemCreate()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> SystemCreateHandler([FromForm]User user)
+        {
+            if (ModelState.IsValid)
+            {
+                string url = _endpointGetter.BaseUrl;
+                string json = JsonSerializer.Serialize(user, new JsonSerializerOptions(JsonSerializerDefaults.Web));
+                byte[] buffer = Encoding.UTF8.GetBytes(json);
+                ByteArrayContent byteArrayContent = new ByteArrayContent(buffer);
+                byteArrayContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+                HttpResponseMessage response = await httpClient.PostAsync(url, byteArrayContent);
+                
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    string message = await response.Content.ReadAsStringAsync();
+                    throw new ArgumentException("Couldn't create user" + message);
+                }
+                return RedirectToAction("Index", "Product");
+            }
+            return RedirectToAction("SystemCreate");
+        }
+
         [Authorize(Roles = "administrator, employee")]
         public async Task<IActionResult> Users()
         {
@@ -156,11 +183,6 @@ namespace Desafio.Consumer.Controllers
             return View(result);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error(string Message, string ReasonPhrase, string StatusCode)
         {
@@ -185,7 +207,8 @@ namespace Desafio.Consumer.Controllers
 
             if (!response.IsSuccessStatusCode)
             {
-                ModelState.AddModelError(null, "Error");
+                string message = await response.Content.ReadAsStringAsync();
+                throw new ArgumentException("Couldn't do that" + message);
             }
             return RedirectToAction("Users");
         }
@@ -204,7 +227,7 @@ namespace Desafio.Consumer.Controllers
             ByteArrayContent byteContent = new ByteArrayContent(buffer);
             byteContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
             HttpResponseMessage response = await httpClient.PutAsync(url, byteContent);
-            throw new ArgumentException("Error!");
+            //throw new ArgumentException("Error!");
 
             if (!response.IsSuccessStatusCode)
             {

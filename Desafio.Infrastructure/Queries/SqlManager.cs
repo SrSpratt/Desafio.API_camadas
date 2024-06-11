@@ -103,7 +103,9 @@ namespace Desafio.Infrastructure.Queries
                             WHERE user_id = @id";
                     break;
                 case SqlQueryType.DELETEUSER:
-                    sql = @"DELETE FROM tst_users 
+                    sql = @"DELETE FROM tst_user_names 
+                            WHERE user_id = @id;
+                            DELETE FROM tst_users 
                             WHERE user_id = @id";
                     break;
                 case SqlQueryType.READNAME: //Isso deve ficar como readmaincategory

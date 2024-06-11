@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 
 namespace Desafio.Consumer.Validations.ForProduct
 {
-    public class ValidateCategoryAttribute : ValidationAttribute, IClientValidatable
+    public class ValidateCategoryAttribute : ValidationAttribute, IClientModelValidator
     {
         private string _word;
 
@@ -13,16 +14,20 @@ namespace Desafio.Consumer.Validations.ForProduct
             _word = word;
         }
 
-        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
+        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
         {
-            var rule = new ModelClientValidationRule
-            {
-                ErrorMessage= FormatErrorMessage(metadata.GetDisplayName()),
-                ValidationType = "validatecategory"
-            };
+            if (attributes.ContainsKey(key))
+                return false;
 
-            rule.ValidationParameters["word"] = _word;
-            return new[] { rule };
+            attributes.Add(key, value);
+            return true;
+        }
+
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            MergeAttribute(context.Attributes, "data-val", "true");
+            MergeAttribute(context.Attributes, "data-val-validatecategory", "Choose a valid category!");
+            MergeAttribute(context.Attributes, "data-val-validatecategory-word", _word);
         }
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)

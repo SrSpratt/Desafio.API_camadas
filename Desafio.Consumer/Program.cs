@@ -28,7 +28,7 @@ builder.Services.AddControllersWithViews(
         options.Filters.Add<MVCErrorFilter>();
         //options.Filters.Add<SetTempModelStateAttribute>();
         //options.Filters.Add<RestoreTempModelStateAttribute>();
-    });
+    }).AddDataAnnotationsLocalization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

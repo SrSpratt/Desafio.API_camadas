@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
-using System.Web.Mvc;
 
 namespace Desafio.Consumer.Validations.ForProduct
 {
-    public class ValidateValuesAttribute : ValidationAttribute
+    public class ValidateValuesAttribute : ValidationAttribute, IClientModelValidator
     {
         public readonly float _min;
         public readonly float _max;
@@ -15,6 +14,26 @@ namespace Desafio.Consumer.Validations.ForProduct
         {
             _min = min;
             _max = max;
+        }
+
+        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
+        {
+            if (attributes.ContainsKey(key))
+            {
+                return false;
+            }
+
+            attributes.Add(key, value);
+            return true;
+        }
+
+        public void AddValidation(ClientModelValidationContext context)
+        {
+            MergeAttribute(context.Attributes, "data-val", "true");
+            MergeAttribute(context.Attributes, "data-val-validatevalues", "The field is not a valid number!");
+            MergeAttribute(context.Attributes, "data-val-validatevalues-min", _min.ToString());
+            MergeAttribute(context.Attributes, "data-val-validatevalues-max", _max.ToString());
+
         }
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
@@ -31,16 +50,8 @@ namespace Desafio.Consumer.Validations.ForProduct
             return new ValidationResult($"The field is not a valid number!");
         }
 
-        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
-        {
-            var rule = new ModelClientValidationRule
-            {
-                ValidationType = "validatevalues",
-                ErrorMessage = "The field is not valid!"
-            };
-            rule.ValidationParameters.Add("fields", string.Join(",", _fields));
-            yield return rule;
-        }
+
+
     }
 
 

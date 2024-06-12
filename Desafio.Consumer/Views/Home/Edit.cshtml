@@ -47,13 +47,17 @@
                 <input asp-for="Email" class="form-control" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            @if (User.Identity.IsAuthenticated)
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 @if (User.IsInRole("administrator"))
                 {
                     <div class="form-group">
                         <label asp-for="Role" class="control-label"></label>
-                        <input asp-for="Role" class="form-control" />
+                        <select name="Role" id="Role" value ="@Model.Role" class="form-control">
+                            <option>administrator</option>
+                            <option>employee</option>
+                            <option>user</option>
+                        </select>
                         <span asp-validation-for="Role" class="text-danger"></span>
                     </div>
                 } else

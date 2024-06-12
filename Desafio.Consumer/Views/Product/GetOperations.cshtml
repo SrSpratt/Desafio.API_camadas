@@ -1,14 +1,11 @@
 ﻿@model IEnumerable<Desafio.Consumer.Models.Dtos.StockOperation>
 
 @{
-    ViewData["Title"] = "GetOperations";
+    ViewData["Title"] = "Stock Operations";
 }
 
-<h1>GetOperations</h1>
+<h1>Stock Operations</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
@@ -42,12 +39,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.OperationAmount)
             </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
         </tr>
 }
     </tbody>
 </table>
+<p>@Html.ActionLink("Go back", "Get", new { ViewBag.id })</p>

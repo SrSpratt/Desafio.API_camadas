@@ -13,6 +13,7 @@ namespace Desafio.Consumer.Models.Dtos
 
         [Required]
         //[ValidatePassword("senha")]  // vou trocar isto por uma variável ou retorno, e também criar um dto apenas para o login
+        [Length(3, 4, ErrorMessage ="A senha deve ter mais de 4 caracteres")]
         public string Password { get; set; }
 
         [Required]

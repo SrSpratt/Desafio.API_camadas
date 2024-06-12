@@ -89,6 +89,7 @@ namespace Desafio.Consumer.Controllers
             List<StockOperation> operations = new List<StockOperation>();
             string url = _endpointGetter.GenerateCrossEndpoint("GetAllOperations", 4);
             url += $"{id}";
+            ViewBag.id = id;
             HttpResponseMessage response = await httpClient.GetAsync(url);
 
             if (response.IsSuccessStatusCode)

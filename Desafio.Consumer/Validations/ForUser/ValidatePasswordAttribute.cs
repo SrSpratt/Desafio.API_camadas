@@ -12,7 +12,7 @@ namespace Desafio.Consumer.Validations.ForUser
         }
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            if (value.Equals(_password))
+            if (value != null && value.Equals(_password))
             {
                 return ValidationResult.Success;
             }

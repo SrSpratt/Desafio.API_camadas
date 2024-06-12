@@ -42,11 +42,13 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Index");
         }
 
+        [RestoreTempModelState]
         public IActionResult SystemCreate()
         {
             return View();
         }
 
+        [SetTempModelState]
         public async Task<IActionResult> SystemCreateHandler([FromForm]User user)
         {
             if (ModelState.IsValid)

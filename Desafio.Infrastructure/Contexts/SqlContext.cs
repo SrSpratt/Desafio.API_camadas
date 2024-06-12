@@ -24,7 +24,7 @@ namespace Desafio.Infrastructure.Contexts
         }
 
 
-        #region //Products
+        #region Products
         public async Task<int> Create(ProductDTO product)
         {
             SqlConnection sqlConnection = null;
@@ -330,8 +330,9 @@ namespace Desafio.Infrastructure.Contexts
 
         }
 
-        #endregion 
+        #endregion
 
+        #region Operations
         public async Task<List<OperationDTO>> GetAllOperations(int id)
         {
             string sql = SqlManager.GetSql(SqlQueryType.READOPERATIONS);
@@ -375,7 +376,9 @@ namespace Desafio.Infrastructure.Contexts
             }
         }
 
-        #region //Users
+        #endregion
+
+        #region Users
         public async Task<List<UserDTO>> GetAllUsers()
         {
             SqlConnection sqlConnection = null;
@@ -663,7 +666,7 @@ namespace Desafio.Infrastructure.Contexts
         }
         #endregion
 
-        #region //Categories
+        #region Categories
         public async Task<List<CategoryDTO>> GetAllCategories()
         {
             SqlConnection sqlConnection = null;

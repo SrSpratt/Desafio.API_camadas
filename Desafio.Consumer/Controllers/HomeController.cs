@@ -69,7 +69,7 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("SystemCreate");
         }
 
-        [Authorize(Roles = "administrator, employee")]
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Users()
         {
             List<User> users = null;
@@ -141,12 +141,14 @@ namespace Desafio.Consumer.Controllers
             return result;
         }
 
+        [Authorize(Roles ="administrator")]
         [RestoreTempModelState]
         public async Task<IActionResult> Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "administrator")]
         [SetTempModelState]
         public async Task<IActionResult> CreateHandler([Bind("Name, Password, Email, Role, DateRegistered, UserRegistered, RealName")]User user)
         {
@@ -169,7 +171,8 @@ namespace Desafio.Consumer.Controllers
             }
             return RedirectToAction("Create");
         }
-        
+
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Details(int id)
         {
             User result = null;
@@ -194,12 +197,14 @@ namespace Desafio.Consumer.Controllers
             });
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await GetUserInfo(id);
             return View(result);
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> DeleteHandler(int id)
         {
             string url = $"{_endpointGetter.BaseUrl}{id}";
@@ -213,12 +218,14 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Users");
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Edit(int id)
         {
             var result = await GetUserInfo(id);
             return View(result);
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> EditHandler([FromForm]User user)
         {
             string url = $"{_endpointGetter.BaseUrl}{user.Id}";

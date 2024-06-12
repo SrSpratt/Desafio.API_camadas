@@ -99,6 +99,7 @@ namespace Desafio.Consumer.Controllers
             return View(operations);
         }
 
+        [Authorize(Roles = "administrator")]
         [RestoreTempModelState]
         public async Task<IActionResult> Create()
         {
@@ -117,6 +118,7 @@ namespace Desafio.Consumer.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "administrator")]
         [SetTempModelState]
         //O bind garante que tudo que não foi referenciado recebe 0
         public async Task<IActionResult> CreateHandler([Bind("Description, Name, SaleValue, Supplier, Value, Category, ExpirationDate, Amount, Operation")] Product product)
@@ -141,6 +143,7 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Create");
         }
 
+        [Authorize(Roles = "administrator")]
         [RestoreTempModelState]
         public async Task<IActionResult> Edit(int id)
         {
@@ -163,6 +166,7 @@ namespace Desafio.Consumer.Controllers
             return View(productModel);
         }
 
+        [Authorize(Roles = "administrator, employee")]
         [SetTempModelState]
         [HttpPost]
         public async Task<IActionResult> EditHandler([FromForm] ProductViewModel productModel)
@@ -192,6 +196,7 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Edit", new { id = productModel.Code });
         }
 
+        [Authorize(Roles = "employee")]
         public async Task<IActionResult> ChangeStock(int id)
         {
             Product product = await Search(id);
@@ -199,6 +204,7 @@ namespace Desafio.Consumer.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> Delete(int id)
         {
             Product product = await Search(id);
@@ -207,6 +213,7 @@ namespace Desafio.Consumer.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "administrator")]
         public async Task<IActionResult> DeleteHandler(string Code) //TEM que nomeado EXATAMENTE como na tag do formulário que redireciona para cá
         {
             int id = Int32.Parse(Code);

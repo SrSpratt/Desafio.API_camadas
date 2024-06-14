@@ -13,7 +13,7 @@ VALUES
 INSERT INTO ssqldata.dbo.tst_roles (role_type)
 VALUES
 ('administrator'),
-('employee'),
+('stockist'),
 ('vendor');
 
 INSERT INTO ssqldata.dbo.tst_product_category (product_id, category_id)
@@ -30,11 +30,11 @@ VALUES
 
 INSERT INTO ssqldata.dbo.tst_stock_updates (stock_id, operation_type, operation_date, operation_user, operation_amount)
 VALUES
-(1, 'Create', GETDATE(), 'administrator', 50),
-(2, 'Create', GETDATE(), 'administrator', 30),
-(3, 'Create', GETDATE(), 'administrator', 100),
-(1, 'Add', GETDATE(), 'employee', 50),
-(1, 'Remove', GETDATE(), 'employee', 50);
+(1, 'Create', GETDATE(), 'Fulano', 50),
+(2, 'Create', GETDATE(), 'Sicrano', 30),
+(3, 'Create', GETDATE(), 'Beltrano', 100),
+(1, 'Add', GETDATE(), 'Sicrano', 50),
+(1, 'Remove', GETDATE(), 'Sicrano', 50);
 
 INSERT INTO ssqldata.dbo.tst_users (username, user_email, user_password, date_registered, user_role, user_registered)
 VALUES

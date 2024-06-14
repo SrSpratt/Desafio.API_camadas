@@ -27,6 +27,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ExpirationDate)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Amount)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -59,13 +62,16 @@
                     @Html.DisplayFor(modelItem => item.ExpirationDate)
                 </td>
                 <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+                <td>
                     @if (User.Identity.IsAuthenticated)
                     {
                         @if (User.IsInRole("administrator"))
                         {
                             @Html.ActionLink("Edit", "Edit", new { id = item.Code })
                         }
-                        else if (User.IsInRole("employee"))
+                        else if (User.IsInRole("stockist"))
                         {
                             @Html.ActionLink("Stock", "ChangeStock", new { id = item.Code })
                         }

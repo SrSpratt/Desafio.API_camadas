@@ -167,7 +167,7 @@ namespace Desafio.Consumer.Controllers
             return View(productModel);
         }
 
-        [Authorize(Roles = "administrator, employee")]
+        [Authorize(Roles = "administrator, stockist")]
         [SetTempModelState]
         [HttpPost]
         public async Task<IActionResult> EditHandler([FromForm] ProductViewModel productModel)
@@ -197,7 +197,7 @@ namespace Desafio.Consumer.Controllers
             return RedirectToAction("Edit", new { id = productModel.Code });
         }
 
-        [Authorize(Roles = "employee")]
+        [Authorize(Roles = "stockist")]
         public async Task<IActionResult> ChangeStock(int id)
         {
             Product product = await Search(id);

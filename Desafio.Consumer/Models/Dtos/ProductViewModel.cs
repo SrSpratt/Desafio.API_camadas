@@ -12,7 +12,7 @@ namespace Desafio.Consumer.Models.Dtos
         public string Description { get; set; }
         [Required]
         [Display(Name = "Sale Value")]
-        [ValidateValues(0.01f, 100.0f, ErrorMessage ="Put a valid value!")]
+        [ValidateValues(0.01f, 1500.0f, ErrorMessage ="Put a valid value!")]
         [BindProperty]
         public string SaleValue { get; set; } //double
         public string Name { get; set; }
@@ -20,7 +20,7 @@ namespace Desafio.Consumer.Models.Dtos
         public string Supplier { get; set; }
 
         [Display(Name = "Purchase Value")]
-        [ValidateValues(0.01f, 100.0f)]
+        [ValidateValues(0.01f, 1500.0f)]
         public string Value { get; set; } //double
 
         [ValidateCategory("category")]

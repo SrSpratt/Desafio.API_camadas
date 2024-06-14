@@ -19,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <input asp-for="Password" type="password" class="form-control" />
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -31,8 +31,8 @@
                 <label asp-for="Role" class="control-label"></label>
                 <select name="Role" id="Role" class="form-control">
                     <option>administrator</option>
-                    <option>employee</option>
-                    <option>user</option>
+                    <option>stockist</option>
+                    <option>vendor</option>
                 </select>
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>

@@ -1,11 +1,7 @@
-﻿using Desafio.Domain.Dtos;
+﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Dtos;
 using Desafio.Infrastructure.Repository;
 using Desafio.Services.Authentication;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Desafio.Services.Services
 {
@@ -21,18 +17,77 @@ namespace Desafio.Services.Services
         }
         public async Task<UserDTO> Read(int id)
         {
-            return await _repository.Read(id);
+            
+            UserDAO user = await _repository.GetUser(id);
+            List<UserNameDAO> userNames = await _repository.GetMany(id);
+            string realName = "";
+            for (int i = 0; i < userNames.Count; i++)
+                if (i > 0)
+                    realName += " " + userNames[i].UserName;
+                else
+                    realName += userNames[i].UserName;
+            user.RealName = realName;
+            RoleDAO role = await _repository.GetRole(user.Role);
+            return new UserDTO(user, role);
         }
 
         public async Task<List<UserDTO>> ReadAll()
         {
-            return await _repository.ReadAll();
+            List<UserDAO> users = await _repository.GetAllUsers();
+            List<UserDTO> results = new List<UserDTO>();
+            foreach (UserDAO user in users)
+            {
+                List<UserNameDAO> userNames = await _repository.GetMany(user.ID);
+                string realName = "";
+                for (int i = 0; i < userNames.Count; i++)
+                    if (i > 0)
+                        realName += " " + userNames[i].UserName;
+                    else
+                        realName += userNames[i].UserName;
+                user.RealName = realName;
+                RoleDAO role = await _repository.GetRole(user.Role);
+                results.Add(new UserDTO(user, role));
+            }
+            return results;
         }
 
         public async Task<int> Create(UserDTO user)
         {
             var passwordHash = _passwordHasher.Hash(user.Password);
             user.Password = passwordHash;
+            UserDAO userDAO = new UserDAO
+            {
+                ID = user.ID,
+                Name = user.Name,
+                RealName = user.RealName,
+                DateRegistered = user.DateRegistered,
+                UserRegistered = user.UserRegistered,
+                Password = user.Password,
+                Role = (await _repository.GetRoleByName(user.Role)).ID,
+                Email = user.Email,
+            };
+            UserDAO daoResult = await _repository.PlaceUser(userDAO);
+            var splitName = user.RealName.Split(" ");
+            List<UserNameDAO> names = new List<UserNameDAO>();
+            foreach (string name in splitName)
+            {
+                names.Add( await _repository.PlaceName(
+                        new UserNameDAO
+                        {
+                            UserID = daoResult.ID,
+                            UserName = name,
+                        }
+                    )
+                    );
+            }
+            string realName = "";
+            for (int i = 0; i < names.Count; i++)
+                if (i > 0)
+                    realName += " " + names[i].UserName;
+                else
+                    realName += names[i].UserName;
+            daoResult.RealName = realName;
+            return daoResult.ID;
             return await _repository.Create(user);
         }
 

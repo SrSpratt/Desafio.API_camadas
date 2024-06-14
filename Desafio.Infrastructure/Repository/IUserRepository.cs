@@ -17,11 +17,13 @@ namespace Desafio.Infrastructure.Repository
         Task<UserDTO> Read(int id);
 
         Task Delete(int id);
+
         //-----------------------------
         //ROLE
         Task<List<RoleDAO>> GetAllRoles();
 
         Task<RoleDAO> GetRole(int id);
+        Task<RoleDAO> GetRoleByName(string name);
         Task<RoleDAO> PlaceRole(RoleDAO userPiece);
 
         Task<RoleDAO> ReplaceRole(RoleDAO userPiece);
@@ -29,15 +31,23 @@ namespace Desafio.Infrastructure.Repository
         Task<RoleDAO> RemoveRole(int id);
 
         //-----------------------------
-        //ROLE
+        //User
         Task<List<UserDAO>> GetAllUsers();
 
         Task<UserDAO> GetUser(int id);
-        Task<UserDAO> PlaceUser(RoleDAO userPiece);
+        Task<UserDAO> PlaceUser(UserDAO userPiece);
 
-        Task<UserDAO> ReplaceUser(RoleDAO userPiece);
+        Task<UserDAO> ReplaceUser(UserDAO userPiece);
 
         Task<UserDAO> RemoveUser(int id);
+
+        //-----------------------------
+        //UserName
+        Task<List<UserNameDAO>> GetMany(int id);
+        Task<UserNameDAO> PlaceName(UserNameDAO userPiece);
+        Task<UserNameDAO> DeleteName(UserNameDAO userPiece);
+        Task<UserNameDAO> UpdateName(UserNameDAO userPiece);
+        //Task<UserNameDAO> PlaceMany(UserNameDAO userPiece);
 
         //----------------------------------------
         Task<UserDTO> Login(string name);

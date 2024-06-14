@@ -326,6 +326,11 @@ namespace Desafio.Infrastructure.Queries
                             FROM tst_roles
                             WHERE role_id=@role_id;";
                     break;
+                case SqlQueryType.R_READBYNAME:
+                    sql = @"SELECT role_id, role_type
+                            FROM tst_roles
+                            WHERE role_type=@role_type;";
+                    break;
                 case SqlQueryType.R_CREATE:
                     sql = @"INSERT INTO tst_roles
                             (role_type)
@@ -400,6 +405,7 @@ namespace Desafio.Infrastructure.Queries
                 case SqlQueryType.UN_CREATE:
                     sql = @"INSERT INTO tst_user_names
                             (user_id, user_name)
+                            OUTPUT INSERTED.user_id
                             VALUES(@user_id, @user_name);";
                     break;
                 case SqlQueryType.UN_UPDATE:

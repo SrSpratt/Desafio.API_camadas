@@ -834,11 +834,14 @@ namespace Desafio.Infrastructure.Contexts
                 PropertyInfo[] properties = daoType.GetProperties();
                 foreach(var item in properties)
                 {
-                    bool sqlMap = Identifier.SqlTypeMap.TryGetValue(item.PropertyType, out SqlDbType dataType);
-                    bool propertyMap = dbMapping.TryGetValue(item.Name, out string scalar);
-                    if ( sqlMap && propertyMap)
+                    if (item.PropertyType == typeof(int))
                     {
-                        cmd.Parameters.Add(new SqlParameter("@" + scalar, dataType)).Value = id;
+                        bool sqlMap = Identifier.SqlTypeMap.TryGetValue(item.PropertyType, out SqlDbType dataType);
+                        bool propertyMap = dbMapping.TryGetValue(item.Name, out string scalar);
+                        if (sqlMap && propertyMap)
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@" + scalar, dataType)).Value = id;
+                        }
                     }
                 }
 
@@ -960,12 +963,17 @@ namespace Desafio.Infrastructure.Contexts
                 var daoType = typeof(T);
                 PropertyInfo[] properties = daoType.GetProperties();
                 var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
-                foreach(PropertyInfo property in properties)
+                foreach (var item in properties)
                 {
-                    var sqlMap = Identifier.SqlTypeMap.TryGetValue(property.PropertyType, out SqlDbType dataType);
-                    var propertyMap = dbMapping.TryGetValue(property.Name, out string scalar);
-                    if (sqlMap && propertyMap)
-                        cmd.Parameters.Add("@" + scalar, dataType).Value = id;
+                    if (item.PropertyType == typeof(int))
+                    {
+                        bool sqlMap = Identifier.SqlTypeMap.TryGetValue(item.PropertyType, out SqlDbType dataType);
+                        bool propertyMap = dbMapping.TryGetValue(item.Name, out string scalar);
+                        if (sqlMap && propertyMap)
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@" + scalar, dataType)).Value = id;
+                        }
+                    }
                 }
                 await sqlConnection.OpenAsync();
                 int rows = (int)await cmd.ExecuteNonQueryAsync();
@@ -984,6 +992,141 @@ namespace Desafio.Infrastructure.Contexts
             {
                 if (sqlConnection != null)
                     sqlConnection.Close();
+                sqlConnection = null;
+            }
+        }
+
+        public async Task<List<T>> ReadMany(int id)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                var commandEnum = Identifier.GetCommandType<T>("READ");
+                //var type = commandEnum.GetType();
+                var sql = SqlManager.ChooseSql(commandEnum);
+
+                sqlConnection = _connectionManager.GetConnection();
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                await sqlConnection.OpenAsync();
+
+
+                Type daoType = typeof(T);
+                var daoMapping = (Dictionary<string, string>)daoType.GetField("DAOMap")?.GetValue(null);
+                var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
+                if (daoMapping == null || dbMapping == null)
+                    throw new ArgumentException("Dictionaries not found inside the DAO");
+
+                PropertyInfo[] properties = daoType.GetProperties();
+                foreach (var item in properties)
+                {
+                    if (item.PropertyType == typeof(int))
+                    {
+                        bool sqlMap = Identifier.SqlTypeMap.TryGetValue(item.PropertyType, out SqlDbType dataType);
+                        bool propertyMap = dbMapping.TryGetValue(item.Name, out string scalar);
+                        if (sqlMap && propertyMap)
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@" + scalar, dataType)).Value = id;
+                        }
+                    }
+                }
+
+                var row = await cmd.ExecuteReaderAsync();
+                List<string> columnNames = new List<string>();
+                for (int i = 0; i < row.FieldCount; i++)
+                    columnNames.Add(row.GetName(i));
+                List<T> result = new List<T>();
+
+                if (daoMapping == null)
+                    throw new ArgumentException("Dictionary not found inside the DAO");
+                while (await row.ReadAsync())
+                {
+                    T dao = Activator.CreateInstance<T>();
+                    foreach (string column in columnNames)
+                        if (daoMapping.TryGetValue(column, out string propertyName))
+                        {
+                            PropertyInfo property = daoType.GetProperty(propertyName);
+                            var value = Convert.ChangeType(row[column], property.PropertyType);
+                            property.SetValue(dao, value);
+                        }
+                    result.Add(dao);
+
+                }
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'READ ALL' \n" + ex.Message);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    await sqlConnection.CloseAsync();
+                sqlConnection = null;
+            }
+        }
+
+        public async Task<T> ReadByName(string name)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                var commandEnum = Identifier.GetCommandType<T>("READBYNAME");
+                var sql = SqlManager.ChooseSql(commandEnum);
+
+
+                sqlConnection = _connectionManager.GetConnection();
+                await sqlConnection.OpenAsync();
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+
+                Type daoType = typeof(T);
+                var daoMapping = (Dictionary<string, string>)daoType.GetField("DAOMap")?.GetValue(null);
+                var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
+                if (daoMapping == null || dbMapping == null)
+                    throw new ArgumentException("Dictionaries not found inside the DAO");
+
+                PropertyInfo[] properties = daoType.GetProperties();
+                foreach (var item in properties)
+                {
+                    if (item.PropertyType == typeof(string))
+                    {
+                        bool sqlMap = Identifier.SqlTypeMap.TryGetValue(item.PropertyType, out SqlDbType dataType);
+                        bool propertyMap = dbMapping.TryGetValue(item.Name, out string scalar);
+                        if (sqlMap && propertyMap)
+                        {
+                            cmd.Parameters.Add(new SqlParameter("@" + scalar, dataType)).Value = name;
+                        }
+                    }
+                }
+
+                SqlDataReader row = await cmd.ExecuteReaderAsync();
+
+                List<string> columnNames = new List<string>();
+                for (int i = 0; i < row.FieldCount; i++)
+                    columnNames.Add(row.GetName(i));
+
+
+                T result = Activator.CreateInstance<T>();
+                if (await row.ReadAsync())
+                    foreach (string column in columnNames)
+                        if (daoMapping.TryGetValue(column, out string propertyName))
+                        {
+                            PropertyInfo property = daoType.GetProperty(propertyName);
+                            var value = Convert.ChangeType(row[column], property.PropertyType);
+                            property.SetValue(result, value);
+                        }
+                return result;
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'READ' \n" + ex.Message);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.CloseAsync();
                 sqlConnection = null;
             }
         }

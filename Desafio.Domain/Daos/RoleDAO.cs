@@ -16,7 +16,7 @@ namespace Desafio.Domain.Daos
         public static Dictionary<string, string> DAOMap = new Dictionary<string, string>
         {
             {"role_id", nameof(ID) },
-            {"category_type", nameof(Type) }
+            {"role_type", nameof(Type) }
         };
 
         public static Dictionary<string, string> DBMap = new Dictionary<string, string>

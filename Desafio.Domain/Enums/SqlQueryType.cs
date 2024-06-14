@@ -78,6 +78,7 @@ namespace Desafio.Domain.Enums
 
         R_READALL,
         R_READ,
+        R_READBYNAME,
         R_CREATE,
         R_UPDATE,
         R_DELETE,

@@ -19,5 +19,7 @@ namespace Desafio.Infrastructure.Contexts
 
         Task<T> Remove(int id);
 
+        Task<List<T>> ReadMany(int id);
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Enums;
+﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -19,9 +20,15 @@ namespace Desafio.Infrastructure.Connections
 
         public static SqlQueryType GetCommandType<T>(string method)
         {
-            string type = typeof(T).Name;
-            char prefix = type[0];
-            string concat = type[0] + "_" + method;
+            string type = typeof(T).Name.Replace("DAO", "");
+            string prefix = type[0].ToString();
+            if (type.Contains("UserName")) {
+                prefix += type.Replace("User", "")[0];
+            } else if (type.Contains("ProductCategory"))
+            {
+                prefix += type.Replace("Product", "")[0];
+            }
+            string concat = prefix + "_" + method;
 
             return (SqlQueryType)Enum.Parse(typeof(SqlQueryType), concat);
         }

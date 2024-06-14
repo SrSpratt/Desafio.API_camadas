@@ -20,6 +20,8 @@ namespace Desafio.Domain.Daos
 
         public DateTime ExpirationDate { get; set; }
 
+        public StockDAO() { }
+
         public StockDAO(int amount, double saleValue, double purchaseValue, string supplier, DateTime expirationDate, int id) {
             this.Amount = amount;
             this.SaleValue = saleValue;

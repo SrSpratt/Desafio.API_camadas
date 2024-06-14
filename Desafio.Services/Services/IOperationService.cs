@@ -9,6 +9,6 @@ namespace Desafio.Services.Services
 {
     public interface IOperationService
     {
-        Task<List<OperationDTO>> GetAllOperations(int id);
+        Task<List<OperationDTO>> GetAll(int id);
     }
 }

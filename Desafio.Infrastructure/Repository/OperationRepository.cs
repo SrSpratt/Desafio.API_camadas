@@ -16,10 +16,10 @@ namespace Desafio.Infrastructure.Repository
         public OperationRepository(IApiConfig config)
         {
             _config = config;
-            _context = new SqlContext(_config);
+            _context = new SqlContext<OperationDTO>(_config);
         }
 
-        public async Task<List<OperationDTO>> GetAllOperations(int id)
+        public async Task<List<OperationDTO>> GetAll(int id)
         {
             return await _context.GetAllOperations(id);
         }

@@ -1,8 +1,8 @@
-INSERT INTO ssqldata.dbo.tst_categories (category_id, category_name, category_description)
+INSERT INTO ssqldata.dbo.tst_categories (category_name, category_description)
 VALUES
-(1, 'Electronics', 'Devices and gadgets'),
-(2, 'Books', 'Various genres of books'),
-(3, 'Clothing', 'Apparel and accessories');
+('Electronics', 'Devices and gadgets'),
+('Books', 'Various genres of books'),
+('Clothing', 'Apparel and accessories');
 
 INSERT INTO ssqldata.dbo.tst_products (Name, Description)
 VALUES

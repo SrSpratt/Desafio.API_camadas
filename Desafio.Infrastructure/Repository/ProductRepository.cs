@@ -11,7 +11,7 @@ namespace Desafio.Infrastructure.Repository
         public ProductRepository(IApiConfig apiConfig)
         {
             _apiConfig = apiConfig;
-            _context = new SqlContext(_apiConfig);
+            _context = new SqlContext<ProductDTO>(_apiConfig);
         }
         public async Task<int> Create(ProductDTO product)
         {

@@ -23,7 +23,7 @@ namespace Desafio.API.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<UserDTO>> Get(int id)
         {
-            var user = await _service.ReadUser(id);
+            var user = await _service.Read(id);
             return user == null ? NoContent() : Ok(user);
         }
 
@@ -61,14 +61,14 @@ namespace Desafio.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserDTO>>> Index()
         {
-            var users = await _service.ReadUsers();
+            var users = await _service.ReadAll();
             return users == null ? NoContent() : Ok(users); 
         }
 
         [HttpPost]
         public async Task<ActionResult<UserDTO>> Create([FromBody]UserDTO user)
         {
-            var userId = await _service.CreateUser(user);
+            var userId = await _service.Create(user);
             //var userObject = await _service.ReadUser(userId);
 
             return CreatedAtAction("Get", new { id = user.ID }, null);
@@ -79,7 +79,7 @@ namespace Desafio.API.Controllers
         {
             try
             {
-                await _service.UpdateUser(id, user);
+                await _service.Update(id, user);
                 return Ok();
             } catch (Exception ex)
             {
@@ -93,8 +93,8 @@ namespace Desafio.API.Controllers
         {
             try
             {
-                await _service.DeleteUser(id);
-                var result = await _service.ReadUser(id);
+                await _service.Delete(id);
+                var result = await _service.Read(id);
                 return result == null ? Ok() : BadRequest("Delete didn't work");
             } catch (Exception ex)
             {

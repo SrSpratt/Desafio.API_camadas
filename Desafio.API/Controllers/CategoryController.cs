@@ -18,35 +18,35 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet]
-        public async Task<List<CategoryDTO>> GetAllCategories()
+        public async Task<List<CategoryDTO>> GetAll()
         {
-            return await _service.GetAllCategories();
+            return await _service.GetAll();
         }
 
         [HttpGet("{id:int}")]
-        public async Task<CategoryDTO> GetCategoy(int id)
+        public async Task<CategoryDTO> Get(int id)
         {
-            return await _service.GetCategoy(id);
+            return await _service.Get(id);
         }
 
 
         //TODO: daqui para baixo a implementar
         [HttpPost]
-        public async Task<CategoryDTO> CreateCategory([FromBody]CategoryDTO category)
+        public async Task<CategoryDTO> Create([FromBody]CategoryDTO category)
         {
-            return await _service.CreateCategory(category);
+            return await _service.Create(category);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<CategoryDTO> UpdateCategory(int id,[FromBody] CategoryDTO category)
+        public async Task<CategoryDTO> Update(int id,[FromBody] CategoryDTO category)
         {
-            return await _service.UpdateCategory(id, category);
+            return await _service.Update(id, category);
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<CategoryDTO> DeleteCategory(int id)
+        public async Task<CategoryDTO> Delete(int id)
         {
-            return await _service.DeleteCategory(id);
+            return await _service.Delete(id);
         }
     }
 }

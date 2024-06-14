@@ -13,6 +13,11 @@ namespace Desafio.Domain.Daos
 
         public string? Description { get; set; }
 
+        public CategoryDAO()
+        {
+
+        }
+
         public CategoryDAO(int id, string name, string description) {
             Id = id;
             Name = name;
@@ -23,5 +28,19 @@ namespace Desafio.Domain.Daos
             Name = name;
             Description = description;
         }
+
+        public static Dictionary<string, string> DAOMap = new Dictionary<string, string>
+        {
+            {"category_id", nameof(Id) },
+            {"category_name", nameof(Name) },
+            {"category_description", nameof(Description) }
+        };
+
+        public static Dictionary<string, string> DBMap = new Dictionary<string, string>
+        {
+            {nameof(Id), "category_id"},
+            {nameof(Name), "category_name"},
+            {nameof(Description), "category_description"}
+        };
     }
 }

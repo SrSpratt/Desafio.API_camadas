@@ -4,13 +4,16 @@ using Desafio.Domain.Enums;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Connections;
 using Desafio.Infrastructure.Queries;
+using Microsoft.SqlServer.Server;
 using System.Data;
 using System.Data.SqlClient;
+using System.Diagnostics;
+using System.Reflection;
 using System.Text;
 
 namespace Desafio.Infrastructure.Contexts
 {
-    public class SqlContext : IContext
+    public class SqlContext<T> : IContext, ISqlContext<T> where T : class
     {
         private readonly IApiConfig _apiConfig;
         private readonly ConnectionManager _connectionManager;
@@ -758,5 +761,232 @@ namespace Desafio.Infrastructure.Contexts
             throw new NotImplementedException();
         }
         #endregion
+
+
+        public async Task<List<T>> ReadAll()
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                var commandEnum = Identifier.GetCommandType<T>("READALL");
+                //var type = commandEnum.GetType();
+                var sql = SqlManager.ChooseSql(commandEnum);
+                
+                sqlConnection = _connectionManager.GetConnection();
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                await sqlConnection.OpenAsync();
+                var row = await cmd.ExecuteReaderAsync();
+                List<string> columnNames = new List<string>();
+                for (int i = 0; i < row.FieldCount; i++)
+                    columnNames.Add(row.GetName(i));
+                List<T> result = new List<T>();
+                Type daoType = typeof(T);
+                var mapping = (Dictionary<string, string>) daoType.GetField("DAOMap")?.GetValue(null);
+
+                if (mapping == null)
+                    throw new ArgumentException("Dictionary not found inside the DAO");
+                while (await row.ReadAsync())
+                {
+                    T dao = Activator.CreateInstance<T>();
+                    foreach (string column in columnNames)
+                        if (mapping.TryGetValue(column, out string propertyName))
+                        {
+                            PropertyInfo property = daoType.GetProperty(propertyName);
+                            var value = Convert.ChangeType(row[column], property.PropertyType);
+                            property.SetValue(dao, value);
+                        }
+                    result.Add(dao);
+
+                }
+
+                return result;
+            } catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'READ ALL' \n" + ex.Message);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    await sqlConnection.CloseAsync();
+                sqlConnection = null;
+            }
+        }
+
+        public async Task<T> Read(int id)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                var commandEnum = Identifier.GetCommandType<T>("READ");
+                var sql = SqlManager.ChooseSql(commandEnum);
+               
+
+                sqlConnection = _connectionManager.GetConnection();
+                await sqlConnection.OpenAsync();
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+
+                Type daoType = typeof(T);
+                var daoMapping = (Dictionary<string, string>) daoType.GetField("DAOMap")?.GetValue(null);
+                var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
+                if (daoMapping == null || dbMapping == null)
+                    throw new ArgumentException("Dictionaries not found inside the DAO");
+
+                PropertyInfo[] properties = daoType.GetProperties();
+                foreach(var item in properties)
+                {
+                    bool sqlMap = Identifier.SqlTypeMap.TryGetValue(item.PropertyType, out SqlDbType dataType);
+                    bool propertyMap = dbMapping.TryGetValue(item.Name, out string scalar);
+                    if ( sqlMap && propertyMap)
+                    {
+                        cmd.Parameters.Add(new SqlParameter("@" + scalar, dataType)).Value = id;
+                    }
+                }
+
+                SqlDataReader row = await cmd.ExecuteReaderAsync();
+
+                List<string> columnNames = new List<string>();
+                for (int i = 0; i < row.FieldCount; i++)
+                    columnNames.Add(row.GetName(i));
+
+
+                T result = Activator.CreateInstance<T>();
+                if (await row.ReadAsync())
+                    foreach(string column in columnNames)
+                        if(daoMapping.TryGetValue(column, out string propertyName))
+                        {
+                            PropertyInfo property = daoType.GetProperty(propertyName);
+                            var value = Convert.ChangeType(row[column], property.PropertyType);
+                            property.SetValue(result, value);
+                        }
+                return result;
+
+
+            } catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'READ' \n" + ex.Message);
+            } finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.CloseAsync();
+                sqlConnection = null;
+            }
+        }
+
+        public async Task<T> Place(T product)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = _connectionManager.GetConnection();
+                var commandEnum = Identifier.GetCommandType<T>("CREATE");
+                var sql = SqlManager.ChooseSql(commandEnum);
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                var daoType = typeof(T);
+                PropertyInfo[] properties = daoType.GetProperties();
+                var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
+                foreach (var property in properties)
+                {
+                    bool sqlMap = Identifier.SqlTypeMap.TryGetValue(property.PropertyType, out SqlDbType dataType);
+                    bool propertyMap = dbMapping.TryGetValue(property.Name, out string scalar);
+                    if (sqlMap && propertyMap)
+                        cmd.Parameters.Add("@" + scalar, dataType).Value = property.GetValue(product);
+                }
+                await sqlConnection.OpenAsync();
+                int id = (int) await cmd.ExecuteScalarAsync();
+
+                await sqlConnection.CloseAsync();
+                return await Read(id);
+
+
+            } catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'PLACE' \n" + ex.Message);
+            }
+            finally
+            {
+                if(sqlConnection != null)
+                    sqlConnection.Close();
+                sqlConnection = null;
+            }
+        }
+
+        public async Task<T> Replace(T product)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = _connectionManager.GetConnection();
+                var commandEnum = Identifier.GetCommandType<T>("UPDATE");
+                var sql = SqlManager.ChooseSql(commandEnum);
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                var daoType = typeof(T);
+                PropertyInfo[] properties = daoType.GetProperties();
+                var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
+                foreach (var property in properties)
+                {
+                    var sqlMap = Identifier.SqlTypeMap.TryGetValue(property.PropertyType, out SqlDbType dataType);
+                    var propertyMap = dbMapping.TryGetValue(property.Name, out string scalar);
+                    if (sqlMap && propertyMap)
+                        cmd.Parameters.Add("@" + scalar, dataType).Value = property.GetValue(product);
+                }
+                await sqlConnection.OpenAsync();
+                int id = (int)await cmd.ExecuteScalarAsync();
+
+                await sqlConnection.CloseAsync();
+                return await Read(id);
+
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'REPLACE' \n" + ex.Message);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+                sqlConnection = null;
+            }
+        }
+
+        public async Task<T> Remove(int id)
+        {
+            SqlConnection sqlConnection = null;
+            try
+            {
+                sqlConnection = _connectionManager.GetConnection();
+                var commandEnum = Identifier.GetCommandType<T>("DELETE");
+                var sql = SqlManager.ChooseSql(commandEnum);
+                SqlCommand cmd = new SqlCommand(sql, sqlConnection);
+                var daoType = typeof(T);
+                PropertyInfo[] properties = daoType.GetProperties();
+                var dbMapping = (Dictionary<string, string>)daoType.GetField("DBMap")?.GetValue(null);
+                foreach(PropertyInfo property in properties)
+                {
+                    var sqlMap = Identifier.SqlTypeMap.TryGetValue(property.PropertyType, out SqlDbType dataType);
+                    var propertyMap = dbMapping.TryGetValue(property.Name, out string scalar);
+                    if (sqlMap && propertyMap)
+                        cmd.Parameters.Add("@" + scalar, dataType).Value = id;
+                }
+                await sqlConnection.OpenAsync();
+                int rows = (int)await cmd.ExecuteNonQueryAsync();
+                if (rows < 1)
+                    throw new ArgumentException("DELETE didn't work");
+                await sqlConnection.CloseAsync();
+
+                return await Read(id);
+
+
+            } catch (Exception ex)
+            {
+                throw new ArgumentException("Problem while trying to 'REPLACE' \n" + ex.Message);
+            }
+            finally
+            {
+                if (sqlConnection != null)
+                    sqlConnection.Close();
+                sqlConnection = null;
+            }
+        }
+
     }
 }

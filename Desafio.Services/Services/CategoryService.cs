@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Dtos;
+﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Dtos;
 using Desafio.Domain.Setup;
 using Desafio.Infrastructure.Contexts;
 using Desafio.Infrastructure.Repository;
@@ -17,29 +18,56 @@ namespace Desafio.Services.Services
         {
             _repository = repository;
         }
-        public async Task<List<CategoryDTO>> GetAllCategories()
+        public async Task<List<CategoryDTO>> GetAll()
         {
-            return await _repository.GetAllCategories();
+            List<CategoryDTO> categoryList = new List<CategoryDTO>();
+
+            var daoList = await _repository.GetAll();
+            foreach (var item in daoList)
+                categoryList.Add(
+                    new CategoryDTO(item)
+                    );
+            return categoryList;
         }
 
-        public async Task<CategoryDTO> GetCategoy(int id)
+        public async Task<CategoryDTO> Get(int id)
         {
-            return await _repository.GetCategoy(id);
+            return new CategoryDTO( 
+                await _repository.Get(id)
+                );
         }
 
-        public async Task<CategoryDTO> CreateCategory(CategoryDTO category)
+        public async Task<CategoryDTO> Create(CategoryDTO category)
         {
-            return await _repository.CreateCategory(category);
+            CategoryDAO categoryDAO = new CategoryDAO()
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+            };
+            return new CategoryDTO(
+                await _repository.Create(categoryDAO)
+                );
         }
 
-        public async Task<CategoryDTO> UpdateCategory(int id, CategoryDTO category)
+        public async Task<CategoryDTO> Update(int id, CategoryDTO category)
         {
-            return await _repository.UpdateCategory(id, category);
+            CategoryDAO categoryDAO = new CategoryDAO()
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+            };
+            return new CategoryDTO(
+                await _repository.Update(id, categoryDAO)
+                );
         }
 
-        public async Task<CategoryDTO> DeleteCategory(int id)
+        public async Task<CategoryDTO> Delete(int id)
         {
-            return await _repository.DeleteCategory(id);
+            return new CategoryDTO(
+                await _repository.Delete(id)
+                );
         }
     }
 }

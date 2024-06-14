@@ -9,6 +9,6 @@ namespace Desafio.Infrastructure.Repository
 {
     public interface IOperationRepository
     {
-        Task<List<OperationDTO>> GetAllOperations(int id);
+        Task<List<OperationDTO>> GetAll(int id);
     }
 }

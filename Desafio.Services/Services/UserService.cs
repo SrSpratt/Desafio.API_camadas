@@ -19,31 +19,31 @@ namespace Desafio.Services.Services
             _repository = repository;
             _passwordHasher = passwordHasher;
         }
-        public async Task<UserDTO> ReadUser(int id)
+        public async Task<UserDTO> Read(int id)
         {
-            return await _repository.ReadUser(id);
+            return await _repository.Read(id);
         }
 
-        public async Task<List<UserDTO>> ReadUsers()
+        public async Task<List<UserDTO>> ReadAll()
         {
-            return await _repository.ReadUsers();
+            return await _repository.ReadAll();
         }
 
-        public async Task<int> CreateUser(UserDTO user)
+        public async Task<int> Create(UserDTO user)
         {
             var passwordHash = _passwordHasher.Hash(user.Password);
             user.Password = passwordHash;
-            return await _repository.CreateUser(user);
+            return await _repository.Create(user);
         }
 
-        public async Task UpdateUser(int id, UserDTO user)
+        public async Task Update(int id, UserDTO user)
         {
-            await _repository.UpdateUser(id, user);
+            await _repository.Update(id, user);
         }
 
-        public async Task DeleteUser(int id)
+        public async Task Delete(int id)
         {
-            await _repository.DeleteUser(id);
+            await _repository.Delete(id);
         }
 
         public async Task<LoginResponse> Login(string name, string Password)

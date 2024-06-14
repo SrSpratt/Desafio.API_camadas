@@ -16,29 +16,29 @@ namespace Desafio.Infrastructure.Repository
         public UserRepository(IApiConfig apiConfig)
         {
             _apiConfig = apiConfig;
-            _context = new SqlContext(_apiConfig);
+            _context = new SqlContext<UserDTO>(_apiConfig);
         }
-        public async Task<UserDTO> ReadUser(int id)
+        public async Task<UserDTO> Read(int id)
         {
             return await _context.GetUser(id);
         }
 
-        public async Task<List<UserDTO>> ReadUsers()
+        public async Task<List<UserDTO>> ReadAll()
         {
             return await _context.GetAllUsers();
         }
 
-        public async Task<int> CreateUser(UserDTO user)
+        public async Task<int> Create(UserDTO user)
         {
             return await _context.CreateUser(user);
         }
 
-        public async Task UpdateUser(int id, UserDTO user)
+        public async Task Update(int id, UserDTO user)
         {
             await _context.UpdateUser(id, user);
         }
 
-        public async Task DeleteUser(int id)
+        public async Task Delete(int id)
         {
             await _context.DeleteUser(id);
         }

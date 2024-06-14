@@ -273,7 +273,7 @@ namespace Desafio.Infrastructure.Queries
                     break;
                 case SqlQueryType.C_READ:
                     sql = @"SELECT category_id, category_name, category_description
-                            FROM tst_categories;
+                            FROM tst_categories
                             WHERE category_id = @category_id";
                     break;
                 case SqlQueryType.C_CREATE:
@@ -284,8 +284,8 @@ namespace Desafio.Infrastructure.Queries
                     break;
                 case SqlQueryType.C_UPDATE:
                     sql = @"UPDATE tst_categories
-                            SET category_name='', category_description=''
-                            OUTPUT DELETED.category_name
+                            SET category_name=@category_name, category_description=@category_description
+                            OUTPUT DELETED.category_id
                             WHERE category_id=@category_id;";
                     break;
                 case SqlQueryType.C_DELETE:
@@ -371,7 +371,7 @@ namespace Desafio.Infrastructure.Queries
                     break;
                 case SqlQueryType.PC_READ:
                     sql = @"SELECT product_id, category_id
-                            FROM tst_product_category;
+                            FROM tst_product_category
                             WHERE product_id=@product_id";
                     break;
                 case SqlQueryType.PC_CREATE:

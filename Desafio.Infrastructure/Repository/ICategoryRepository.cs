@@ -1,4 +1,5 @@
-﻿using Desafio.Domain.Dtos;
+﻿using Desafio.Domain.Daos;
+using Desafio.Domain.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,14 @@ namespace Desafio.Infrastructure.Repository
 {
     public interface ICategoryRepository
     {
-        Task<List<CategoryDTO>> GetAllCategories();
+        Task<List<CategoryDAO>> GetAll();
 
-        Task<CategoryDTO> GetCategoy(int id);
+        Task<CategoryDAO> Get(int id);
 
-        Task<CategoryDTO> CreateCategory(CategoryDTO category);
+        Task<CategoryDAO> Create(CategoryDAO category);
 
-        Task<CategoryDTO> UpdateCategory(int id, CategoryDTO category);
+        Task<CategoryDAO> Update(int id, CategoryDAO category);
 
-        Task<CategoryDTO> DeleteCategory(int id);
+        Task<CategoryDAO> Delete(int id);
     }
 }

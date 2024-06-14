@@ -15,9 +15,9 @@ namespace Desafio.Services.Services
         {
             _repository = repository;
         }
-        public async Task<List<OperationDTO>> GetAllOperations(int id)
+        public async Task<List<OperationDTO>> GetAll(int id)
         {
-            return await _repository.GetAllOperations(id);
+            return await _repository.GetAll(id);
         }
     }
 }

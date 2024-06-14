@@ -41,6 +41,7 @@ namespace Desafio.Infrastructure.Contexts
 
         Task<CategoryDTO> UpdateCategory(int id, CategoryDTO category);
 
-        Task<CategoryDTO> DeleteCategory(int id);
+        Task<CategoryDTO> DeleteCategory(int id); 
+
     }
 }

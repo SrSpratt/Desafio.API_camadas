@@ -18,9 +18,9 @@ namespace Desafio.API.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<List<OperationDTO>> GetAllOperations(int id)
+        public async Task<List<OperationDTO>> GetAll(int id)
         {
-            return await _service.GetAllOperations(id);
+            return await _service.GetAll(id);
         }
 
     }

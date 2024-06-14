@@ -9,14 +9,14 @@ namespace Desafio.Services.Services
 {
     public interface ICategoryService
     {
-        Task<List<CategoryDTO>> GetAllCategories();
+        Task<List<CategoryDTO>> GetAll();
 
-        Task<CategoryDTO> GetCategoy(int id);
+        Task<CategoryDTO> Get(int id);
 
-        Task<CategoryDTO> CreateCategory(CategoryDTO category);
+        Task<CategoryDTO> Create(CategoryDTO category);
 
-        Task<CategoryDTO> UpdateCategory(int id, CategoryDTO category);
+        Task<CategoryDTO> Update(int id, CategoryDTO category);
 
-        Task<CategoryDTO> DeleteCategory(int id);
+        Task<CategoryDTO> Delete(int id);
     }
 }

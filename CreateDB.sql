@@ -1,7 +1,7 @@
 CREATE DATABASE ssqldata;
 
 CREATE TABLE ssqldata.dbo.tst_categories (
-	category_id int NOT NULL,
+	category_id int IDENTITY(1,1) NOT NULL,
 	category_name varchar(100) COLLATE Modern_Spanish_CI_AS NOT NULL,
 	category_description text COLLATE Modern_Spanish_CI_AS NULL,
 	CONSTRAINT PK__tst_cate__D54EE9B4B4F6DFE0 PRIMARY KEY (category_id)

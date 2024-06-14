@@ -9,15 +9,15 @@ namespace Desafio.Services.Services
 {
     public interface IUserService
     {
-        Task<List<UserDTO>> ReadUsers();
-        Task<int> CreateUser(UserDTO user);
+        Task<List<UserDTO>> ReadAll();
+        Task<int> Create(UserDTO user);
 
-        Task UpdateUser(int id, UserDTO user);
+        Task Update(int id, UserDTO user);
 
-        Task<UserDTO> ReadUser(int id);
+        Task<UserDTO> Read(int id);
 
         Task<LoginResponse> Login(string name, string Password);
 
-        Task DeleteUser(int id);
+        Task Delete(int id);
     }
 }

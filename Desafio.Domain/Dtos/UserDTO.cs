@@ -26,7 +26,11 @@ namespace Desafio.Domain.Dtos
 
         public string RealName { get; set; } 
 
-        [JsonConstructor]
+        public UserDTO()
+        {
+
+        }
+
         public UserDTO(int id, string name, string email, string password, string role, DateTime dateRegistered, string userRegistered)
         {
             ID = id;
